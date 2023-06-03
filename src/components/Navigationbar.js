@@ -11,10 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = [{pageName:"Home", link:"/"}, {pageName:"About", link:"/about"}, {pageName:"Contact Us", link:"/contact-us"}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function NavigationBar() {
@@ -44,7 +44,6 @@ function NavigationBar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -82,9 +81,11 @@ function NavigationBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <Link to={page.link} style={{textDecoration:"none", color:"black"}}>
+                <MenuItem key={page.pageName}>
+                  <Typography textAlign="center">{page.pageName}</Typography>
                 </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
@@ -92,7 +93,6 @@ function NavigationBar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -103,13 +103,14 @@ function NavigationBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
+              <Link to={page.link} style={{textDecoration:"none"}}>
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.pageName}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.pageName}
               </Button>
+              </Link>
             ))}
           </Box>
 
