@@ -25,8 +25,7 @@ Key features of the Jade Recruitment web platform include:
 To get started with the Jade Recruitment web platform, follow the instructions below.
 
 ### Prerequisites
-- Node.js (version X.X.X)
-- MongoDB (version X.X.X)
+- Node.js 
 
 ### Installation
 1. Clone this repository to your local machine using the following command:
