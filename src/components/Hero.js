@@ -3,9 +3,8 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import { Link as ScrollLink } from 'react-scroll'
 import Button from '@mui/material/Button';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import { Link } from 'react-router-dom'
 import WorkIcon from '@mui/icons-material/Work';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
@@ -84,16 +83,16 @@ const HomeHero = () => {
                 </Typography>
               </Box>
               <Box>
-                <ScrollLink to="popular-course" spy={true} smooth={true} offset={0} duration={350}>
+                <Link to="/login">
                   <Button sx={{backgroundColor:"green", ":hover":{backgroundColor:"darkgreen"}}} size="large" variant="contained" startIcon={<WorkIcon/>}>
                     Job Seeker?
                   </Button>
-                </ScrollLink>&nbsp;&nbsp;&nbsp;
-                <ScrollLink to="video-section" spy={true} smooth={true} offset={0} duration={350}>
+                </Link>&nbsp;&nbsp;&nbsp;
+                <Link to="/company-login">
                   <Button sx={{borderColor:"green", color:"green", backgroundColor:"white", ":hover":{backgroundColor:"darkgreen", color:"white", borderColor:"green"}}}  size="large" variant="outlined" startIcon={<SupervisorAccountIcon />}>
                     Recruiter
                   </Button>
-                </ScrollLink>
+                </Link>
               </Box>
             </Box>
           </Grid>

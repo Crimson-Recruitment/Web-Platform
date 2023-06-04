@@ -13,7 +13,6 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
-import { ScrollLink } from 'react-scroll';
 
 const pages = [{pageName:"Home", link:"/"}, {pageName:"About", link:"/about"}, {pageName:"Contact Us", link:"/contact-us"}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -50,7 +49,7 @@ function NavigationBar() {
               display: { xs: 'none', md: 'flex' },
             }}
           >
-             <img src="./images/logo.png" style={{width:"150px", marginRight:"2px" }}/>
+             <img src="./images/logo.png" alt="logo" style={{width:"150px", marginRight:"2px" }}/>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -88,6 +87,18 @@ function NavigationBar() {
                 </MenuItem>
                 </Link>
               ))}
+                       <Box sx={{ display: { xs: 'block', md: 'none' }, }}>
+                      <Link to="/login" style={{textDecoration:"none", color:"black"}}>
+                        <MenuItem>
+                          <Typography textAlign="center">Login</Typography>
+                        </MenuItem>
+                      </Link>
+                      <Link to="/register" style={{textDecoration:"none", color:"black"}}>
+                      <MenuItem  onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Register</Typography>
+                </MenuItem>
+                  </Link>
+              </Box>
             </Menu>
           </Box>
           <Typography
@@ -100,7 +111,7 @@ function NavigationBar() {
               flexGrow: 1,
             }}
           >
-             <img src="./images/logo.png" style={{width:"150px", marginRight:"2px" }}/>
+             <img src="./images/logo.png" alt="logo" style={{width:"150px", marginRight:"2px" }}/>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -116,15 +127,19 @@ function NavigationBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {true ?  <div>
-                  <Button sx={{backgroundColor:"green", ":hover":{backgroundColor:"darkgreen"}}} size="large" variant="contained">
-                    Login
-                  </Button>&nbsp;&nbsp;&nbsp;
+            {true ?  <Box sx={{display: { xs: 'none', md: 'flex' } }}>
+                  <Link to="/login">
+                    <Button sx={{backgroundColor:"green", ":hover":{backgroundColor:"darkgreen"}}} size="large" variant="contained">
+                      Login
+                    </Button>
+                  </Link>
+                  &nbsp;&nbsp;&nbsp;
+                  <Link to="/register">
                   <Button sx={{borderColor:"green", color:"green", backgroundColor:"white", ":hover":{backgroundColor:"darkgreen", color:"white", borderColor:"green"}}} size="large" variant="outlined">
                     Register
                   </Button>
-                
-              </div> :<Tooltip title="Open settings">
+                  </Link>
+              </Box> :<Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
