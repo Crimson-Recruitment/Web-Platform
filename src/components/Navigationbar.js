@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
+import { ScrollLink } from 'react-scroll';
 
 const pages = [{pageName:"Home", link:"/"}, {pageName:"About", link:"/about"}, {pageName:"Contact Us", link:"/contact-us"}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -37,7 +38,7 @@ function NavigationBar() {
   };
 
   return (
-    <AppBar position="static" sx={{bgcolor:"#AFE1AF"}}>
+    <AppBar position="sticky" sx={{bgcolor:"#50C878"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -115,11 +116,19 @@ function NavigationBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {true ?  <div>
+                  <Button sx={{backgroundColor:"green", ":hover":{backgroundColor:"darkgreen"}}} size="large" variant="contained">
+                    Login
+                  </Button>&nbsp;&nbsp;&nbsp;
+                  <Button sx={{borderColor:"green", color:"green", backgroundColor:"white", ":hover":{backgroundColor:"darkgreen", color:"white", borderColor:"green"}}} size="large" variant="outlined">
+                    Register
+                  </Button>
+                
+              </div> :<Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
-            </Tooltip>
+            </Tooltip>}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
