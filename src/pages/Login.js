@@ -5,8 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import {Link as RouterLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -74,6 +73,7 @@ export default function Login() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              <Link to="/jobs">
               <Button
                 type="submit"
                 fullWidth
@@ -82,7 +82,8 @@ export default function Login() {
               >
                 Sign In
               </Button>
-              <RouterLink to="/company-login">
+              </Link>
+              <Link to="/company-login">
               <Button
                 type="submit"
                 fullWidth
@@ -91,17 +92,17 @@ export default function Login() {
               >
                 I'm a Recruiter
               </Button>
-              </RouterLink>
+              </Link>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link to="" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <RouterLink to="/register" variant="body2">
+                  <Link to="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
-                  </RouterLink>
+                  </Link>
                 </Grid>
               </Grid>
             </Box>

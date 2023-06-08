@@ -1,23 +1,18 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -29,33 +24,54 @@ export default function AboutUs() {
         {/* Hero unit */}
         <Box
           sx={{
-            bgcolor: 'background.paper',
+            bgcolor: 'lightgreen',
             pt: 8,
             pb: 6,
           }}
         >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Album layout
+          <Container>
+          <Box>
+                <Typography
+                  component="h1"
+                  sx={{
+                    position: 'relative',
+                    fontSize: { xs: 40, md: 72 },
+                    letterSpacing: 1.5,
+                    fontWeight: 'bold',
+                    lineHeight: 1.3,
+                    flexGrow:1,
+                    textAlign:"center"
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      position: 'relative',
+                      fontSize: 'inherit',
+                      fontWeight: 'inherit',
+                      backgroundColor: 'unset',
+                      align:"center"
+                    }}
+                  >
+                    Ignite your Professional journey with 
+                    <Typography
+                    component = "span"
+                    sx={{
+                      fontSize: 'inherit',
+                      color:"green",
+                      fontWeight: 'inherit',
+                      position: 'relative',
+                    }}
+                  >
+                  &nbsp;Jade.{' '}
+                  </Typography>
+                  </Typography>
+                </Typography>
+              </Box>
+            <Typography variant="h4" align="center" color="text.secondary" paragraph>
+            With our unwavering commitment to your professional growth, 
+            we strive to open doors to remarkable opportunities tailored to 
+            your unique talents and aspirations. 
             </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Something short and leading about the collection below—its contents,
-              the creator, etc. Make it short and sweet, but not too short so folks
-              don&apos;t simply skip over it entirely.
-            </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-            </Stack>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
