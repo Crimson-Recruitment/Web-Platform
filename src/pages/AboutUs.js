@@ -1,18 +1,16 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -24,53 +22,58 @@ export default function AboutUs() {
         {/* Hero unit */}
         <Box
           sx={{
-            bgcolor: 'lightgreen',
+            bgcolor: "lightgreen",
             pt: 8,
             pb: 6,
           }}
         >
           <Container>
-          <Box>
+            <Box>
+              <Typography
+                component="h1"
+                sx={{
+                  position: "relative",
+                  fontSize: { xs: 40, md: 72 },
+                  letterSpacing: 1.5,
+                  fontWeight: "bold",
+                  lineHeight: 1.3,
+                  flexGrow: 1,
+                  textAlign: "center",
+                }}
+              >
                 <Typography
-                  component="h1"
                   sx={{
-                    position: 'relative',
-                    fontSize: { xs: 40, md: 72 },
-                    letterSpacing: 1.5,
-                    fontWeight: 'bold',
-                    lineHeight: 1.3,
-                    flexGrow:1,
-                    textAlign:"center"
+                    position: "relative",
+                    fontSize: "inherit",
+                    fontWeight: "inherit",
+                    backgroundColor: "unset",
+                    align: "center",
                   }}
                 >
+                  Ignite your Professional journey with
                   <Typography
+                    component="span"
                     sx={{
-                      position: 'relative',
-                      fontSize: 'inherit',
-                      fontWeight: 'inherit',
-                      backgroundColor: 'unset',
-                      align:"center"
+                      fontSize: "inherit",
+                      color: "green",
+                      fontWeight: "inherit",
+                      position: "relative",
                     }}
                   >
-                    Ignite your Professional journey with 
-                    <Typography
-                    component = "span"
-                    sx={{
-                      fontSize: 'inherit',
-                      color:"green",
-                      fontWeight: 'inherit',
-                      position: 'relative',
-                    }}
-                  >
-                  &nbsp;Jade.{' '}
-                  </Typography>
+                    &nbsp;Jade.{" "}
                   </Typography>
                 </Typography>
-              </Box>
-            <Typography variant="h4" align="center" color="text.secondary" paragraph>
-            With our unwavering commitment to your professional growth, 
-            we strive to open doors to remarkable opportunities tailored to 
-            your unique talents and aspirations. 
+              </Typography>
+            </Box>
+            <Typography
+              variant="h4"
+              align="center"
+              color="text.secondary"
+              paragraph
+            >
+              With our unwavering commitment to your professional growth, we
+              strive to open doors to remarkable opportunities tailored to your
+              unique talents and aspirations.
             </Typography>
           </Container>
         </Box>
@@ -80,13 +83,17 @@ export default function AboutUs() {
             {cards.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
                   <CardMedia
                     component="div"
                     sx={{
                       // 16:9
-                      pt: '56.25%',
+                      pt: "56.25%",
                     }}
                     image="https://source.unsplash.com/random?wallpapers"
                   />
@@ -95,8 +102,8 @@ export default function AboutUs() {
                       Heading
                     </Typography>
                     <Typography>
-                      This is a media card. You can use this section to describe the
-                      content.
+                      This is a media card. You can use this section to describe
+                      the content.
                     </Typography>
                   </CardContent>
                   <CardActions>

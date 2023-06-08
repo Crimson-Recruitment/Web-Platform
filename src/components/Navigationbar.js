@@ -1,21 +1,26 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-const pages = [{pageName:"Home", link:"/"}, {pageName:"About", link:"/about"}, {pageName:"Contact Us", link:"/contact-us"}];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = [
+  { pageName: "Home", link: "/" },
+  { pageName: "About", link: "/about" },
+  { pageName: "Contact Us", link: "/contact-us" },
+  { pageName: "Forum", link: "/forum" },
+];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavigationBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -37,7 +42,7 @@ function NavigationBar() {
   };
 
   return (
-    <AppBar position="sticky" sx={{bgcolor:"#50C878"}}>
+    <AppBar position="sticky" sx={{ bgcolor: "#50C878" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -46,12 +51,16 @@ function NavigationBar() {
             component="a"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: "none", md: "flex" },
             }}
           >
-             <img src="./images/logo.png" alt="logo" style={{width:"150px", marginRight:"2px" }}/>
+            <img
+              src="./images/logo.png"
+              alt="logo"
+              style={{ width: "150px", marginRight: "2px" }}
+            />
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -66,38 +75,47 @@ function NavigationBar() {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
-                <Link to={page.link} style={{textDecoration:"none", color:"black"}}>
-                <MenuItem key={page.pageName}>
-                  <Typography textAlign="center">{page.pageName}</Typography>
-                </MenuItem>
+                <Link
+                  to={page.link}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  <MenuItem key={page.pageName}>
+                    <Typography textAlign="center">{page.pageName}</Typography>
+                  </MenuItem>
                 </Link>
               ))}
-                       <Box sx={{ display: { xs: 'block', md: 'none' }, }}>
-                      <Link to="/login" style={{textDecoration:"none", color:"black"}}>
-                        <MenuItem>
-                          <Typography textAlign="center">Login</Typography>
-                        </MenuItem>
-                      </Link>
-                      <Link to="/register" style={{textDecoration:"none", color:"black"}}>
-                      <MenuItem  onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Register</Typography>
-                </MenuItem>
-                  </Link>
+              <Box sx={{ display: { xs: "block", md: "none" } }}>
+                <Link
+                  to="/login"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  <MenuItem>
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/register"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Register</Typography>
+                  </MenuItem>
+                </Link>
               </Box>
             </Menu>
           </Box>
@@ -107,55 +125,83 @@ function NavigationBar() {
             component="a"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
             }}
           >
-             <img src="./images/logo.png" alt="logo" style={{width:"150px", marginRight:"2px" }}/>
+            <img
+              src="./images/logo.png"
+              alt="logo"
+              style={{ width: "150px", marginRight: "2px" }}
+            />
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link to={page.link} style={{textDecoration:"none"}}>
-              <Button
-                key={page.pageName}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page.pageName}
-              </Button>
+              <Link to={page.link} style={{ textDecoration: "none" }}>
+                <Button
+                  key={page.pageName}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.pageName}
+                </Button>
               </Link>
             ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {true ?  <Box sx={{display: { xs: 'none', md: 'flex' } }}>
-                  <Link to="/login">
-                    <Button sx={{backgroundColor:"green", ":hover":{backgroundColor:"darkgreen"}}} size="large" variant="contained">
-                      Login
-                    </Button>
-                  </Link>
-                  &nbsp;&nbsp;&nbsp;
-                  <Link to="/register">
-                  <Button sx={{borderColor:"green", color:"green", backgroundColor:"white", ":hover":{backgroundColor:"darkgreen", color:"white", borderColor:"green"}}} size="large" variant="outlined">
+            {true ? (
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <Link to="/login">
+                  <Button
+                    sx={{
+                      backgroundColor: "green",
+                      ":hover": { backgroundColor: "darkgreen" },
+                    }}
+                    size="large"
+                    variant="contained"
+                  >
+                    Login
+                  </Button>
+                </Link>
+                &nbsp;&nbsp;&nbsp;
+                <Link to="/register">
+                  <Button
+                    sx={{
+                      borderColor: "green",
+                      color: "green",
+                      backgroundColor: "white",
+                      ":hover": {
+                        backgroundColor: "darkgreen",
+                        color: "white",
+                        borderColor: "green",
+                      },
+                    }}
+                    size="large"
+                    variant="outlined"
+                  >
                     Register
                   </Button>
-                  </Link>
-              </Box> :<Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>}
+                </Link>
+              </Box>
+            ) : (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            )}
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
