@@ -14,8 +14,8 @@ function Jobs() {
   return (
     <SideBar>
       <Grid container padding="0px">
-        <Grid item xs={12} md={5}>
-          <Box  className="search-box">
+        <Grid item xs={12} lg={5}>
+          <Box className="search-box">
             <input type="text" placeholder="Search..." />
             <Button type="submit">
               <i className="fas fa-search"></i>
@@ -76,7 +76,10 @@ function Jobs() {
               "& h3": { fontWeight: "bolder" },
             },
           }}
-          md={6.9}
+          xs={false}
+          sm={false}
+          md={false}
+          lg={6.9}
         >
           <div className="job-description">
             <h2>React Developer (JSX and Material-UI)</h2>

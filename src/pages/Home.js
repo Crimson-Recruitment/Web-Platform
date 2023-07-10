@@ -21,14 +21,14 @@ export default function Login() {
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main">
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item md={7} component={Paper} elevation={6} square>
           <HomeHero />
         </Grid>
         <Grid
           item
           xs={false}
-          sm={4}
-          md={7}
+          sm={false}
+          md={5}
           sx={{
             backgroundImage: "url(./images/home.jpg)",
             backgroundRepeat: "no-repeat",

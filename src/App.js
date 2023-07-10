@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import NavigationBar from "./components/Navigationbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
@@ -9,31 +9,34 @@ import CompanyLogin from "./pages/CompanyLogin";
 import CompanyRegister from "./pages/CompanyRegister";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
-import Jobs from "./pages/Platform/Users/Jobs";
-import ForYou from "./pages/Platform/Users/ForYou";
-import Profile from "./pages/Platform/Users/Profile";
-import Settings from "./pages/Platform/Settings";
-import Applications from "./pages/Platform/Users/Applications";
+import User from "./routes/User";
+import { auth } from "./Firebase/FirebaseConfig";
+import Cookies from "universal-cookie";
+
+export const DataContext = createContext(null);
 
 function App() {
+  const cookie = new Cookies();
+  const [user, setUser] = useState({});
+  const updateUser = (value) => {
+    setUser(value);
+  };
   return (
     <Router>
-      <NavigationBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/company-login" element={<CompanyLogin />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/company-register" element={<CompanyRegister />} />
-        <Route path="/jobs" element={<Jobs />} />
-        <Route path="/for-you" element={<ForYou />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/applications" element={<Applications />} />
-      </Routes>
-      <Footer />
+      <DataContext.Provider value={{ user, updateUser }}>
+        <NavigationBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/company-login" element={<CompanyLogin />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/company-register" element={<CompanyRegister />} />
+        </Routes>
+        {cookie.get("login") ? <User /> : null}
+        <Footer />
+      </DataContext.Provider>
     </Router>
   );
 }

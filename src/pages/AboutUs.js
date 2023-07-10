@@ -33,7 +33,7 @@ export default function AboutUs() {
                 component="h1"
                 sx={{
                   position: "relative",
-                  fontSize: { xs: 40, md: 72 },
+                  fontSize: { xs: 50, md: 72 },
                   letterSpacing: 1.5,
                   fontWeight: "bold",
                   lineHeight: 1.3,

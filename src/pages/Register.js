@@ -9,22 +9,47 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as RouterLink } from "react-router-dom";
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import MuiPhoneNumber from "material-ui-phone-number-2";
+import Auth from "../Firebase/Authentication";
+import uniqid from "uniqid";
+import { DataContext } from "../App";
+import Cookies from "universal-cookie";
 
 const defaultTheme = createTheme();
 
 export default function Register() {
-  const handleSubmit = (event) => {
+  const cookie = new Cookies();
+  const { user, updateUser } = React.useContext(DataContext);
+  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    console.log({
+    var edit = {
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      phoneNumber: data.get("phonenumber"),
       email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+    };
 
+    updateUser(edit);
+    await auth
+      .userSignUp(data.get("email"), data.get("password"))
+      .then((val) => {
+        if (val.code == 0) {
+          cookie.set("login", true, { path: "/" });
+          navigate("/skills");
+        } else {
+          alert(`${val.val}`);
+          setLoading(false);
+        }
+      });
+    setLoading(false);
+  };
+  console.log(user);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -73,9 +98,22 @@ export default function Register() {
                 />
               </Grid>
               <Grid item xs={12}>
+                <MuiPhoneNumber
+                  required
+                  variant="outlined"
+                  id="phonenumber"
+                  label="Phone Number"
+                  name="phonenumber"
+                  fullWidth
+                  defaultCountry={"ug"}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
+                  type="email"
                   id="email"
                   label="Email Address"
                   name="email"
@@ -95,12 +133,13 @@ export default function Register() {
               </Grid>
             </Grid>
             <Button
+              disabled={loading}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              {loading ? "Loading..." : "Sign Up"}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

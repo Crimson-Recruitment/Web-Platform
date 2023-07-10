@@ -5,33 +5,46 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Auth from "../Firebase/Authentication";
+import { DataContext } from "../App";
+import Cookies from "universal-cookie";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const { user } = React.useContext(DataContext);
+  const cookie = new Cookies();
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    await auth
+      .userSignIn(data.get("email"), data.get("password"))
+      .then((val) => {
+        if (val.code == 0) {
+          cookie.set("login", true, { path: "/" });
+          navigate("/jobs");
+        } else {
+          alert(`${val.code} : ${val.val}`);
+        }
+      });
   };
-
+  console.log(user);
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main" sx={{ minHeight: { lg: "100vh" } }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
+        <Grid item md={4} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -77,16 +90,14 @@ export default function Login() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Link to="/jobs">
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign In
-                </Button>
-              </Link>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
               <Link to="/company-login">
                 <Button
                   type="submit"
@@ -125,7 +136,7 @@ export default function Login() {
         <Grid
           item
           xs={false}
-          sm={4}
+          sm={false}
           md={8}
           sx={{
             backgroundImage:

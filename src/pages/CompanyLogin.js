@@ -12,14 +12,27 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import Auth from "../Firebase/Authentication";
 
 const defaultTheme = createTheme();
 
 export default function CompanyLogin() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    let auth = new Auth();
     const data = new FormData(event.currentTarget);
+    await auth
+      .userSignIn(data.get("email"), data.get("password"))
+      .then((val) => {
+        if (val.code == 0) {
+          navigate("/jobs");
+        } else {
+          alert(`${val.code} : ${val.val}`);
+        }
+      });
     console.log({
       email: data.get("email"),
       password: data.get("password"),
@@ -28,9 +41,9 @@ export default function CompanyLogin() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main" sx={{ minHeight: { lg: "100vh" } }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
+        <Grid item md={4} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -122,7 +135,7 @@ export default function CompanyLogin() {
         <Grid
           item
           xs={false}
-          sm={4}
+          sm={false}
           md={8}
           sx={{
             backgroundImage:

@@ -24,12 +24,12 @@ function ForYou() {
     <SideBar>
       <Grid container>
         <Grid item xs={12} md={5}>
-        <Box sx={{ bgcolor: "background.paper" }}>
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Recommended" />
-          <Tab label="Featured" />
-        </Tabs>
-      </Box>
+          <Box sx={{ bgcolor: "background.paper" }}>
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="Recommended" />
+              <Tab label="Featured" />
+            </Tabs>
+          </Box>
           <MDBCard className="my-3 me-3">
             <MDBCardBody>
               <MDBCardTitle>Card title</MDBCardTitle>
