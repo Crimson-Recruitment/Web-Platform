@@ -8,7 +8,6 @@ import {
 } from "mdb-react-ui-kit";
 import "../../../Styles/jobs.css";
 import { Box, Button, Grid } from "@mui/material";
-import { MDBCol, MDBFormInline, MDBIcon } from "mdbreact";
 
 function Jobs() {
   return (

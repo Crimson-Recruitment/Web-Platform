@@ -19,8 +19,9 @@ import Search from "@mui/icons-material/Search";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
+import Auth from "../Firebase/Authentication";
 
 const pages = [
   {
@@ -48,16 +49,18 @@ const pages = [
     link: "/settings",
     icon: <Settings sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
-  {
-    pageName: "Logout",
-    link: "/logout",
-    icon: <Logout sx={{ fontSize: "35px", marginRight: "5px" }} />,
-  },
 ];
 
 function SideBar({ children }) {
   const [state, setState] = React.useState(false);
-
+  const auth = new Auth()
+  const navigate = useNavigate()
+  const logoutHandler = async() => {
+    await auth.logout()
+    .then(() => {
+      window.location.href = "/"
+    })
+  }
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -88,6 +91,16 @@ function SideBar({ children }) {
             </Link>
           </ListItem>
         ))}
+          <ListItem sx={{ marginTop: "10px" }} disablePadding>
+          <Link
+             
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItemIcon onClick={logoutHandler}>
+                <Logout sx={{ fontSize: "35px", marginRight: "5px" }} /> <ListItemText primary="Logout" />
+              </ListItemIcon>
+              </Link>
+          </ListItem>
       </List>
     </Box>
   );
@@ -136,6 +149,19 @@ function SideBar({ children }) {
                     </Link>
                   </MenuItem>
                 ))}
+                 <MenuItem onClick={logoutHandler}>
+                      <Typography
+                        sx={{
+                          fontSize: { md: "20px" },
+                          color: "text.secondary",
+                        }}
+                      >
+                         
+                       <Logout sx={{ fontSize: "35px", marginRight: "5px" }} /> Logout
+                       
+                      </Typography>
+                  
+                  </MenuItem>
               </Menu>
             </Sidebar>
           </Box>

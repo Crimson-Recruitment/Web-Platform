@@ -12,7 +12,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { auth } from "../Firebase/FirebaseConfig";
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -25,6 +27,9 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function NavigationBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const navigate = useNavigate()
+  const cookie= new Cookies()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -40,7 +45,7 @@ function NavigationBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  console.log(cookie.get("login") == "true")
   return (
     <AppBar position="sticky" sx={{ bgcolor: "#50C878" }}>
       <Container maxWidth="xl">
@@ -147,72 +152,102 @@ function NavigationBar() {
               </Link>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            {true ? (
-              <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <Link to="/login">
-                  <Button
-                    sx={{
-                      backgroundColor: "green",
-                      ":hover": { backgroundColor: "darkgreen" },
-                    }}
-                    size="large"
-                    variant="contained"
-                  >
-                    Login
-                  </Button>
-                </Link>
-                &nbsp;&nbsp;&nbsp;
-                <Link to="/register">
-                  <Button
-                    sx={{
-                      borderColor: "green",
-                      color: "green",
-                      backgroundColor: "white",
-                      ":hover": {
-                        backgroundColor: "darkgreen",
-                        color: "white",
-                        borderColor: "green",
-                      },
-                    }}
-                    size="large"
-                    variant="outlined"
-                  >
-                    Register
-                  </Button>
-                </Link>
-              </Box>
-            ) : (
+              {cookie.get("login") == "true"?
+              <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
-            )}
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>:<Box sx={{ flexGrow: 0 }}>
+              {true ? (
+                <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                  <Link to="/login">
+                    <Button
+                      sx={{
+                        backgroundColor: "green",
+                        ":hover": { backgroundColor: "darkgreen" },
+                      }}
+                      size="large"
+                      variant="contained"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                  &nbsp;&nbsp;&nbsp;
+                  <Link to="/register">
+                    <Button
+                      sx={{
+                        borderColor: "green",
+                        color: "green",
+                        backgroundColor: "white",
+                        ":hover": {
+                          backgroundColor: "darkgreen",
+                          color: "white",
+                          borderColor: "green",
+                        },
+                      }}
+                      size="large"
+                      variant="outlined"
+                    >
+                      Register
+                    </Button>
+                  </Link>
+                </Box>
+              ) : (
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>} 
+              
+          
         </Toolbar>
       </Container>
     </AppBar>
