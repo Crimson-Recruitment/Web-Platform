@@ -29,11 +29,11 @@ export default function Register() {
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
     var edit = {
-      "id":uniqid(`${data.get("firstName")}-${data.get("lastName")}`,"-user"),
-      "firstName": data.get("firstName"),
-      "lastName": data.get("lastName"),
-      "phoneNumber": data.get("phonenumber"),
-      "email": data.get("email"),
+      id: uniqid(`${data.get("firstName")}-${data.get("lastName")}`, "-user"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      phoneNumber: data.get("phonenumber"),
+      email: data.get("email"),
     };
 
     updateUser(edit);

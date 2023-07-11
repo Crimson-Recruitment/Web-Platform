@@ -23,9 +23,7 @@ const defaultTheme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-
-  })
+  React.useEffect(() => {});
   const { user } = React.useContext(DataContext);
   const cookie = new Cookies();
   const handleSubmit = async (event) => {
@@ -37,7 +35,7 @@ export default function Login() {
       .then((val) => {
         if (val.code == 0) {
           cookie.set("login", true, { path: "/" });
-          window.location.href = "/jobs"
+          window.location.href = "/jobs";
         } else {
           alert(`${val.code} : ${val.val}`);
         }

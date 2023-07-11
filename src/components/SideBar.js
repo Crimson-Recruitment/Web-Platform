@@ -53,14 +53,13 @@ const pages = [
 
 function SideBar({ children }) {
   const [state, setState] = React.useState(false);
-  const auth = new Auth()
-  const navigate = useNavigate()
-  const logoutHandler = async() => {
-    await auth.logout()
-    .then(() => {
-      window.location.href = "/"
-    })
-  }
+  const auth = new Auth();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    await auth.logout().then(() => {
+      window.location.href = "/";
+    });
+  };
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -91,16 +90,14 @@ function SideBar({ children }) {
             </Link>
           </ListItem>
         ))}
-          <ListItem sx={{ marginTop: "10px" }} disablePadding>
-          <Link
-             
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItemIcon onClick={logoutHandler}>
-                <Logout sx={{ fontSize: "35px", marginRight: "5px" }} /> <ListItemText primary="Logout" />
-              </ListItemIcon>
-              </Link>
-          </ListItem>
+        <ListItem sx={{ marginTop: "10px" }} disablePadding>
+          <Link style={{ textDecoration: "none", color: "black" }}>
+            <ListItemIcon onClick={logoutHandler}>
+              <Logout sx={{ fontSize: "35px", marginRight: "5px" }} />{" "}
+              <ListItemText primary="Logout" />
+            </ListItemIcon>
+          </Link>
+        </ListItem>
       </List>
     </Box>
   );
@@ -149,19 +146,17 @@ function SideBar({ children }) {
                     </Link>
                   </MenuItem>
                 ))}
-                 <MenuItem onClick={logoutHandler}>
-                      <Typography
-                        sx={{
-                          fontSize: { md: "20px" },
-                          color: "text.secondary",
-                        }}
-                      >
-                         
-                       <Logout sx={{ fontSize: "35px", marginRight: "5px" }} /> Logout
-                       
-                      </Typography>
-                  
-                  </MenuItem>
+                <MenuItem onClick={logoutHandler}>
+                  <Typography
+                    sx={{
+                      fontSize: { md: "20px" },
+                      color: "text.secondary",
+                    }}
+                  >
+                    <Logout sx={{ fontSize: "35px", marginRight: "5px" }} />{" "}
+                    Logout
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Sidebar>
           </Box>

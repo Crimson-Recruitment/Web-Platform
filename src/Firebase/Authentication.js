@@ -2,13 +2,13 @@ import { auth } from "./FirebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
 } from "firebase/auth";
 import Firestore from "./Firestore";
 import Cookies from "universal-cookie";
 
 export default class Auth {
-  #cookie = new Cookies() 
+  #cookie = new Cookies();
   userSignIn = async (email, password) => {
     let result = { code: null, val: null };
     await signInWithEmailAndPassword(auth, email, password)
@@ -33,21 +33,20 @@ export default class Auth {
     return result;
   };
 
-  logout = async() => {
+  logout = async () => {
     let result = { code: null, val: null };
     await signOut(auth)
-    .then(val => {
-      this.#cookie.remove("login", {path:"/"})
-      result = { code: 0, val: val };
-    }).catch(err => {
-      result = { code: 0, val: err };
-    });
-    return result
-  } 
+      .then((val) => {
+        this.#cookie.remove("login", { path: "/" });
+        result = { code: 0, val: val };
+      })
+      .catch((err) => {
+        result = { code: 0, val: err };
+      });
+    return result;
+  };
 
   companyLogin = () => {};
 
   companySignUp = () => {};
-
-
 }

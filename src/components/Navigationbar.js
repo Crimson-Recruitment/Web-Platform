@@ -28,8 +28,8 @@ function NavigationBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const navigate = useNavigate()
-  const cookie= new Cookies()
+  const navigate = useNavigate();
+  const cookie = new Cookies();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,7 +45,7 @@ function NavigationBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  console.log(cookie.get("login") == "true")
+  console.log(cookie.get("login") == "true");
   return (
     <AppBar position="sticky" sx={{ bgcolor: "#50C878" }}>
       <Container maxWidth="xl">
@@ -152,25 +152,25 @@ function NavigationBar() {
               </Link>
             ))}
           </Box>
-              {cookie.get("login") == "true"?
-              <Box sx={{ flexGrow: 0 }}>
+          {cookie.get("login") == "true" ? (
+            <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{ mt: "45px" }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
@@ -181,7 +181,9 @@ function NavigationBar() {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box>:<Box sx={{ flexGrow: 0 }}>
+            </Box>
+          ) : (
+            <Box sx={{ flexGrow: 0 }}>
               {true ? (
                 <Box sx={{ display: { xs: "none", md: "flex" } }}>
                   <Link to="/login">
@@ -219,7 +221,10 @@ function NavigationBar() {
               ) : (
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
                   </IconButton>
                 </Tooltip>
               )}
@@ -245,9 +250,8 @@ function NavigationBar() {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box>} 
-              
-          
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
