@@ -16,7 +16,7 @@ export const companyPages = [
     },
     {
       pageName: "Applications",
-      link: "/applications",
+      link: "/company-applications",
       icon: <ArticleIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
     },
     {
