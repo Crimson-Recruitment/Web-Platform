@@ -1,4 +1,4 @@
-import React, { createContext,useState } from "react";
+import React, { createContext, useState } from "react";
 import NavigationBar from "./components/Navigationbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -11,10 +11,10 @@ import Login from "./pages/Authentication/Login";
 import CompanyLogin from "./pages/Authentication/CompanyLogin";
 import Register from "./pages/Authentication/Register";
 import CompanyRegister from "./pages/Authentication/CompanyRegister";
-import CompanyJobs from './pages/Platform/Companies/CompanyJobs'
-import CompanyProfile from './pages/Platform/Companies/CompanyProfile'
+import CompanyJobs from "./pages/Platform/Companies/CompanyJobs";
+import CompanyProfile from "./pages/Platform/Companies/CompanyProfile";
 import CompanyApplications from "./pages/Platform/Companies/CompanyApplications";
-import CompanySettings from './pages/Platform/Companies/CompanySettings'
+import CompanySettings from "./pages/Platform/Companies/CompanySettings";
 import Skills from "./pages/Platform/Users/Skills";
 import Jobs from "./pages/Platform/Users/Jobs";
 import ForYou from "./pages/Platform/Users/ForYou";
@@ -42,23 +42,37 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/register" element={<Register />} />
           <Route path="/company-register" element={<CompanyRegister />} />
-          {cookie.get("user-login") ?
-        <>
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/for-you" element={<ForYou />} />
-          <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-      <Route path="/applications" element={<Applications />} />
-        </> : null}
-        {cookie.get("company-login") ?
-        <>
-          <Route exact path="/company-jobs" element={<CompanyJobs/>}/>
-        <Route exact path="/company-profile" element={<CompanyProfile/>}/>
-        <Route exact path="/company-applications" element={<CompanyApplications/>}/>
-        <Route exact path="/company-settings" element={<CompanySettings/>}/>
-        </>: null}
-        <Route exact path='*' element={<PageNotFound/>}/>
+          {cookie.get("user-login") ? (
+            <>
+              <Route path="/skills" element={<Skills />} />
+              <Route path="/jobs" element={<Jobs />} />
+              <Route path="/for-you" element={<ForYou />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/applications" element={<Applications />} />
+            </>
+          ) : null}
+          {cookie.get("company-login") ? (
+            <>
+              <Route exact path="/company-jobs" element={<CompanyJobs />} />
+              <Route
+                exact
+                path="/company-profile"
+                element={<CompanyProfile />}
+              />
+              <Route
+                exact
+                path="/company-applications"
+                element={<CompanyApplications />}
+              />
+              <Route
+                exact
+                path="/company-settings"
+                element={<CompanySettings />}
+              />
+            </>
+          ) : null}
+          <Route exact path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
       </DataContext.Provider>

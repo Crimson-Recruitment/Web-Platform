@@ -28,16 +28,14 @@ export default function Login() {
     event.preventDefault();
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    await auth
-      .signIn(data.get("email"), data.get("password"))
-      .then((val) => {
-        if (val.code == 0) {
-          cookie.set("user-login", true, { path: "/" });
-          window.location.href = "/jobs";
-        } else {
-          alert(`${val.code} : ${val.val}`);
-        }
-      });
+    await auth.signIn(data.get("email"), data.get("password")).then((val) => {
+      if (val.code == 0) {
+        cookie.set("user-login", true, { path: "/" });
+        window.location.href = "/jobs";
+      } else {
+        alert(`${val.code} : ${val.val}`);
+      }
+    });
   };
   return (
     <ThemeProvider theme={defaultTheme}>

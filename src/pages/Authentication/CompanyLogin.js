@@ -25,16 +25,14 @@ export default function CompanyLogin() {
     event.preventDefault();
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    await auth
-      .signIn(data.get("email"), data.get("password"))
-      .then((val) => {
-        if (val.code == 0) {
-          cookie.set("company-login", true, { path: "/" });
-          window.location.href = "/company-jobs"
-        } else {
-          alert(`${val.code} : ${val.val}`);
-        }
-      });
+    await auth.signIn(data.get("email"), data.get("password")).then((val) => {
+      if (val.code == 0) {
+        cookie.set("company-login", true, { path: "/" });
+        window.location.href = "/company-jobs";
+      } else {
+        alert(`${val.code} : ${val.val}`);
+      }
+    });
     console.log({
       email: data.get("email"),
       password: data.get("password"),

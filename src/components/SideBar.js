@@ -19,7 +19,6 @@ import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import Auth from "../Firebase/Authentication";
 import { userPages } from "../Data/UserPages";
 
-
 function SideBar({ children }) {
   const [state, setState] = React.useState(false);
   const auth = new Auth();

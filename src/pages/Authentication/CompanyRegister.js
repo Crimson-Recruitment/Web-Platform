@@ -22,12 +22,12 @@ export default function CompanyRegister() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    cookie.set("company-login", true, {path:"/"})
+    cookie.set("company-login", true, { path: "/" });
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
-    window.location.href = "/company-jobs"
+    window.location.href = "/company-jobs";
   };
 
   return (

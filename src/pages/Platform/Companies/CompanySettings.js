@@ -1,10 +1,10 @@
-import React from 'react'
-import CompanySideBar from '../../../components/CompanySideBar'
+import React from "react";
+import CompanySideBar from "../../../components/CompanySideBar";
 
 function CompanySettings() {
   return (
     <CompanySideBar>
-         <div className="container">
+      <div className="container">
         <div className="row justify-content-center">
           <div className="col-12 col-lg-10 col-xl-8 mx-auto">
             <h2 className="h3 mb-4 page-title">Settings</h2>
@@ -164,7 +164,7 @@ function CompanySettings() {
         </div>
       </div>
     </CompanySideBar>
-  )
+  );
 }
 
-export default CompanySettings
+export default CompanySettings;

@@ -1,11 +1,11 @@
-import React from 'react'
-import CompanySideBar from '../../../components/CompanySideBar'
+import React from "react";
+import CompanySideBar from "../../../components/CompanySideBar";
 import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
 
 function CompanyApplications() {
   return (
     <CompanySideBar>
-            <MDBCard className="my-3 me-3 w-75">
+      <MDBCard className="my-3 me-3 w-75">
         <MDBCardBody>
           <MDBCardTitle>Card title</MDBCardTitle>
           <MDBCardText>
@@ -90,7 +90,7 @@ function CompanyApplications() {
         </MDBCardBody>
       </MDBCard>
     </CompanySideBar>
-  )
+  );
 }
 
-export default CompanyApplications
+export default CompanyApplications;
