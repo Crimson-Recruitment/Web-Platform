@@ -9,8 +9,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import MuiPhoneNumber from "material-ui-phone-number-2";
+import { Link, useNavigate } from "react-router-dom";
+import MuiPhoneNumber from "material-ui-phone-number";
 import Auth from "../../Firebase/Authentication";
 import uniqid from "uniqid";
 import { DataContext } from "../../App";
@@ -35,16 +35,17 @@ export default function Register() {
       lastName: data.get("lastName"),
       phoneNumber: data.get("phonenumber"),
       email: data.get("email"),
-      location: data.get("location")
+      location: data.get("location"),
     };
-
+    console.log(process.env.MAPS_API);
     updateUser(edit);
     await auth
-      .userSignUp(data.get("email"), data.get("password"))
+      .signUp(data.get("email"), data.get("password"))
       .then((val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          navigate("/skills");
+          window.location.href = "/skills";
+          setLoading(false)
         } else {
           alert(`${val.val}`);
           setLoading(false);
@@ -111,7 +112,7 @@ export default function Register() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <LocationSearchInput/>
+                <LocationSearchInput />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -141,15 +142,24 @@ export default function Register() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: "green",
+                ":hover": { backgroundColor: "darkgreen" },
+              }}
             >
               {loading ? "Loading..." : "Sign Up"}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <RouterLink to="/login" variant="body2">
+                <Link
+                  className="text-green-600 hover:text-green-800"
+                  to="/login"
+                  variant="body2"
+                >
                   Already have an account? Sign in
-                </RouterLink>
+                </Link>
               </Grid>
             </Grid>
           </Box>

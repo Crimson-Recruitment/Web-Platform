@@ -21,6 +21,7 @@ import ForYou from "./pages/Platform/Users/ForYou";
 import Profile from "./pages/Platform/Users/Profile";
 import Settings from "./pages/Platform/Users/Settings";
 import Applications from "./pages/Platform/Users/Applications";
+import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
 
 export const DataContext = createContext(null);
 
@@ -55,6 +56,11 @@ function App() {
           {cookie.get("company-login") ? (
             <>
               <Route exact path="/company-jobs" element={<CompanyJobs />} />
+              <Route
+                exact
+                path="/company-details"
+                element={<CompanyDetails />}
+              />
               <Route
                 exact
                 path="/company-profile"
