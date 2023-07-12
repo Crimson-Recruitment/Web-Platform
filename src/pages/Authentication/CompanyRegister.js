@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Cookies from "universal-cookie";
+import LocationSearchInput from "../../components/LocationInput";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -78,6 +79,9 @@ export default function CompanyRegister() {
                 />
               </Grid>
               <Grid item xs={12}>
+                <LocationSearchInput/>
+              </Grid>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -109,7 +113,7 @@ export default function CompanyRegister() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/company-login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

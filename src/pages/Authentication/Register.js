@@ -15,6 +15,7 @@ import Auth from "../../Firebase/Authentication";
 import uniqid from "uniqid";
 import { DataContext } from "../../App";
 import Cookies from "universal-cookie";
+import LocationSearchInput from "../../components/LocationInput";
 
 const defaultTheme = createTheme();
 
@@ -34,6 +35,7 @@ export default function Register() {
       lastName: data.get("lastName"),
       phoneNumber: data.get("phonenumber"),
       email: data.get("email"),
+      location: data.get("location")
     };
 
     updateUser(edit);
@@ -50,7 +52,6 @@ export default function Register() {
       });
     setLoading(false);
   };
-  console.log(user);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -109,7 +110,9 @@ export default function Register() {
                   defaultCountry={"ug"}
                 />
               </Grid>
-
+              <Grid item xs={12}>
+                <LocationSearchInput/>
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
