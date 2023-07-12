@@ -21,7 +21,7 @@ export default function Login() {
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main">
         <CssBaseline />
-        <Grid item md={7} component={Paper} elevation={6} square>
+        <Grid item md={7} xs={12} component={Paper} elevation={6} square>
           <HomeHero />
         </Grid>
         <Grid

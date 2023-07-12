@@ -40,7 +40,7 @@ const HomeHero = () => {
                   component="h1"
                   sx={{
                     position: "relative",
-                    fontSize: { xs: 60, md: 72 },
+                    fontSize: { xs: 50, md: 80 },
                     letterSpacing: 1.5,
                     fontWeight: "bold",
                     lineHeight: 1.3,
@@ -96,7 +96,7 @@ const HomeHero = () => {
                   sx={{
                     color: "text.secondary",
                     lineHeight: 1.6,
-                    fontSize: "30px",
+                    fontSize: "25px",
                   }}
                 >
                   Discover your path to professional greatness with Jade. As a
