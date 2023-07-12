@@ -4,12 +4,11 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import Firestore from "./Firestore";
 import Cookies from "universal-cookie";
 
 export default class Auth {
   #cookie = new Cookies();
-  userSignIn = async (email, password) => {
+  signIn = async (email, password) => {
     let result = { code: null, val: null };
     await signInWithEmailAndPassword(auth, email, password)
       .then((val) => {
@@ -21,7 +20,7 @@ export default class Auth {
     return result;
   };
 
-  userSignUp = async (email, password) => {
+  signUp = async (email, password) => {
     let result = { code: null, val: null };
     await createUserWithEmailAndPassword(auth, email, password)
       .then((val) => {
@@ -37,7 +36,8 @@ export default class Auth {
     let result = { code: null, val: null };
     await signOut(auth)
       .then((val) => {
-        this.#cookie.remove("login", { path: "/" });
+        this.#cookie.remove("user-login", { path: "/" });
+        this.#cookie.remove("company-login", { path: "/" });
         result = { code: 0, val: val };
       })
       .catch((err) => {
@@ -45,8 +45,4 @@ export default class Auth {
       });
     return result;
   };
-
-  companyLogin = () => {};
-
-  companySignUp = () => {};
 }

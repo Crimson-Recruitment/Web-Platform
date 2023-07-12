@@ -5,43 +5,42 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Auth from "../Firebase/Authentication";
-import { DataContext } from "../App";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function CompanyLogin() {
   const navigate = useNavigate();
-
-  React.useEffect(() => {});
-  const { user } = React.useContext(DataContext);
   const cookie = new Cookies();
   const handleSubmit = async (event) => {
     event.preventDefault();
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
     await auth
-      .userSignIn(data.get("email"), data.get("password"))
+      .signIn(data.get("email"), data.get("password"))
       .then((val) => {
         if (val.code == 0) {
-          cookie.set("login", true, { path: "/" });
-          window.location.href = "/jobs";
+          cookie.set("company-login", true, { path: "/" });
+          window.location.href = "/company-jobs"
         } else {
           alert(`${val.code} : ${val.val}`);
         }
       });
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
   };
-  console.log(user);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ minHeight: { lg: "100vh" } }}>
@@ -56,11 +55,11 @@ export default function Login() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "darkgreen" }}>
+            <Avatar sx={{ m: 1, bgcolor: "black" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Company Sign in
             </Typography>
             <Box
               component="form"
@@ -100,7 +99,7 @@ export default function Login() {
               >
                 Sign In
               </Button>
-              <Link to="/company-login">
+              <RouterLink to="/login">
                 <Button
                   type="submit"
                   fullWidth
@@ -108,28 +107,28 @@ export default function Login() {
                   sx={{
                     mb: 2,
                     backgroundColor: "white",
-                    borderColor: "green",
-                    color: "green",
+                    borderColor: "black",
+                    color: "black",
                     ":hover": {
                       color: "white",
-                      backgroundColor: "darkgreen",
-                      borderColor: "darkgreen",
+                      backgroundColor: "black",
+                      borderColor: "black",
                     },
                   }}
                 >
-                  I'm a Recruiter
+                  I'm a Job Seeker
                 </Button>
-              </Link>
+              </RouterLink>
               <Grid container>
                 <Grid item xs>
-                  <Link to="" variant="body2">
+                  <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to="/register" variant="body2">
+                  <RouterLink to="/company-register" variant="body2">
                     {"Don't have an account? Sign Up"}
-                  </Link>
+                  </RouterLink>
                 </Grid>
               </Grid>
             </Box>

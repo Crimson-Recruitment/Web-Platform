@@ -15,6 +15,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { auth } from "../Firebase/FirebaseConfig";
+import { userPages } from "../Data/UserPages";
+import { companyPages } from "../Data/CompanyPages";
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -22,7 +24,6 @@ const pages = [
   { pageName: "Contact Us", link: "/contact-us" },
   { pageName: "Forum", link: "/forum" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavigationBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -45,7 +46,6 @@ function NavigationBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  console.log(cookie.get("login") == "true");
   return (
     <AppBar position="sticky" sx={{ bgcolor: "#50C878" }}>
       <Container maxWidth="xl">
@@ -152,9 +152,9 @@ function NavigationBar() {
               </Link>
             ))}
           </Box>
-          {cookie.get("login") == "true" ? (
+          {cookie.get("user-login") == "true" || cookie.get("company-login") == "true" ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
@@ -175,11 +175,16 @@ function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {cookie.get("user-login") == "true" ? userPages.map((userpage) => (
+                  <MenuItem key={userpage.link} onClick={() => navigate(userpage.link)}>
+                    <Typography textAlign="center">{userpage.pageName}</Typography>
                   </MenuItem>
-                ))}
+                )):null}
+                {cookie.get("company-login") == "true" ? companyPages.map((companypage) => (
+                  <MenuItem key={companypage.link} onClick={() => navigate(companypage.link)}>
+                    <Typography textAlign="center">{companypage.pageName}</Typography>
+                  </MenuItem>
+                )):null}
               </Menu>
             </Box>
           ) : (
@@ -244,11 +249,16 @@ function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                 {cookie.get("user-login") == "true" ? userPages.map((userpage) => (
+                  <MenuItem key={userpage.link} onClick={() => navigate(userpage.link)}>
+                    <Typography textAlign="center">{userpage.pageName}</Typography>
                   </MenuItem>
-                ))}
+                )):null}
+                {cookie.get("company-login") == "true" ? companyPages.map((companypage) => (
+                  <MenuItem key={companypage.link} onClick={() => navigate(companypage.link)}>
+                    <Typography textAlign="center">{companypage.pageName}</Typography>
+                  </MenuItem>
+                )):null}
               </Menu>
             </Box>
           )}

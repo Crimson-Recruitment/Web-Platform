@@ -5,40 +5,40 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import { Link, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import Auth from "../Firebase/Authentication";
+import Auth from "../../Firebase/Authentication";
+import Cookies from "universal-cookie";
+
+// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-export default function CompanyLogin() {
+export default function Login() {
   const navigate = useNavigate();
 
+  React.useEffect(() => {});
+  const cookie = new Cookies();
   const handleSubmit = async (event) => {
     event.preventDefault();
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
     await auth
-      .userSignIn(data.get("email"), data.get("password"))
+      .signIn(data.get("email"), data.get("password"))
       .then((val) => {
         if (val.code == 0) {
-          navigate("/jobs");
+          cookie.set("user-login", true, { path: "/" });
+          window.location.href = "/jobs";
         } else {
           alert(`${val.code} : ${val.val}`);
         }
       });
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ minHeight: { lg: "100vh" } }}>
@@ -53,11 +53,11 @@ export default function CompanyLogin() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "black" }}>
+            <Avatar sx={{ m: 1, bgcolor: "darkgreen" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Company Sign in
+              Sign in
             </Typography>
             <Box
               component="form"
@@ -97,7 +97,7 @@ export default function CompanyLogin() {
               >
                 Sign In
               </Button>
-              <RouterLink to="/login">
+              <Link to="/company-login">
                 <Button
                   type="submit"
                   fullWidth
@@ -105,28 +105,28 @@ export default function CompanyLogin() {
                   sx={{
                     mb: 2,
                     backgroundColor: "white",
-                    borderColor: "black",
-                    color: "black",
+                    borderColor: "green",
+                    color: "green",
                     ":hover": {
                       color: "white",
-                      backgroundColor: "black",
-                      borderColor: "black",
+                      backgroundColor: "darkgreen",
+                      borderColor: "darkgreen",
                     },
                   }}
                 >
-                  I'm a Job Seeker
+                  I'm a Recruiter
                 </Button>
-              </RouterLink>
+              </Link>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link to="" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <RouterLink to="/company-register" variant="body2">
+                  <Link to="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
-                  </RouterLink>
+                  </Link>
                 </Grid>
               </Grid>
             </Box>
