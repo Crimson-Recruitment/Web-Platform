@@ -3,6 +3,7 @@
 Welcome to the Jade Recruitment GitHub repository! This repository contains the source code for the Jade Recruitment web platform, an innovative platform for job seekers and employers to connect and streamline the recruitment process.
 
 ## Table of Contents
+
 - [About Jade Recruitment](#about-jade-recruitment)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
@@ -11,9 +12,11 @@ Welcome to the Jade Recruitment GitHub repository! This repository contains the 
 - [License](#license)
 
 ## About Jade Recruitment
+
 Jade Recruitment is a company dedicated to revolutionizing the recruitment industry. Our web platform serves as a centralized hub for job seekers and employers to find each other, making the process faster, easier, and more efficient.
 
 Key features of the Jade Recruitment web platform include:
+
 - User registration and authentication
 - Job search and filtering capabilities
 - Job application submission and tracking
@@ -22,12 +25,15 @@ Key features of the Jade Recruitment web platform include:
 - Messaging system for communication between job seekers and employers
 
 ## Getting Started
+
 To get started with the Jade Recruitment web platform, follow the instructions below.
 
 ### Prerequisites
-- Node.js 
+
+- Node.js
 
 ### Installation
+
 1. Clone this repository to your local machine using the following command:
 
 git clone https://github.com/jaderecruitment/web-platform.git
@@ -38,14 +44,12 @@ git clone https://github.com/jaderecruitment/web-platform.git
 
 npm install
 
-4. Set up the environment variables by creating a `.env` file in the root directory and adding the necessary values. Refer to the `.env.example` file for the required variables.
-
-5. Start the application:
+4. Start the application:
 
 npm start
 
-6. Access the Jade Recruitment web platform at `http://localhost:3000` in your browser.
+5. Access the Jade Recruitment web platform at `http://localhost:3000` in your browser.
 
 ## Usage
-To use the Jade Recruitment web platform, follow the steps outlined below.
 
+To use the Jade Recruitment web platform, follow the steps outlined below.
