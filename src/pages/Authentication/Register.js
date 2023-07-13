@@ -13,38 +13,34 @@ import { Link, useNavigate } from "react-router-dom";
 import MuiPhoneNumber from "material-ui-phone-number";
 import Auth from "../../Firebase/Authentication";
 import uniqid from "uniqid";
-import { DataContext } from "../../App";
-import Cookies from "universal-cookie";
 import LocationSearchInput from "../../components/LocationInput";
+import Cookies from "universal-cookie";
 
 const defaultTheme = createTheme();
 
 export default function Register() {
-  const cookie = new Cookies();
-  const { user, updateUser } = React.useContext(DataContext);
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
+  const cookie = new Cookies();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    var edit = {
-      id: uniqid(`${data.get("firstName")}-${data.get("lastName")}`, "-user"),
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      phoneNumber: data.get("phonenumber"),
-      email: data.get("email"),
-      location: data.get("location"),
-    };
-    console.log(process.env.MAPS_API);
-    updateUser(edit);
     await auth
       .signUp(data.get("email"), data.get("password"))
-      .then((val) => {
+      .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          window.location.href = "/skills";
+          await new Promise( res => setTimeout(res, 1000));
+          navigate("/skills",{state:{
+            id: uniqid(`${data.get("firstName")}_${data.get("lastName")}-`, "-user"),
+            "firstName": data.get("firstName"),
+            "lastName": data.get("lastName"),
+            "phoneNumber": data.get("phonenumber"),
+            "email": data.get("email"),
+            "location": data.get("location"),
+          }});
           setLoading(false)
         } else {
           alert(`${val.val}`);

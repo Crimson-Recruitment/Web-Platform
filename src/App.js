@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React from "react";
 import NavigationBar from "./components/Navigationbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -23,17 +23,10 @@ import Settings from "./pages/Platform/Users/Settings";
 import Applications from "./pages/Platform/Users/Applications";
 import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
 
-export const DataContext = createContext(null);
-
 function App() {
   const cookie = new Cookies();
-  const [user, setUser] = useState({});
-  const updateUser = (value) => {
-    setUser(value);
-  };
   return (
     <Router>
-      <DataContext.Provider value={{ user, updateUser }}>
         <NavigationBar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -81,7 +74,6 @@ function App() {
           <Route exact path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
-      </DataContext.Provider>
     </Router>
   );
 }

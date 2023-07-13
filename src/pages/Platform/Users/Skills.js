@@ -1,24 +1,95 @@
-import React, { useState } from "react";
-import Cookies from "universal-cookie";
+import React, { useState,useEffect } from "react";
+
 import Select from "react-select";
 import "flowbite/dist/flowbite.min.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { professionList, skills } from "../../../Data/UserProfessions";
+import Firestore from "../../../Firebase/Firestore";
+import Storage from "../../../Firebase/Storage";
+import { Button } from "@mui/material";
 
 function Skills() {
-  const cookie = new Cookies();
   const [selectedSkills, setSelectedSkills] = useState();
   const [selectedProfession, setSelectedProfession] = useState();
+  const [image, setImage] = useState(null);
+  const [imagePath, setImagePath] = useState(null)
+  const [resume, setResume] = useState();
+  const [loading, setLoading]  = useState(false); 
   const navigate = useNavigate();
+  const firestore = new Firestore();
+  const db = new Storage();
 
-
-  const submitHandler = () => {
-    navigate("/jobs");
+const user = useLocation().state;
+  const submitHandler = async (event) => {
+    event.preventDefault()
+    setLoading(true)
+    let imagelink = await db.getFileUrl(`${user.id}-image`,imagePath);
+    if (imagelink.code === 1) {
+      alert(imagelink.val)
+      setLoading(false)
+      return;
+    }
+    let resumelink = await db.getFileUrl(`${user.id}-resume`, resume);
+    if (resumelink.code === 1) {
+      alert(resumelink.val)
+      setLoading(false)
+      return;
+    }
+    await firestore.createUserDetails(
+      user.id,
+      user.firstName, 
+      user.lastName,
+      user.email,
+      user.phoneNumber,
+      user.location,
+      imagelink.val,
+      selectedSkills,
+      resumelink.val,
+      event.target["about"].value,
+      selectedProfession)
+      .then(res => {
+        if (res.code === 0) {
+          navigate("/jobs");
+          setLoading(false)
+        } else {
+          alert(res.val)
+          setLoading(false)
+        }
+      })
   };
+
+  const imageHandler = (e) => {
+      let reader = new FileReader()
+      reader.readAsArrayBuffer(e.target.files[0])
+
+      reader.onload = () => {
+        setImagePath(reader.result);
+      }
+    reader.onerror = () => {
+        alert(reader.error)
+    }
+    setImage(e.target.files[0])
+  }
+
+  const resumeHandler = (e) => {
+    let reader = new FileReader()
+    reader.readAsArrayBuffer(e.target.files[0])
+    reader.onload = () => {
+      setResume(reader.result);
+    }
+  reader.onerror = () => {
+      alert(reader.error)
+  }
+  setResume(reader.result);
+}
   return (
     <div className="p-10 lg:my-12 lg:mx-[200px] sm:m-5 md:m-10 grid place-items-center align-center rounded overflow-hidden shadow-lg h-min-[70vh]">
       <form onSubmit={submitHandler} className="w-full">
         <div className="mb-6">
+        {image != null ? 
+        <div className="flex justify-center mb-5">
+          <img className="h-[400px] w-[400px] rounded-full" src={URL.createObjectURL(image)}/>:
+        </div>:
         <div class="flex items-center justify-center w-full">
     <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -30,7 +101,8 @@ function Skills() {
         </div>
     </label>
 </div> 
-<input id="dropzone-file" type="file" accept=".jpeg, .png, .jpg" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  />
+ }
+<input onChange={imageHandler} id="dropzone-file" type="file" accept=".jpeg, .png, .jpg" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  />
 
           <label
             for="profession"
@@ -39,7 +111,7 @@ function Skills() {
             Profession
           </label>
           <Select
-            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
             options={professionList}
             placeholder="Medicine, technology,....."
             onChange={(val) => {
@@ -59,7 +131,8 @@ function Skills() {
           <textarea
             id="about"
             rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            name="about"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
             placeholder="Describe yourself,..."
           ></textarea>
         </div>
@@ -70,7 +143,7 @@ function Skills() {
           Select your prominent skills (6 max).
         </label>
         <Select
-          className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
           options={skills}
           placeholder="Select skills,..."
           onChange={(val) => {
@@ -92,18 +165,26 @@ function Skills() {
           Upload you Resume
         </label>
         <input
+        onChange={resumeHandler}
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="file_input"
           accept=".pdf,.doc,.docx"
           type="file"
         />
 
-        <button
-          type="submit"
-          className="mt-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Submit
-        </button>
+<Button
+              disabled={loading}
+              type="submit"
+              variant="contained"
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: "green",
+                ":hover": { backgroundColor: "darkgreen" },
+              }}
+            >
+              {loading ? "Loading..." : "Submit"}
+            </Button>
       </form>
     </div>
   );

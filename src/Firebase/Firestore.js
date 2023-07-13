@@ -14,7 +14,13 @@ export default class Firestore {
     firstName,
     lastname,
     emailAddress,
-    phoneNumber
+    phoneNumber,
+    location,
+    image = "",
+    skills = [],
+    resume = "",
+    about,
+    profession
   ) => {
     let result = { code: null, val: null };
     await setDoc(doc(firestore, "User", id), {
@@ -22,6 +28,12 @@ export default class Firestore {
       lastname: lastname,
       emailAddress: emailAddress,
       phoneNumber: phoneNumber,
+      profileImage: image,
+      location: location,
+      profession: profession,
+      about: about,
+      skills: skills,
+      resume: resume,
     })
       .then((val) => {
         result = { code: 0, val: val };
