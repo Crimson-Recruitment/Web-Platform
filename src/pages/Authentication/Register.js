@@ -32,15 +32,20 @@ export default function Register() {
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          navigate("/skills",{state:{
-            id: uniqid(`${data.get("firstName")}_${data.get("lastName")}-`, "-user"),
-            "firstName": data.get("firstName"),
-            "lastName": data.get("lastName"),
-            "phoneNumber": data.get("phonenumber"),
-            "email": data.get("email"),
-            "location": data.get("location"),
-          }});
-          setLoading(false)
+          navigate("/skills", {
+            state: {
+              id: uniqid(
+                `${data.get("firstName")}_${data.get("lastName")}-`,
+                "-user"
+              ),
+              firstName: data.get("firstName"),
+              lastName: data.get("lastName"),
+              phoneNumber: data.get("phonenumber"),
+              email: data.get("email"),
+              location: data.get("location"),
+            },
+          });
+          setLoading(false);
         } else {
           alert(`${val.val}`);
           setLoading(false);

@@ -19,20 +19,29 @@ import Cookies from "universal-cookie";
 const defaultTheme = createTheme();
 
 export default function CompanyLogin() {
-  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
   const cookie = new Cookies();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    await auth.signIn(data.get("email"), data.get("password")).then((val) => {
-      if (val.code == 0) {
-        cookie.set("company-login", true, { path: "/" });
-        window.location.href = "/company-jobs";
-      } else {
-        alert(`${val.code} : ${val.val}`);
-      }
-    });
+    await auth
+      .signIn(data.get("email"), data.get("password"))
+      .then((val) => {
+        if (val.code == 0) {
+          cookie.set("company-login", true, { path: "/" });
+          window.location.href = "/company-jobs";
+          setLoading(false);
+        } else {
+          alert(`${val.code} : ${val.val}`);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+        setLoading(false);
+      });
     console.log({
       email: data.get("email"),
       password: data.get("password"),
@@ -90,12 +99,13 @@ export default function CompanyLogin() {
                 label="Remember me"
               />
               <Button
+                disabled={loading}
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                {loading ? "Loading..." : "Sign In"}
               </Button>
               <RouterLink to="/login">
                 <Button

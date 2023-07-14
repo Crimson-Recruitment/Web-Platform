@@ -28,22 +28,24 @@ export default function CompanyRegister() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true)
+    setLoading(true);
     const data = new FormData(event.currentTarget);
     await auth
       .signUp(data.get("email"), data.get("password"))
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });
-          navigate("/company-details",{state:{
-            "id": uniqid(`${data.get("companyName")}-`, "-company"),
-            "companyName":data.get("companyName"),
-            "phoneNumber1": data.get("phonenumber1"),
-            "phoneNumber2": data.get("phonenumber2"),
-            "location": data.get("location"),
-            "email": data.get("email"),
-          }});
-          setLoading(false)
+          navigate("/company-details", {
+            state: {
+              id: uniqid(`${data.get("companyName")}-`, "-company"),
+              companyName: data.get("companyName"),
+              phoneNumber1: data.get("phonenumber1"),
+              phoneNumber2: data.get("phonenumber2"),
+              location: data.get("location"),
+              email: data.get("email"),
+            },
+          });
+          setLoading(false);
         } else {
           alert(`${val.val}`);
           setLoading(false);

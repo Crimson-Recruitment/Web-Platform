@@ -27,53 +27,45 @@ function App() {
   const cookie = new Cookies();
   return (
     <Router>
-        <NavigationBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/company-login" element={<CompanyLogin />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/company-register" element={<CompanyRegister />} />
-          {cookie.get("user-login") ? (
-            <>
+      <NavigationBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/company-login" element={<CompanyLogin />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/company-register" element={<CompanyRegister />} />
+        {cookie.get("user-login") ? (
+          <>
             <Route path="/skills" element={<Skills />} />
-              <Route path="/jobs" element={<Jobs />} />
-              <Route path="/for-you" element={<ForYou />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/applications" element={<Applications />} />
-            </>
-          ) : null}
-          {cookie.get("company-login") ? (
-            <>
-              <Route exact path="/company-jobs" element={<CompanyJobs />} />
-              <Route
-                exact
-                path="/company-details"
-                element={<CompanyDetails />}
-              />
-              <Route
-                exact
-                path="/company-profile"
-                element={<CompanyProfile />}
-              />
-              <Route
-                exact
-                path="/company-applications"
-                element={<CompanyApplications />}
-              />
-              <Route
-                exact
-                path="/company-settings"
-                element={<CompanySettings />}
-              />
-            </>
-          ) : null}
-          <Route exact path="*" element={<PageNotFound />} />
-        </Routes>
-        <Footer />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/for-you" element={<ForYou />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/applications" element={<Applications />} />
+          </>
+        ) : null}
+        {cookie.get("company-login") ? (
+          <>
+            <Route exact path="/company-jobs" element={<CompanyJobs />} />
+            <Route exact path="/company-details" element={<CompanyDetails />} />
+            <Route exact path="/company-profile" element={<CompanyProfile />} />
+            <Route
+              exact
+              path="/company-applications"
+              element={<CompanyApplications />}
+            />
+            <Route
+              exact
+              path="/company-settings"
+              element={<CompanySettings />}
+            />
+          </>
+        ) : null}
+        <Route exact path="*" element={<PageNotFound />} />
+      </Routes>
+      <Footer />
     </Router>
   );
 }
