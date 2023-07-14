@@ -26,20 +26,19 @@ export default function Profile() {
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
                 <div className="flex justify-center">
-                <MDBCardImage
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                  alt="avatar"
-                  className="rounded-circle text-center"
-                  style={{ width: "150px" }}
-                  fluid
-                />
+                  <MDBCardImage
+                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                    alt="avatar"
+                    className="rounded-circle text-center"
+                    style={{ width: "150px" }}
+                    fluid
+                  />
                 </div>
-                <br/>
+                <br />
                 <p className="text-muted mb-1">Full Stack Developer</p>
                 <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                
+
                 <p className="text-blue-500 mb-1">Download Resume</p>
-                
               </MDBCardBody>
             </MDBCard>
 
@@ -74,27 +73,25 @@ export default function Profile() {
               </MDBCardBody>
             </MDBCard>
             <MDBRow className="mt-4">
-    <MDBCol md="12">
-            <MDBCard className="mb-4 mb-md-0">
+              <MDBCol md="12">
+                <MDBCard className="mb-4 mb-md-0">
                   <MDBCardBody>
-                    <MDBCardText className="mb-4">
-                      Bio
-                    </MDBCardText>
+                    <MDBCardText className="mb-4">Bio</MDBCardText>
 
                     <MDBCardText
                       className="mt-4 mb-1"
                       style={{ fontSize: ".77rem" }}
                     >
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                       tempora pariatur porro provident autem labore, reprehenderit 
-                      odio dicta dolorem voluptatum dolorum architecto quisquam 
-                      fuga quia minima eligendi sequi ex repudiandae!
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      tempora pariatur porro provident autem labore,
+                      reprehenderit odio dicta dolorem voluptatum dolorum
+                      architecto quisquam fuga quia minima eligendi sequi ex
+                      repudiandae!
                     </MDBCardText>
-
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>
-    </MDBRow>
+            </MDBRow>
           </MDBCol>
           <MDBCol lg="8">
             <MDBCard className="mb-4">
@@ -148,10 +145,8 @@ export default function Profile() {
               <MDBCol md="12">
                 <MDBCard className="mb-4 mb-md-0">
                   <MDBCardBody>
-                    <MDBCardText className="mb-4">
-                      Skills
-                    </MDBCardText>
-                    <hr/>
+                    <MDBCardText className="mb-4">Skills</MDBCardText>
+                    <hr />
                     <MDBCardText
                       className="mb-1"
                       style={{ fontSize: ".77rem" }}

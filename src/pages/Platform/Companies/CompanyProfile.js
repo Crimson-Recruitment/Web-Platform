@@ -8,11 +8,10 @@ import {
   MDBCardText,
   MDBCardBody,
   MDBCardImage,
-  MDBTypography
+  MDBTypography,
 } from "mdb-react-ui-kit";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
-
+import { Carousel } from "react-responsive-carousel";
 
 function CompanyProfile() {
   return (
@@ -41,7 +40,9 @@ function CompanyProfile() {
                   />
                 </div>
                 <div className="ms-3" style={{ marginTop: "90px" }}>
-                  <MDBTypography className="text-white" tag="h3">BlockSafe</MDBTypography>
+                  <MDBTypography className="text-white" tag="h3">
+                    BlockSafe
+                  </MDBTypography>
                   <MDBCardText>Technology</MDBCardText>
                   <MDBCardText>Kampala, Uganda</MDBCardText>
                 </div>
@@ -51,27 +52,32 @@ function CompanyProfile() {
                   <p className="lead fw-normal mb-1">Company Overview</p>
                   <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
                     <MDBCardText className="font-italic mb-1">
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias mollitia nisi id? Sunt consectetur nostrum eum 
-                      consequatur dolore explicabo sint fuga voluptate, asperiores dolorem laboriosam ducimus architecto nobis natus. Laborum.
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
-                      Suscipit, id facilis. Assumenda esse maxime a, pariatur eos tenetur, nam eum quisquam quibusdam, velit in illo suscipit ad temporibus dolore eius.
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Alias mollitia nisi id? Sunt consectetur nostrum eum
+                      consequatur dolore explicabo sint fuga voluptate,
+                      asperiores dolorem laboriosam ducimus architecto nobis
+                      natus. Laborum. Lorem ipsum dolor, sit amet consectetur
+                      adipisicing elit. Suscipit, id facilis. Assumenda esse
+                      maxime a, pariatur eos tenetur, nam eum quisquam
+                      quibusdam, velit in illo suscipit ad temporibus dolore
+                      eius.
                     </MDBCardText>
                   </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                <p className="lead fw-normal mb-1">Company Photos</p>
+                  <p className="lead fw-normal mb-1">Company Photos</p>
                 </div>
                 <Carousel autoPlay={true}>
-                <div>
+                  <div>
                     <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(22).jpg" />
-                </div>
-                <div>
+                  </div>
+                  <div>
                     <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(15).jpg" />
-                </div>
-                <div>
+                  </div>
+                  <div>
                     <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(23).jpg" />
-                </div>
-            </Carousel>
+                  </div>
+                </Carousel>
 
                 <div className="my-5">
                   <p className="lead fw-normal mb-1">Contact</p>
