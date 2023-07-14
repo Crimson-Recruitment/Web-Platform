@@ -31,6 +31,7 @@ export default function CompanyLogin() {
       .then((val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });
+          localStorage.setItem("email", data.get("email"));
           window.location.href = "/company-jobs";
           setLoading(false);
         } else {

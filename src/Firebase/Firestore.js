@@ -3,6 +3,9 @@ import {
   getDocs,
   getDoc,
   doc,
+  query,
+  where,
+  collection,
   deleteDoc,
   updateDoc,
   setDoc,
@@ -25,7 +28,7 @@ export default class Firestore {
     let result = { code: null, val: null };
     await setDoc(doc(firestore, "User", id), {
       firstName: firstName,
-      lastname: lastname,
+      lastName: lastname,
       emailAddress: emailAddress,
       phoneNumber: phoneNumber,
       profileImage: image,
@@ -78,6 +81,43 @@ export default class Firestore {
         result = { code: 1, val: err };
       });
 
+    return result;
+  };
+
+  getUserDetails = async (email) => {
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "User"),
+      where("emailAddress", "==", email)
+    );
+
+    await getDocs(q)
+      .then((res) => {
+        res.forEach((doc) => {
+          result = { code: 0, val: doc };
+        });
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    return result;
+  };
+
+  getCompanyDetails = async (email) => {
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Company"),
+      where("emailAddress", "==", email)
+    );
+
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = { code: 1, val: "No docs found!" };
+    } else {
+      res.forEach((doc) => {
+        result = { code: 0, val: doc };
+      });
+    }
     return result;
   };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CompanySideBar from "../../../components/CompanySideBar";
 import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
 import PropTypes from "prop-types";
@@ -6,6 +6,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import MuiPhoneNumber from "material-ui-phone-number";
+import { Grid, Button, CssBaseline, TextField, Container } from "@mui/material";
+import LocationSearchInput from "../../../components/LocationInput";
+import { Link } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,6 +50,8 @@ function CompanyJobs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [loading, setLoading] = useState(false);
   return (
     <CompanySideBar>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -74,7 +80,104 @@ function CompanyJobs() {
         </MDBCard>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Create Job
+        <Container component="main" maxWidth="lg">
+          <CssBaseline />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              minHeight: "80vh",
+            }}
+          >
+            <Box component="form" noValidate sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="firstName"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="family-name"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <MuiPhoneNumber
+                    required
+                    variant="outlined"
+                    id="phonenumber"
+                    label="Phone Number"
+                    name="phonenumber"
+                    fullWidth
+                    defaultCountry={"ug"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <LocationSearchInput />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="email"
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                disabled={loading}
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "green",
+                  ":hover": { backgroundColor: "darkgreen" },
+                }}
+              >
+                {loading ? "Loading..." : "Sign Up"}
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link
+                    className="text-green-600 hover:text-green-800"
+                    to="/login"
+                    variant="body2"
+                  >
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Container>
       </CustomTabPanel>
     </CompanySideBar>
   );

@@ -19,7 +19,7 @@ function Skills() {
   const firestore = new Firestore();
   const db = new Storage();
 
-  const user = useLocation().state;
+  const user = JSON.parse(sessionStorage.getItem("userData"));
   const submitHandler = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -64,7 +64,7 @@ function Skills() {
           setLoading(false);
         }
       })
-      .catxh((err) => {
+      .catch((err) => {
         alert(err);
         setLoading(false);
       });
@@ -158,7 +158,7 @@ function Skills() {
             options={professionList}
             placeholder="Medicine, technology,....."
             onChange={(val) => {
-              setSelectedProfession(val.value);
+              setSelectedProfession(val);
             }}
             isSearchable={true}
             value={selectedProfession}

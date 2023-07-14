@@ -17,7 +17,7 @@ function CompanyDetails() {
   const [image, setImage] = useState(null);
   const [imagePath, setImagePath] = useState(null);
   const [license, setLicense] = useState(null);
-  const company = useLocation().state;
+  const company = JSON.parse(sessionStorage.getItem("companyData"));
   const db = new Storage();
   const firestore = new Firestore();
 
@@ -51,11 +51,11 @@ function CompanyDetails() {
         company.phoneNumber2,
         company.email,
         company.location,
-        imagelink,
+        imagelink.val,
         selectedType,
         e.target["overview"].value,
         e.target["bordered-radio"].value,
-        licenselink
+        licenselink.val
       )
       .then((res) => {
         if (res.code === 0) {

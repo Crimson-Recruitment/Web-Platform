@@ -30,6 +30,7 @@ export default function Login() {
       .then((val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
+          localStorage.setItem("email", data.get("email"));
           window.location.href = "/jobs";
           setLoading(false);
         } else {

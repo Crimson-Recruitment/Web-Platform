@@ -7,7 +7,6 @@ import Container from "@mui/material/Container";
 export default function AboutUs() {
   return (
     <main>
-      {/* Hero unit */}
       <Box
         sx={{
           bgcolor: "lightgreen",
@@ -67,15 +66,15 @@ export default function AboutUs() {
       </Box>
       <Container sx={{ py: 8 }} maxWidth="md">
         {/* End hero unit */}
-        <Grid container spacing={4} sx={{ marginBottom: "100px" }}>
+        <Grid container spacing={5} sx={{ marginBottom: "100px" }}>
           <Grid
-            item
             xs={12}
             sm={6}
             sx={{
               backgroundImage:
                 "url(https://source.unsplash.com/random?wallpapers)",
               minHeight: "300px",
+              width: { xs: "100vw" },
             }}
           />
           <Grid xs={12} sm={6}>
@@ -83,7 +82,7 @@ export default function AboutUs() {
               align="center"
               color="text.black"
               paragraph
-              sx={{ fontSize: "30px" }}
+              sx={{ fontSize: "30px", marginLeft: "20px" }}
             >
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam atque
               dolore voluptatibus nisi. Nihil placeat, eius a harum tenetur,

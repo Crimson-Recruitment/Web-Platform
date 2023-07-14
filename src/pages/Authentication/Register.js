@@ -32,8 +32,10 @@ export default function Register() {
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          navigate("/skills", {
-            state: {
+          localStorage.setItem("email", data.get("email"));
+          sessionStorage.setItem(
+            "userData",
+            JSON.stringify({
               id: uniqid(
                 `${data.get("firstName")}_${data.get("lastName")}-`,
                 "-user"
@@ -43,8 +45,9 @@ export default function Register() {
               phoneNumber: data.get("phonenumber"),
               email: data.get("email"),
               location: data.get("location"),
-            },
-          });
+            })
+          );
+          window.location.href = "/skills";
           setLoading(false);
         } else {
           alert(`${val.val}`);

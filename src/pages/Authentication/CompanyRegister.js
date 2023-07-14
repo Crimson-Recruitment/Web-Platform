@@ -35,16 +35,19 @@ export default function CompanyRegister() {
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });
-          navigate("/company-details", {
-            state: {
+          localStorage.setItem("email", data.get("email"));
+          sessionStorage.setItem(
+            "companyData",
+            JSON.stringify({
               id: uniqid(`${data.get("companyName")}-`, "-company"),
               companyName: data.get("companyName"),
               phoneNumber1: data.get("phonenumber1"),
               phoneNumber2: data.get("phonenumber2"),
               location: data.get("location"),
               email: data.get("email"),
-            },
-          });
+            })
+          );
+          window.location.href = "/company-details";
           setLoading(false);
         } else {
           alert(`${val.val}`);
