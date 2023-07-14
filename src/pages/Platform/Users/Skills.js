@@ -13,7 +13,7 @@ function Skills() {
   const [selectedProfession, setSelectedProfession] = useState();
   const [image, setImage] = useState(null);
   const [imagePath, setImagePath] = useState(null)
-  const [resume, setResume] = useState();
+  const [resume, setResume] = useState(null);
   const [loading, setLoading]  = useState(false); 
   const navigate = useNavigate();
   const firestore = new Firestore();
@@ -23,17 +23,23 @@ const user = useLocation().state;
   const submitHandler = async (event) => {
     event.preventDefault()
     setLoading(true)
-    let imagelink = await db.getFileUrl(`${user.id}-image`,imagePath);
-    if (imagelink.code === 1) {
-      alert(imagelink.val)
-      setLoading(false)
-      return;
+    let imagelink = "";
+    if (imagePath != null) {
+      imagelink = await db.getFileUrl(`${user.id}-image`,imagePath);
+      if (imagelink.code === 1) {
+        alert(imagelink.val)
+        setLoading(false)
+        return;
+      }
     }
-    let resumelink = await db.getFileUrl(`${user.id}-resume`, resume);
-    if (resumelink.code === 1) {
-      alert(resumelink.val)
-      setLoading(false)
-      return;
+    let resumelink = "";
+    if (resume != null) {
+      resumelink = await db.getFileUrl(`${user.id}-resume`, resume);
+      if (resumelink.code === 1) {
+        alert(resumelink.val)
+        setLoading(false)
+        return;
+      }
     }
     await firestore.createUserDetails(
       user.id,
@@ -55,6 +61,9 @@ const user = useLocation().state;
           alert(res.val)
           setLoading(false)
         }
+      }).catxh(err => {
+        alert(err)
+          setLoading(false)
       })
   };
 
@@ -115,7 +124,7 @@ const user = useLocation().state;
             options={professionList}
             placeholder="Medicine, technology,....."
             onChange={(val) => {
-              setSelectedProfession(val);
+              setSelectedProfession(val.value);
             }}
             isSearchable={true}
             value={selectedProfession}

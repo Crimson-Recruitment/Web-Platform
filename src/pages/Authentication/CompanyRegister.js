@@ -13,6 +13,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Cookies from "universal-cookie";
 import LocationSearchInput from "../../components/LocationInput";
+import Auth from "../../Firebase/Authentication";
+import uniqid from "uniqid";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -21,15 +23,37 @@ const defaultTheme = createTheme();
 export default function CompanyRegister() {
   const cookie = new Cookies();
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  const [loading, setLoading] = React.useState(false);
+  let auth = new Auth();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true)
     const data = new FormData(event.currentTarget);
-    cookie.set("company-login", true, { path: "/" });
+    await auth
+      .signUp(data.get("email"), data.get("password"))
+      .then(async (val) => {
+        if (val.code == 0) {
+          cookie.set("company-login", true, { path: "/" });
+          navigate("/company-details",{state:{
+            "id": uniqid(`${data.get("companyName")}-`, "-company"),
+            "companyName":data.get("companyName"),
+            "phoneNumber1": data.get("phonenumber1"),
+            "phoneNumber2": data.get("phonenumber2"),
+            "location": data.get("location"),
+            "email": data.get("email"),
+          }});
+          setLoading(false)
+        } else {
+          alert(`${val.val}`);
+          setLoading(false);
+        }
+      });
+    setLoading(false);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
-    window.location.href = "/company-details";
   };
 
   return (
@@ -76,7 +100,7 @@ export default function CompanyRegister() {
                   variant="outlined"
                   id="phonenumber"
                   label="Phone Number 1"
-                  name="phonenumber"
+                  name="phonenumber1"
                   fullWidth
                   defaultCountry={"ug"}
                 />
@@ -87,7 +111,7 @@ export default function CompanyRegister() {
                   variant="outlined"
                   id="phonenumber"
                   label="Phone Number 2"
-                  name="phonenumber"
+                  name="phonenumber2"
                   fullWidth
                   defaultCountry={"ug"}
                 />
@@ -110,11 +134,11 @@ export default function CompanyRegister() {
                   label="Password"
                   type="password"
                   id="password"
-                  autoComplete="new-password"
                 />
               </Grid>
             </Grid>
             <Button
+              disabled={loading}
               type="submit"
               fullWidth
               variant="contained"
@@ -125,7 +149,7 @@ export default function CompanyRegister() {
                 ":hover": { backgroundColor: "darkgreen" },
               }}
             >
-              Sign Up
+              {loading ? "Loading..." : "Sign Up"}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

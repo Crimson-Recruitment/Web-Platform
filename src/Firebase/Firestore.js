@@ -45,7 +45,41 @@ export default class Firestore {
     return result;
   };
 
-  createCompanyDetails = () => {};
+  createCompanyDetails = async (
+    id,
+    companyName,
+    phoneNumber1,
+    phoneNumber2 = "",
+    email,
+    location,
+    logo="",
+    type,
+    overview,
+    isLicensed,
+    license
+    ) => {
+      let result = { code: null, val: null };
+      await setDoc(doc(firestore, "Company", id), {
+        companyName:companyName,
+        phoneNumber1: phoneNumber1,
+        phoneNumber2: phoneNumber2,
+        emailAddress: email,
+        logo: logo,
+        location: location,
+        type: type,
+        overview: overview,
+        isLicensed: isLicensed,
+        license: license,
+      })
+        .then((val) => {
+          result = { code: 0, val: val };
+        })
+        .catch((err) => {
+          result = { code: 1, val: err };
+        });
+  
+      return result;
+    };
 
   updateUserDetails = () => {};
 

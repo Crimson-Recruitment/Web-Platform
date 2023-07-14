@@ -32,7 +32,6 @@ export default function Register() {
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          await new Promise( res => setTimeout(res, 1000));
           navigate("/skills",{state:{
             id: uniqid(`${data.get("firstName")}_${data.get("lastName")}-`, "-user"),
             "firstName": data.get("firstName"),

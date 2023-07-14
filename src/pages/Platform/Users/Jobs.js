@@ -10,6 +10,7 @@ import "../../../Styles/jobs.css";
 import { Box, Button, Grid } from "@mui/material";
 
 function Jobs() {
+ 
   return (
     <SideBar>
       <Grid container padding="0px">

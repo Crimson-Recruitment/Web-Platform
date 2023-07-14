@@ -38,7 +38,7 @@ function App() {
           <Route path="/company-register" element={<CompanyRegister />} />
           {cookie.get("user-login") ? (
             <>
-              <Route path="/skills" element={<Skills />} />
+            <Route path="/skills" element={<Skills />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/for-you" element={<ForYou />} />
               <Route path="/profile" element={<Profile />} />
