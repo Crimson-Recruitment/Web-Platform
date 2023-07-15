@@ -1,17 +1,9 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import SideBar from "../../../components/SideBar";
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-} from "mdb-react-ui-kit";
 import "../../../Styles/jobs.css";
 import { Grid, IconButton, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Firestore from "../../../Firebase/Firestore";
 import { industryProfessions } from "../../../Data/CompanyIndustries";
 import UserJobCard from "../../../components/UserJobCard";
@@ -42,13 +34,6 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
 
 function containsObject(obj, list) {
   var i;
@@ -68,10 +53,6 @@ function ForYou() {
   const [jobsList, setJobsList] = React.useState([]);
   const [loading, setLoading] = React.useState(true)
   const [current, setCurrent] = React.useState(null);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   React.useEffect(() => {
     (async() => {
@@ -97,14 +78,7 @@ function ForYou() {
   return (
     <SideBar>
       <Grid container>
-        <Grid item xs={12} md={5}>
-          <Box sx={{ bgcolor: "background.paper" }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="For You" {...a11yProps(0)} />
-          <Tab label="Featured" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
+        <Grid item xs={12} md={5}>     
         {jobsList && jobsList.filter((val) => {
           if(industryProfessions[val.jobField].indexOf(JSON.parse(sessionStorage.getItem("userDetails")).profession.label) !== -1) {
             return true
@@ -118,14 +92,6 @@ function ForYou() {
             </a>
           )
         })}
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-      {jobsList && jobsList.map((job) => {
-          return(
-            <UserJobCard title={job.jobTitle} description={job.jobDescription} timestamp={job.timestamp}/>
-          )
-        })}
-      </CustomTabPanel>
         </Grid>
         <Grid item sx={{ display: { md: "block", xs: "none" } }} md={0.1}>
           <div className="d-flex" style={{ height: "100vh" }}>
