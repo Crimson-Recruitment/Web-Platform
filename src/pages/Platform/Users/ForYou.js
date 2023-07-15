@@ -66,7 +66,6 @@ function ForYou() {
   const [value, setValue] = React.useState(0);
   const firestore = new Firestore();
   const [jobsList, setJobsList] = React.useState([]);
-  const [forYou, setForYou] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [current, setCurrent] = React.useState(null);
 
