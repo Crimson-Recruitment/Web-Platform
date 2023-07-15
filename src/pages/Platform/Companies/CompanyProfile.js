@@ -23,7 +23,11 @@ function CompanyProfile() {
     (async () => {
       let email = localStorage.getItem("email");
       console.log(email);
-      await firestore
+      if(sessionStorage.getItem("companyDetails") != null) {
+        setCompanyData(JSON.parse(sessionStorage.getItem("companyDetails")));
+        setLoading(false);
+      } else {
+        await firestore
         .getCompanyDetails(email)
         .then((user) => {
           if (user.code == 0) {
@@ -39,6 +43,8 @@ function CompanyProfile() {
           alert(err);
           setLoading(false);
         });
+
+      }
     })();
   }, []);
   return (

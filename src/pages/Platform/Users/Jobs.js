@@ -8,8 +8,38 @@ import {
 } from "mdb-react-ui-kit";
 import "../../../Styles/jobs.css";
 import { Box, Button, Grid } from "@mui/material";
+import Firestore from "../../../Firebase/Firestore";
 
 function Jobs() {
+  const firestore = new Firestore()
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    (async () => {
+      let email = localStorage.getItem("email");
+      console.log(email);
+      await firestore
+        .getUserDetails(email)
+        .then((user) => {
+          if (user.code == 0) {
+            if(sessionStorage.getItem("userDetails") != null) {
+              setLoading(false);
+              return;
+            }
+            sessionStorage.setItem("userDetails", JSON.stringify(user.val.data()));
+            setLoading(false);
+          } else {
+            alert(user.val);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+          setLoading(false);
+        });
+    })();
+  }, []);
+
   return (
     <SideBar>
       <Grid container padding="0px">

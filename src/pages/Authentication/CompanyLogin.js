@@ -43,10 +43,6 @@ export default function CompanyLogin() {
         alert(err);
         setLoading(false);
       });
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
 
   return (

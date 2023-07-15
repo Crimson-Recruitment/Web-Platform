@@ -55,10 +55,7 @@ export default function CompanyRegister() {
         }
       });
     setLoading(false);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+   
   };
 
   return (

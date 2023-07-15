@@ -169,7 +169,9 @@ function CompanyDetails() {
               setSelectedType(val.value);
             }}
             isSearchable={true}
-            value={selectedType}
+            value={industries.filter(function(option) {
+              return option.value === selectedType;
+            })}
           />
         </div>
         <div className="mb-6">

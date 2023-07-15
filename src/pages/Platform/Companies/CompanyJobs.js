@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CompanySideBar from "../../../components/CompanySideBar";
-import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import MuiPhoneNumber from "material-ui-phone-number";
 import {
   Grid,
   Button,
@@ -18,12 +16,17 @@ import {
   ListItemButton,
   ListItemText,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import LocationSearchInput from "../../../components/LocationInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { professionList, skills } from "../../../Data/UserProfessions";
 import Select from "react-select";
+import { industries } from "../../../Data/CompanyIndustries";
+import Firestore from "../../../Firebase/Firestore";
+import JobCard from "../../../components/JobCard";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,7 +71,10 @@ function CompanyJobs() {
   const [benefits, setBenefits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState();
-  const [selectedProfession, setSelectedProfession] = useState();
+  const [selectedType, setSelectedType] = useState();
+  const [jobsList, setJobsList] = useState([])
+  const navigate = useNavigate()
+  const [open, setOpen] = React.useState(false);
 
   const removeRequirementsHandler = (res) => {
     const newList = requirements.filter((item) => item !== res);
@@ -78,6 +84,92 @@ function CompanyJobs() {
     const newList = benefits.filter((item) => item !== res);
     setBenefits(newList);
   };
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const firestore = new Firestore();
+  
+  useEffect(() => {
+    (async () => {
+      let email = localStorage.getItem("email");
+      if(sessionStorage.getItem("companyDetails") != null) {
+        setLoading(false);
+        return;
+      } else {
+        await firestore
+        .getCompanyDetails(email)
+        .then((user) => {
+          if (user.code == 0) {
+            sessionStorage.setItem("companyDetails", JSON.stringify(user.val.data()));
+            sessionStorage.setItem("companyId", JSON.stringify(user.val.id));
+          } else {
+            alert(user.val);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+      }
+    })();
+  (async() => {
+    await firestore.getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
+    .then(val => {
+      if(val.code == 0) {
+        val.val.forEach(job => {
+          setJobsList([...jobsList,job.data()])
+        })
+      setLoading(false)
+      } else {
+        alert(val.val)
+      setLoading(false)
+      }
+    }).catch(err => {
+      alert(err)
+      setLoading(false)
+    })
+  })()
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    const data = new FormData(e.currentTarget);
+    await firestore.createJobPost(
+      data.get("jobTitle"),
+      selectedType,
+      data.get("jobDescription"),
+      data.get("location"),
+      requirements,
+      selectedSkills,
+      data.get("minSalary"),
+      data.get("maxSalary"),
+      benefits,
+      new Date().getTime()
+      ).then(async val => {
+        if (val.code == 0) {
+          handleClick()
+        await new Promise(res => setTimeout(res,2000))
+        setLoading(false)
+        navigate(0)
+        } else {
+          alert(val.val)
+          setLoading(false)
+        }
+      }).catch(err => {
+        alert(err)
+        setLoading(false)
+      })
+  }
+
   return (
     <CompanySideBar>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -91,19 +183,14 @@ function CompanyJobs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <MDBCard className="my-3 me-3 w-75">
-          <MDBCardBody>
-            <MDBCardTitle>Card title</MDBCardTitle>
-            <MDBCardText>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </MDBCardText>
-            <MDBCardText>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </MDBCardText>
-          </MDBCardBody>
-        </MDBCard>
+          {
+            jobsList? jobsList.map((job) => {
+              return(
+                <JobCard title={job.jobTitle} description={job.jobDescription} timestamp={job.timestamp}/>
+              )
+            }):null
+          }
+       
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <Container component="main" maxWidth="lg">
@@ -116,7 +203,7 @@ function CompanyJobs() {
               minHeight: "80vh",
             }}
           >
-            <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Box component="form" onSubmit={handleSubmit} noValidate={true} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <label
@@ -133,6 +220,27 @@ function CompanyJobs() {
                     label="Job Title"
                     autoFocus
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="field"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Job Field
+                  </label>
+                  <Select
+                  required
+            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+            options={industries}
+            name="field"
+            placeholder="Healthcare, technology,....."
+            onChange={(val) => {
+              setSelectedType(val.label);
+            }}
+            value={industries.filter(function(option) {
+              return option.label === selectedType;
+            })}
+          />
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -188,11 +296,13 @@ function CompanyJobs() {
                     ":hover": { backgroundColor: "darkgreen" },
                   }}
                     onClick={() => {
-                      setRequirements([
-                        ...requirements,
-                        document.getElementsByName("requirements")[0].value,
-                      ]);
-                      document.getElementsByName("requirements")[0].value = "";
+                      if(document.getElementsByName("requirements")[0].value != "") {
+                        setRequirements([
+                          ...requirements,
+                          document.getElementsByName("requirements")[0].value,
+                        ]);
+                        document.getElementsByName("requirements")[0].value = "";
+                      }
                     }}
                   >
                     Add
@@ -225,7 +335,7 @@ function CompanyJobs() {
                       : null}
                   </List>
                 </Grid>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                   <label
                     for="skills"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -254,10 +364,11 @@ function CompanyJobs() {
                     for="minSalary"
                     className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Min Salary
+                    Min Salary in USD
                   </label>
                   <TextField
                     name="minSalary"
+                    type="number"
                     required
                     fullWidth
                     id="minSalary"
@@ -270,11 +381,12 @@ function CompanyJobs() {
                     for="maxSalary"
                     className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Max Salary
+                    Max Salary in USD
                   </label>
                   <TextField
                     name="maxSalary"
                     required
+                    type="number"
                     fullWidth
                     id="maxSalary"
                     label="Max Salary"
@@ -309,11 +421,13 @@ function CompanyJobs() {
                     ":hover": { backgroundColor: "darkgreen" },
                   }}
                     onClick={() => {
-                      setBenefits([
-                        ...requirements,
-                        document.getElementsByName("benefits")[0].value,
-                      ]);
-                      document.getElementsByName("benefits")[0].value = "";
+                      if( document.getElementsByName("benefits")[0].value != "") {
+                        setBenefits([
+                          ...benefits,
+                          document.getElementsByName("benefits")[0].value,
+                        ]);
+                        document.getElementsByName("benefits")[0].value = "";
+                      }
                     }}
                   >
                     Add
@@ -322,7 +436,7 @@ function CompanyJobs() {
                 <Grid xs={12}>
                   <List>
                     {requirements != []
-                      ? requirements.map((req, index) => {
+                      ? benefits.map((req, index) => {
                           return (
                             <ListItem
                               key={index}
@@ -366,6 +480,11 @@ function CompanyJobs() {
           </Box>
         </Container>
       </CustomTabPanel>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Successfully add Job Post!
+        </Alert>
+      </Snackbar>
     </CompanySideBar>
   );
 }

@@ -22,6 +22,7 @@ import Profile from "./pages/Platform/Users/Profile";
 import Settings from "./pages/Platform/Users/Settings";
 import Applications from "./pages/Platform/Users/Applications";
 import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
+import SideBar from "./components/SideBar";
 
 function App() {
   const cookie = new Cookies();
@@ -39,11 +40,13 @@ function App() {
         {cookie.get("user-login") ? (
           <>
             <Route path="/skills" element={<Skills />} />
+          
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/for-you" element={<ForYou />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/applications" element={<Applications />} />
+    
           </>
         ) : null}
         {cookie.get("company-login") ? (

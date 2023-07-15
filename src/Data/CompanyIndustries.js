@@ -29,3 +29,110 @@ export const industries = [
   { value: "legal", label: "Legal" },
   { value: "architecture", label: "Architecture" },
 ];
+
+export const industryProfessions = {
+  Technology: [
+    "Software Developer",
+    "Software Engineer",
+    "Web Developer",
+    "Data Analyst",
+    "Network Administrator",
+    "Database Administrator",
+    "IT Project Manager",
+    "UX/UI Designer",
+    "Systems Analyst"
+  ],
+  Healthcare: [
+    "Nurse",
+    "Doctor",
+    "Pharmacist",
+    "Medical Technician",
+    "Physician Assistant",
+    "Radiologist",
+    "Physical Therapist",
+    "Occupational Therapist"
+  ],
+  Finance: [
+    "Accountant",
+    "Financial Analyst",
+    "Investment Banker",
+    "Actuary",
+    "Tax Consultant",
+    "Financial Planner",
+    "Risk Manager",
+    "Auditor"
+  ],
+  Education: [
+    "Teacher",
+    "Professor",
+    "Librarian",
+    "Guidance Counselor",
+    "Special Education Teacher",
+    "School Administrator",
+    "Curriculum Developer",
+    "Education Consultant"
+  ],
+  Marketing: [
+    "Marketing Manager",
+    "Digital Marketer",
+    "Public Relations Specialist",
+    "Market Researcher",
+    "Social Media Manager",
+    "Brand Manager",
+    "Advertising Executive",
+    "Content Strategist"
+  ],
+  Construction: [
+    "Architect",
+    "Civil Engineer",
+    "Electrician",
+    "Plumber",
+    "Contractor",
+    "Construction Manager",
+    "Structural Engineer",
+    "Building Inspector"
+  ],
+  Entertainment: [
+    "Actor",
+    "Musician",
+    "Director",
+    "Cinematographer",
+    "Makeup Artist",
+    "Costume Designer",
+    "Sound Engineer",
+    "Casting Director"
+  ],
+  Hospitality: [
+    "Chef",
+    "Bartender",
+    "Hotel Manager",
+    "Concierge",
+    "Event Planner",
+    "Sommelier",
+    "Restaurant Manager",
+    "Catering Coordinator"
+  ],
+  Transportation: [
+    "Pilot",
+    "Truck Driver",
+    "Flight Attendant",
+    "Air Traffic Controller",
+    "Ship Captain",
+    "Freight Broker",
+    "Dispatcher",
+    "Logistics Manager"
+  ],
+  Retail: [
+    "Sales Associate",
+    "Store Manager",
+    "Visual Merchandiser",
+    "Buyer",
+    "Customer Service Representative",
+    "Inventory Planner",
+    "Loss Prevention Specialist",
+    "Retail Operations Manager"
+  ]
+};
+
+
+

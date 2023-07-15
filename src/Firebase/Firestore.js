@@ -10,6 +10,7 @@ import {
   updateDoc,
   setDoc,
 } from "firebase/firestore";
+import uniqid from "uniqid";
 
 export default class Firestore {
   createUserDetails = async (
@@ -120,6 +121,76 @@ export default class Firestore {
     }
     return result;
   };
+
+  createJobPost = async (
+    jobTitle,
+    jobField,
+    jobDescription,
+    location,
+    requirements,
+    skills,
+    minSalary,
+    maxSalary,
+    benefits,
+    timestamp
+  ) => {
+    let companyDetails = JSON.parse(sessionStorage.getItem("companyDetails"));
+    let result = { code: null, val: null };
+    let jobId = uniqid("","-"+companyDetails.companyName)
+    await setDoc(doc(firestore, "Jobs", jobId), {
+      companyName: companyDetails.companyName,
+      companyId: JSON.parse(sessionStorage.getItem("companyId")),
+      companyOverview: companyDetails.overview,
+      jobTitle: jobTitle,
+      jobField: jobField,
+      jobDescription: jobDescription,
+      location: location,
+      requirements: requirements,
+      skills: skills,
+      minSalary: minSalary,
+      maxSalary: maxSalary,
+      benefits: benefits,
+      timestamp: timestamp
+    })
+      .then((val) => {
+        result = { code: 0, val: val };
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    return result;
+  } 
+
+  getCompanyJobPosts = async(companyId) => {
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Jobs"),
+      where("companyId", "==", companyId)
+    );
+
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = { code: 1, val: "No docs found!" };
+    } else {
+      result = { code: 0, val: res };
+    }
+    return result;
+  }
+
+  getJobs = async() => {
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Jobs")
+    );
+
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = { code: 1, val: "No docs found!" };
+    } else {
+      result = { code: 0, val: res };
+    }
+    return result;
+  }
 
   updateUserDetails = () => {};
 

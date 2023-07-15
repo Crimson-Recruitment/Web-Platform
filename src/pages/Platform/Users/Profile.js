@@ -25,13 +25,17 @@ export default function Profile() {
     (async () => {
       let email = localStorage.getItem("email");
       console.log(email);
-      await firestore
+      if(sessionStorage.getItem("userDetails") != null) {
+        setUserData(JSON.parse(sessionStorage.getItem("userDetails")));
+        setLoading(false);
+        return;
+      } else {
+        await firestore
         .getUserDetails(email)
         .then((user) => {
           if (user.code == 0) {
             setUserData(user.val.data());
-            localStorage.setItem("profileImage", user.val.data().profileImage);
-            console.log(userData);
+            sessionStorage.setItem("userDetails", JSON.stringify(user.val.data()));
             setLoading(false);
           } else {
             alert(user.val);
@@ -42,6 +46,7 @@ export default function Profile() {
           alert(err);
           setLoading(false);
         });
+      }
     })();
   }, []);
   return (
@@ -64,7 +69,7 @@ export default function Profile() {
                         />
                       </div>
                       <br />
-                      <p className="text-muted mb-1">{userData.profession}</p>
+                      <p className="text-muted mb-1">{userData.profession.label}</p>
                       <p className="text-muted mb-4">{userData.location}</p>
 
                       <p className="text-blue-500 mb-1">Download Resume</p>
