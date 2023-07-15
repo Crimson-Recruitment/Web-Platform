@@ -30,6 +30,7 @@ export default function Profile() {
         .then((user) => {
           if (user.code == 0) {
             setUserData(user.val.data());
+            localStorage.setItem("profileImage", user.val.data().profileImage);
             console.log(userData);
             setLoading(false);
           } else {
@@ -169,13 +170,18 @@ export default function Profile() {
                     <MDBCol md="12">
                       <MDBCard className="mb-4 mb-md-0">
                         <MDBCardBody>
-                          <MDBCardText className="mb-4">Skills</MDBCardText>
+                          <MDBCardText
+                            style={{ fontSize: "1.5rem" }}
+                            className="mb-4 text-black"
+                          >
+                            Skills
+                          </MDBCardText>
                           <hr />
                           {userData.skills.map((skill) => {
                             return (
                               <MDBCardText
-                                className="mb-3 mb-1"
-                                style={{ fontSize: ".9rem" }}
+                                className="mb-3"
+                                style={{ fontSize: "1rem" }}
                               >
                                 {skill.label}
                               </MDBCardText>

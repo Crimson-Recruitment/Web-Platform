@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CompanySideBar from "../../../components/CompanySideBar";
 import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
 import PropTypes from "prop-types";
@@ -7,9 +7,23 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MuiPhoneNumber from "material-ui-phone-number";
-import { Grid, Button, CssBaseline, TextField, Container } from "@mui/material";
+import {
+  Grid,
+  Button,
+  CssBaseline,
+  TextField,
+  Container,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 import LocationSearchInput from "../../../components/LocationInput";
 import { Link } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { professionList, skills } from "../../../Data/UserProfessions";
+import Select from "react-select";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,8 +64,20 @@ function CompanyJobs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const [requirements, setRequirements] = useState([]);
+  const [benefits, setBenefits] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedSkills, setSelectedSkills] = useState();
+  const [selectedProfession, setSelectedProfession] = useState();
+
+  const removeRequirementsHandler = (res) => {
+    const newList = requirements.filter((item) => item !== res);
+    setRequirements(newList);
+  };
+  const removeBenefitsHandler = (res) => {
+    const newList = benefits.filter((item) => item !== res);
+    setBenefits(newList);
+  };
   return (
     <CompanySideBar>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -92,62 +118,233 @@ function CompanyJobs() {
           >
             <Box component="form" noValidate sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
+                  <label
+                    for="jobTitle"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Job Title
+                  </label>
                   <TextField
-                    autoComplete="given-name"
-                    name="firstName"
+                    name="jobTitle"
                     required
                     fullWidth
-                    id="firstName"
-                    label="First Name"
+                    id="jobTitle"
+                    label="Job Title"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="jobDescription"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Job Description
+                  </label>
+                  <TextField
+                    required
+                    multiline
+                    fullWidth
+                    rows={4}
+                    maxRows={6}
+                    id="jobDescription"
+                    label="Job Description"
+                    name="jobDescription"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="location"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Location
+                  </label>
+                  <LocationSearchInput />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="requirements"
+                    className="block mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Requirements
+                  </label>
+                </Grid>
+                <Grid item xs={10}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="text"
+                    id="requirements"
+                    label="Requirements"
+                    name="requirements"
+                    autoComplete=""
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "green",
+                    ":hover": { backgroundColor: "darkgreen" },
+                  }}
+                    onClick={() => {
+                      setRequirements([
+                        ...requirements,
+                        document.getElementsByName("requirements")[0].value,
+                      ]);
+                      document.getElementsByName("requirements")[0].value = "";
+                    }}
+                  >
+                    Add
+                  </Button>
+                </Grid>
+                <Grid xs={12}>
+                  <List>
+                    {requirements != []
+                      ? requirements.map((req, index) => {
+                          return (
+                            <ListItem
+                              key={index}
+                              secondaryAction={
+                                <IconButton
+                                  onClick={() => removeRequirementsHandler(req)}
+                                  edge="end"
+                                  aria-label="delete"
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              }
+                              disablePadding
+                            >
+                              <ListItemButton>
+                                <ListItemText primary={req} />
+                              </ListItemButton>
+                            </ListItem>
+                          );
+                        })
+                      : null}
+                  </List>
+                </Grid>
+                <Grid xs={12}>
+                  <label
+                    for="skills"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Skills (Not needed for non-programming jobs)
+                  </label>
+                  <Select
+                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    options={skills}
+                    placeholder="Select skills,..."
+                    name="skills"
+                    onChange={(val) => {
+                      if (val.length <= 6) {
+                        setSelectedSkills(val);
+                      } else {
+                        alert("Max number of skills added!");
+                      }
+                    }}
+                    isSearchable={true}
+                    value={selectedSkills}
+                    isMulti
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <label
+                    for="minSalary"
+                    className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Min Salary
+                  </label>
+                  <TextField
+                    name="minSalary"
+                    required
+                    fullWidth
+                    id="minSalary"
+                    label="Min Salary"
                     autoFocus
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
+                  <label
+                    for="maxSalary"
+                    className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Max Salary
+                  </label>
+                  <TextField
+                    name="maxSalary"
+                    required
+                    fullWidth
+                    id="maxSalary"
+                    label="Max Salary"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="benefits"
+                    className="block mt-4 mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Benefits
+                  </label>
+                </Grid>
+
+                <Grid item xs={10}>
                   <TextField
                     required
                     fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
+                    type="text"
+                    id="benefits"
+                    label="Benefits"
+                    name="benefits"
+                    autoComplete=""
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <MuiPhoneNumber
-                    required
-                    variant="outlined"
-                    id="phonenumber"
-                    label="Phone Number"
-                    name="phonenumber"
-                    fullWidth
-                    defaultCountry={"ug"}
-                  />
+                <Grid item xs={2}>
+                  <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "green",
+                    ":hover": { backgroundColor: "darkgreen" },
+                  }}
+                    onClick={() => {
+                      setBenefits([
+                        ...requirements,
+                        document.getElementsByName("benefits")[0].value,
+                      ]);
+                      document.getElementsByName("benefits")[0].value = "";
+                    }}
+                  >
+                    Add
+                  </Button>
                 </Grid>
-                <Grid item xs={12}>
-                  <LocationSearchInput />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    type="email"
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
+                <Grid xs={12}>
+                  <List>
+                    {requirements != []
+                      ? requirements.map((req, index) => {
+                          return (
+                            <ListItem
+                              key={index}
+                              secondaryAction={
+                                <IconButton
+                                  onClick={() => removeBenefitsHandler(req)}
+                                  edge="end"
+                                  aria-label="delete"
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              }
+                              disablePadding
+                            >
+                              <ListItemButton>
+                                <ListItemText primary={req} />
+                              </ListItemButton>
+                            </ListItem>
+                          );
+                        })
+                      : null}
+                  </List>
                 </Grid>
               </Grid>
               <Button
@@ -162,19 +359,9 @@ function CompanyJobs() {
                   ":hover": { backgroundColor: "darkgreen" },
                 }}
               >
-                {loading ? "Loading..." : "Sign Up"}
+                {loading ? "Loading..." : "Create Job"}
               </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link
-                    className="text-green-600 hover:text-green-800"
-                    to="/login"
-                    variant="body2"
-                  >
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
+              
             </Box>
           </Box>
         </Container>
