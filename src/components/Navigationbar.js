@@ -104,24 +104,6 @@ function NavigationBar() {
                   </MenuItem>
                 </Link>
               ))}
-              <Box sx={{ display: { xs: "block", md: "none" } }}>
-                <Link
-                  to="/login"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <MenuItem>
-                    <Typography textAlign="center">Login</Typography>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to="/register"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Register</Typography>
-                  </MenuItem>
-                </Link>
-              </Box>
             </Menu>
           </Box>
           <Typography

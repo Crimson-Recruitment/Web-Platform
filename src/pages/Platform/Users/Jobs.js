@@ -80,7 +80,7 @@ function Jobs() {
   return (
     <SideBar>
       <Grid container padding="0px">
-        <Grid item xs={12} lg={5}>
+        <Grid className="min-h-[100vh]" item xs={12} lg={5}>
           <Box className="search-box">
             <input type="text" placeholder="Search..." />
             <Button type="submit">

@@ -84,7 +84,7 @@ function ForYou() {
   return (
     <SideBar>
       <Grid container>
-        <Grid item xs={12} md={5}>     
+        <Grid className="min-h-[100vh]" item xs={12} md={5}>     
         {jobsList && jobsList.filter((val) => {
           if(industryProfessions[val.jobField].indexOf(JSON.parse(sessionStorage.getItem("userDetails")).profession.label) !== -1) {
             return true
