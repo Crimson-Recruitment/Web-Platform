@@ -20,16 +20,32 @@ export default function Footer() {
         </div>
 
         <div>
-          <a href="https://t.me/+_hO9ux7YlGw2ZWU0" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://t.me/+_hO9ux7YlGw2ZWU0"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <MDBIcon fab icon="telegram" />
           </a>
-          <a href="https://twitter.com/JadeRecruit" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://twitter.com/JadeRecruit"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <MDBIcon fab icon="twitter" />
           </a>
-          <a href="https://chat.whatsapp.com/GxKCKOgN4Ve202uEBlGD2u" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://chat.whatsapp.com/GxKCKOgN4Ve202uEBlGD2u"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <MDBIcon fab icon="whatsapp" />
           </a>
-          <a href="https://www.linkedin.com/company/jade-recruit" target="_blank" className="me-4 text-reset">
+          <a
+            href="https://www.linkedin.com/company/jade-recruit"
+            target="_blank"
+            className="me-4 text-reset"
+          >
             <i className="fab fa-linkedin"> </i>
           </a>
         </div>
@@ -70,7 +86,6 @@ export default function Footer() {
                   Contact Us
                 </Link>
               </p>
-
             </MDBCol>
 
             <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">

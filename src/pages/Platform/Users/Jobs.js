@@ -1,16 +1,15 @@
 import * as React from "react";
 import SideBar from "../../../components/SideBar";
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-} from "mdb-react-ui-kit";
 import "../../../Styles/jobs.css";
-import { Box, Button, Grid } from "@mui/material";
+import { Alert, Box, Button, Grid, Snackbar } from "@mui/material";
 import Firestore from "../../../Firebase/Firestore";
 import UserJobCard from "../../../components/UserJobCard";
 import { useNavigate } from "react-router-dom";
+import { Grid as GridLoader } from "react-loader-spinner";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 function containsObject(obj, list) {
   var i;
@@ -29,6 +28,15 @@ function Jobs() {
   const [loading, setLoading] = React.useState(true);
   const [current, setCurrent] = React.useState(null);
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState();
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   React.useEffect(() => {
     (async () => {
@@ -37,49 +45,37 @@ function Jobs() {
         localStorage.getItem("email")
       );
       if (hasDetails.val == true) {
-        navigate("/skills", { state: { notify: true } });
+        setOpen(true);
       } else {
-        await firestore
-          .getUserDetails(email)
-          .then((user) => {
-            if (user.code == 0) {
-              if (sessionStorage.getItem("userDetails") != null) {
-                setLoading(false);
-                return;
+        await firestore.getUserDetails(email).then((user) => {
+          if (user.code == 0) {
+            if (sessionStorage.getItem("userDetails") != null) {
+              setLoading(false);
+              return;
+            }
+            sessionStorage.setItem(
+              "userDetails",
+              JSON.stringify(user.val.data())
+            );
+            setLoading(false);
+          } else {
+            alert(user.val);
+            setLoading(false);
+          }
+        });
+        await firestore.getJobs().then((val) => {
+          if (val.code == 0) {
+            val.val.forEach((job) => {
+              if (containsObject(job.data(), jobsList) == false) {
+                setJobsList([...jobsList, job.data()]);
               }
-              sessionStorage.setItem(
-                "userDetails",
-                JSON.stringify(user.val.data())
-              );
-              setLoading(false);
-            } else {
-              alert(user.val);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            alert(err);
+            });
             setLoading(false);
-          });
-        await firestore
-          .getJobs()
-          .then((val) => {
-            if (val.code == 0) {
-              val.val.forEach((job) => {
-                if (!containsObject(job.data(), jobsList)) {
-                  setJobsList([...jobsList, job.data()]);
-                }
-              });
-              setLoading(false);
-            } else {
-              alert(val.val);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            alert(err);
+          } else {
+            alert(val.val);
             setLoading(false);
-          });
+          }
+        });
       }
     })();
   }, []);
@@ -94,7 +90,21 @@ function Jobs() {
               <i className="fas fa-search"></i>
             </Button>
           </Box>
-          {jobsList &&
+          {loading ? (
+            <div className="flex justify-center mt-12">
+              <GridLoader
+                height="130"
+                width="130"
+                color="#4fa94d"
+                ariaLabel="grid-loading"
+                radius="12.5"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
+          ) : (
+            jobsList &&
             jobsList.map((job, index) => {
               return (
                 <a onClick={() => setCurrent(index)}>
@@ -106,7 +116,8 @@ function Jobs() {
                   />
                 </a>
               );
-            })}
+            })
+          )}
         </Grid>
         <Grid item sx={{ display: { md: "block", xs: "none" } }} md={0.1}>
           <div className="d-flex" style={{ minHeight: "100vh" }}>
@@ -129,33 +140,69 @@ function Jobs() {
           lg={6.9}
         >
           {current !== null ? (
-            <div className="job-description">
-              <h2>{jobsList[current].jobTitle}</h2>
-              <h4>Company Overview</h4>
-              <p>{jobsList[current].companyOverview}</p>
-              <h4>Job Description</h4>
-              {jobsList[current].jobDescription}
-
-              <h4>Required Skills and Qualifications</h4>
-              <ul>
-                {jobsList[current].requirements.map((req) => {
-                  return <li>{req}</li>;
-                })}
-              </ul>
-              <ul>
-                {jobsList[current].skills.length != 0 ? (
-                  <>
-                    <h4>Skills</h4>
-                    {jobsList[current].skills.map((skill) => {
-                      return <li>{skill.label}</li>;
-                    })}
-                  </>
-                ) : null}
-              </ul>
-            </div>
+            <Card
+              sx={{ margin: "10px", paddingX: "5px", paddingY: "3px" }}
+              variant="outlined"
+            >
+              {
+                <>
+                  <CardContent>
+                    <Typography variant="h4" color="text.black" gutterBottom>
+                      {jobsList[current].jobTitle}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      Company Overview
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      {jobsList[current].companyOverview}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      Job Description
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      {jobsList[current].jobDescription}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      Required Skills and Qualifications
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      <ul>
+                        {jobsList[current].requirements.map((req) => {
+                          return <li>{req}</li>;
+                        })}
+                      </ul>
+                    </Typography>
+                    {jobsList[current].skills.length != 0 ? (
+                      <>
+                        <Typography variant="h5" component="div">
+                          Skills
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                          <ul>
+                            {jobsList[current].skills.map((skill) => {
+                              return <li>{skill.label}</li>;
+                            })}
+                          </ul>
+                        </Typography>
+                      </>
+                    ) : null}
+                  </CardContent>
+                  <CardActions>
+                    <Button variant="contained" size="small">
+                      Apply
+                    </Button>
+                  </CardActions>
+                </>
+              }
+            </Card>
           ) : null}
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Failed to load Jobs!
+        </Alert>
+      </Snackbar>
     </SideBar>
   );
 }

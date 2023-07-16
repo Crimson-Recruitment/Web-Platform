@@ -2,12 +2,13 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import SideBar from "../../../components/SideBar";
 import "../../../Styles/jobs.css";
-import { Grid, IconButton, Typography } from "@mui/material";
+import { Alert, Grid, IconButton, Snackbar, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import Firestore from "../../../Firebase/Firestore";
 import { industryProfessions } from "../../../Data/CompanyIndustries";
 import UserJobCard from "../../../components/UserJobCard";
 import { useNavigate } from "react-router-dom";
+import { Grid as GridLoader } from "react-loader-spinner";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,6 +53,15 @@ function ForYou() {
   const [loading, setLoading] = React.useState(true);
   const [current, setCurrent] = React.useState(null);
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState();
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   React.useEffect(() => {
     (async () => {
@@ -59,7 +69,7 @@ function ForYou() {
         localStorage.getItem("email")
       );
       if (hasDetails.val == true) {
-        navigate("/skills", { state: { notify: true } });
+        setOpen(true);
       } else {
         await firestore
           .getJobs()
@@ -87,7 +97,21 @@ function ForYou() {
     <SideBar>
       <Grid container>
         <Grid className="min-h-[100vh]" item xs={12} md={5}>
-          {jobsList &&
+          {loading ? (
+            <div className="flex justify-center mt-12">
+              <GridLoader
+                height="130"
+                width="130"
+                color="#4fa94d"
+                ariaLabel="grid-loading"
+                radius="12.5"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
+          ) : (
+            jobsList &&
             jobsList
               .filter((val) => {
                 if (
@@ -112,7 +136,8 @@ function ForYou() {
                     />
                   </a>
                 );
-              })}
+              })
+          )}
         </Grid>
         <Grid item sx={{ display: { md: "block", xs: "none" } }} md={0.1}>
           <div className="d-flex" style={{ height: "100vh" }}>
@@ -159,6 +184,11 @@ function ForYou() {
           ) : null}
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Failed to load Jobs!
+        </Alert>
+      </Snackbar>
     </SideBar>
   );
 }

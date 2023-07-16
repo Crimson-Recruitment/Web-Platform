@@ -140,7 +140,18 @@ function NavigationBar() {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src={sessionStorage.getItem("profileImage")}
+                    src={
+                      JSON.parse(sessionStorage.getItem("userDetails")) != null
+                        ? JSON.parse(sessionStorage.getItem("userDetails"))
+                            .profileImage
+                        : null ||
+                          JSON.parse(
+                            sessionStorage.getItem("companyDetails")
+                          ) != null
+                        ? JSON.parse(sessionStorage.getItem("companyDetails"))
+                            .logo
+                        : null
+                    }
                   />
                 </IconButton>
               </Tooltip>

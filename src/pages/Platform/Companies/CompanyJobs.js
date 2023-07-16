@@ -32,6 +32,7 @@ import JobCard from "../../../components/JobCard";
 import { companyJobsReducer } from "../../../Functions/Reducers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Grid as GridLoader } from "react-loader-spinner";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,7 +46,7 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, minHeight: "100vh" }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -212,17 +213,30 @@ function CompanyJobs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={state.value} index={0}>
-        {state.jobsList
-          ? state.jobsList.map((job) => {
-              return (
-                <JobCard
-                  title={job.jobTitle}
-                  description={job.jobDescription}
-                  timestamp={job.timestamp}
-                />
-              );
-            })
-          : null}
+        {state.loading ? (
+          <div className="flex justify-center mt-12">
+            <GridLoader
+              height="130"
+              width="130"
+              color="#4fa94d"
+              ariaLabel="grid-loading"
+              radius="12.5"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          </div>
+        ) : state.jobsList ? (
+          state.jobsList.map((job) => {
+            return (
+              <JobCard
+                title={job.jobTitle}
+                description={job.jobDescription}
+                timestamp={job.timestamp}
+              />
+            );
+          })
+        ) : null}
       </CustomTabPanel>
       <CustomTabPanel value={state.value} index={1}>
         <Container component="main" maxWidth="lg">
