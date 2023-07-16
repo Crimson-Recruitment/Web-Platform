@@ -6,6 +6,7 @@ import {
   MDBCol,
   MDBIcon,
 } from "mdb-react-ui-kit";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -55,25 +56,21 @@ export default function Footer() {
             <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/" className="text-reset">
                   Home
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/about" className="text-reset">
                   About
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link href="/contact-us" className="text-reset">
                   Contact Us
-                </a>
+                </Link>
               </p>
-              <p>
-                <a href="#!" className="text-reset">
-                  Pricing
-                </a>
-              </p>
+
             </MDBCol>
 
             <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
@@ -84,7 +81,7 @@ export default function Footer() {
               </p>
               <p>
                 <MDBIcon icon="envelope" className="me-3" />
-                jaderecruitment@gmail.com
+                jaderecruit02@gmail.com
               </p>
               <p>
                 <MDBIcon icon="phone" className="me-3" /> + 256 773 457 817
