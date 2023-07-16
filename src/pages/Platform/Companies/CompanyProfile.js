@@ -24,31 +24,32 @@ function CompanyProfile() {
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkCompanyEmail(localStorage.getItem("email"));
+      let hasDetails = await firestore.checkCompanyEmail(
+        localStorage.getItem("email")
+      );
       if (hasDetails == true) {
-        navigate("/company-details", {state:{notify:true}})
+        navigate("/company-details", { state: { notify: true } });
       } else {
-        if(sessionStorage.getItem("companyDetails") != null) {
+        if (sessionStorage.getItem("companyDetails") != null) {
           setCompanyData(JSON.parse(sessionStorage.getItem("companyDetails")));
           setLoading(false);
         } else {
           await firestore
-          .getCompanyDetails(email)
-          .then((user) => {
-            if (user.code == 0) {
-              setCompanyData(user.val.data());
-              console.log(user.val.data());
+            .getCompanyDetails(email)
+            .then((user) => {
+              if (user.code == 0) {
+                setCompanyData(user.val.data());
+                console.log(user.val.data());
+                setLoading(false);
+              } else {
+                alert(user.val);
+                setLoading(false);
+              }
+            })
+            .catch((err) => {
+              alert(err);
               setLoading(false);
-            } else {
-              alert(user.val);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            alert(err);
-            setLoading(false);
-          });
-  
+            });
         }
       }
     })();

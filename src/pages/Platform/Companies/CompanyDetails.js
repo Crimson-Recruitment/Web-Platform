@@ -10,35 +10,35 @@ import Firestore from "../../../Firebase/Firestore";
 import { companyDetailsReducer } from "../../../Functions/Reducers";
 
 let initState = {
-  selectedType:null,
-  loading:false,
-  image:null,
-  imagePath:null,
-  license:null
-}
+  selectedType: null,
+  loading: false,
+  image: null,
+  imagePath: null,
+  license: null,
+};
 
 function CompanyDetails() {
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(companyDetailsReducer, initState)
+  const [state, dispatch] = useReducer(companyDetailsReducer, initState);
   const company = JSON.parse(sessionStorage.getItem("companyData"));
   const db = new Storage();
   const firestore = new Firestore();
   const notify = useLocation().state;
-  useEffect(()=> {
-    if(notify.notify == true) {
-      alert("Please complete registration!")
+  useEffect(() => {
+    if (notify.notify == true) {
+      alert("Please complete registration!");
     }
-  },[])
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch({type:"SETLOADING", loading:true})
+    dispatch({ type: "SETLOADING", loading: true });
     let licenselink = "";
     if (state.license != null) {
       licenselink = await db.getFileUrl(`${company.id}-license`, state.license);
       if (licenselink.code === 1) {
         alert(licenselink.val);
-        dispatch({type:"SETLOADING", loading:false})
+        dispatch({ type: "SETLOADING", loading: false });
         return;
       }
     }
@@ -48,7 +48,7 @@ function CompanyDetails() {
       imagelink = await db.getFileUrl(`${company.id}-image`, state.imagePath);
       if (imagelink.code === 1) {
         alert(imagelink.val);
-        dispatch({type:"SETLOADING", loading:false})
+        dispatch({ type: "SETLOADING", loading: false });
         return;
       }
     }
@@ -69,15 +69,15 @@ function CompanyDetails() {
       .then((res) => {
         if (res.code === 0) {
           navigate("/company-jobs");
-          dispatch({type:"SETLOADING", loading:false})
+          dispatch({ type: "SETLOADING", loading: false });
         } else {
           alert(res.val);
-          dispatch({type:"SETLOADING", loading:false})
+          dispatch({ type: "SETLOADING", loading: false });
         }
       })
       .catch((err) => {
         alert(err);
-        dispatch({type:"SETLOADING", loading:false})
+        dispatch({ type: "SETLOADING", loading: false });
       });
   };
 
@@ -86,19 +86,19 @@ function CompanyDetails() {
     reader.readAsArrayBuffer(e.target.files[0]);
 
     reader.onload = () => {
-      dispatch({type:"SETIMAGEPATH", imagePath:reader.result});
+      dispatch({ type: "SETIMAGEPATH", imagePath: reader.result });
     };
     reader.onerror = () => {
       alert(reader.error);
     };
-    dispatch({type:"SETIMAGE",image:e.target.files[0]});
+    dispatch({ type: "SETIMAGE", image: e.target.files[0] });
   };
 
   const licenseHandler = (e) => {
     let reader = new FileReader();
     reader.readAsArrayBuffer(e.target.files[0]);
     reader.onload = () => {
-      dispatch({type:"SETLICENSE", license:reader.result});
+      dispatch({ type: "SETLICENSE", license: reader.result });
     };
     reader.onerror = () => {
       alert(reader.error);
@@ -175,10 +175,10 @@ function CompanyDetails() {
             options={industries}
             placeholder="Healthcare, technology,....."
             onChange={(val) => {
-              dispatch({type:"SETSELECTEDTYPE",selectedType:val.value});
+              dispatch({ type: "SETSELECTEDTYPE", selectedType: val.value });
             }}
             isSearchable={true}
-            value={industries.filter(function(option) {
+            value={industries.filter(function (option) {
               return option.value === state.selectedType;
             })}
           />

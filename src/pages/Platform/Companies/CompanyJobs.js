@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState} from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import CompanySideBar from "../../../components/CompanySideBar";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -32,7 +32,6 @@ import JobCard from "../../../components/JobCard";
 import { companyJobsReducer } from "../../../Functions/Reducers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,126 +67,137 @@ function a11yProps(index) {
 }
 
 let initState = {
-  requirements:[],
-  benefits:[],
-  loading:false,
-  selectedSkills:null,
-  selectedType:null,
-  jobsList:[],
-  open:false,
-  value:0
-}
-
+  requirements: [],
+  benefits: [],
+  loading: false,
+  selectedSkills: null,
+  selectedType: null,
+  jobsList: [],
+  open: false,
+  value: 0,
+};
 
 function CompanyJobs() {
   const [state, dispatch] = useReducer(companyJobsReducer, initState);
   const handleChange = (event, newValue) => {
-    dispatch({type:"SETVALUE", value:newValue});
+    dispatch({ type: "SETVALUE", value: newValue });
   };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const removeRequirementsHandler = (res) => {
     const newList = state.requirements.filter((item) => item !== res);
-    dispatch({type:"SETREQUIREMENTS", requirements:newList});
+    dispatch({ type: "SETREQUIREMENTS", requirements: newList });
   };
   const removeBenefitsHandler = (res) => {
     const newList = state.benefits.filter((item) => item !== res);
-    dispatch({type:"SETBENEFITS", benefits:newList});
+    dispatch({ type: "SETBENEFITS", benefits: newList });
   };
   const handleClick = () => {
-    dispatch({type:"SETOPEN", open:true})
+    dispatch({ type: "SETOPEN", open: true });
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
-    dispatch({type:"SETOPEN", open:false})
+    dispatch({ type: "SETOPEN", open: false });
   };
 
   const firestore = new Firestore();
   const [expiryDate, setExpiryDate] = useState(new Date());
   var viewList = [];
-  
+
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkCompanyEmail(localStorage.getItem("email"));
+      let hasDetails = await firestore.checkCompanyEmail(
+        localStorage.getItem("email")
+      );
       if (hasDetails == true) {
-        navigate("/company-details", {state:{notify:true}})
+        navigate("/company-details", { state: { notify: true } });
       } else {
-        if(sessionStorage.getItem("companyDetails") != null) {
-          dispatch({type:"SETLOADING", loading:false})
+        if (sessionStorage.getItem("companyDetails") != null) {
+          dispatch({ type: "SETLOADING", loading: false });
           return;
         } else {
           await firestore
-          .getCompanyDetails(email)
-          .then((user) => {
-            if (user.code == 0) {
-              sessionStorage.setItem("companyDetails", JSON.stringify(user.val.data()));
-              sessionStorage.setItem("companyId", JSON.stringify(user.val.id));
-            } else {
-              alert(user.val);
-            }
-          })
-          .catch((err) => {
-            alert(err);
-          });
+            .getCompanyDetails(email)
+            .then((user) => {
+              if (user.code == 0) {
+                sessionStorage.setItem(
+                  "companyDetails",
+                  JSON.stringify(user.val.data())
+                );
+                sessionStorage.setItem(
+                  "companyId",
+                  JSON.stringify(user.val.id)
+                );
+              } else {
+                alert(user.val);
+              }
+            })
+            .catch((err) => {
+              alert(err);
+            });
         }
       }
     })();
-  (async() => {
-    await firestore.getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
-    .then(val => {
-      if(val.code == 0) {
-        val.val.forEach(job => {
-          viewList = [...viewList, job.data()];
-        })
-        dispatch({type:"SETJOBSLIST", jobsList:viewList})
-        viewList = [];
-        dispatch({type:"SETLOADING", loading:false})
-      } else {
-        alert(val.val)
-        dispatch({type:"SETLOADING", loading:false})
-      }
-    })
-  })()
+    (async () => {
+      await firestore
+        .getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
+        .then((val) => {
+          if (val.code == 0) {
+            val.val.forEach((job) => {
+              viewList = [...viewList, job.data()];
+            });
+            dispatch({ type: "SETJOBSLIST", jobsList: viewList });
+            viewList = [];
+            dispatch({ type: "SETLOADING", loading: false });
+          } else {
+            alert(val.val);
+            dispatch({ type: "SETLOADING", loading: false });
+          }
+        });
+    })();
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    dispatch({type:"SETLOADING", loading:true})
+    e.preventDefault();
+    dispatch({ type: "SETLOADING", loading: true });
     const data = new FormData(e.currentTarget);
-    await firestore.createJobPost(
-      data.get("jobTitle"),
-      state.selectedType,
-      data.get("jobDescription"),
-      data.get("location"),
-      state.requirements,
-      state.selectedSkills,
-      data.get("minSalary"),
-      data.get("maxSalary"),
-      state.benefits,
-      data.get("hideSalary"),
-      data.get("requestCoverLetter"),
-      expiryDate,
-      new Date().getTime()
-      ).then(async val => {
+    await firestore
+      .createJobPost(
+        data.get("jobTitle"),
+        state.selectedType,
+        data.get("jobDescription"),
+        data.get("location"),
+        state.requirements,
+        state.selectedSkills,
+        data.get("minSalary"),
+        data.get("maxSalary"),
+        state.benefits,
+        data.get("hideSalary"),
+        data.get("requestCoverLetter"),
+        expiryDate,
+        new Date().getTime()
+      )
+      .then(async (val) => {
         if (val.code == 0) {
-          handleClick()
-        await new Promise(res => setTimeout(res,2000))
-        dispatch({type:"SETLOADING", loading:false})
-        navigate(0)
+          handleClick();
+          await new Promise((res) => setTimeout(res, 2000));
+          dispatch({ type: "SETLOADING", loading: false });
+          navigate(0);
         } else {
-          alert(val.val)
-          dispatch({type:"SETLOADING", loading:false})
+          alert(val.val);
+          dispatch({ type: "SETLOADING", loading: false });
         }
-      }).catch(err => {
-        alert(err)
-        dispatch({type:"SETLOADING", loading:false})
       })
-  }
+      .catch((err) => {
+        alert(err);
+        dispatch({ type: "SETLOADING", loading: false });
+      });
+  };
 
   return (
     <CompanySideBar>
@@ -202,14 +212,17 @@ function CompanyJobs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={state.value} index={0}>
-          {
-            state.jobsList? state.jobsList.map((job) => {
-              return(
-                <JobCard title={job.jobTitle} description={job.jobDescription} timestamp={job.timestamp}/>
-              )
-            }):null
-          }
-       
+        {state.jobsList
+          ? state.jobsList.map((job) => {
+              return (
+                <JobCard
+                  title={job.jobTitle}
+                  description={job.jobDescription}
+                  timestamp={job.timestamp}
+                />
+              );
+            })
+          : null}
       </CustomTabPanel>
       <CustomTabPanel value={state.value} index={1}>
         <Container component="main" maxWidth="lg">
@@ -222,7 +235,12 @@ function CompanyJobs() {
               minHeight: "80vh",
             }}
           >
-            <Box component="form" onSubmit={handleSubmit} noValidate={true} sx={{ mt: 3 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate={true}
+              sx={{ mt: 3 }}
+            >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <label
@@ -248,18 +266,21 @@ function CompanyJobs() {
                     Job Field
                   </label>
                   <Select
-                  required
-            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
-            options={industries}
-            name="field"
-            placeholder="Healthcare, technology,....."
-            onChange={(val) => {
-              dispatch({type:"SETSELECTEDTYPE", selectedType:val.label})
-            }}
-            value={industries.filter(function(option) {
-              return option.label === state.selectedType;
-            })}
-          />
+                    required
+                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    options={industries}
+                    name="field"
+                    placeholder="Healthcare, technology,....."
+                    onChange={(val) => {
+                      dispatch({
+                        type: "SETSELECTEDTYPE",
+                        selectedType: val.label,
+                      });
+                    }}
+                    value={industries.filter(function (option) {
+                      return option.label === state.selectedType;
+                    })}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -309,18 +330,25 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={2}>
                   <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "green",
-                    ":hover": { backgroundColor: "darkgreen" },
-                  }}
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "green",
+                      ":hover": { backgroundColor: "darkgreen" },
+                    }}
                     onClick={() => {
-                      if(document.getElementsByName("requirements")[0].value != "") {
-                        dispatch({type:"SETREQUIREMENTS", requirements:[
-                          ...state.requirements,
-                          document.getElementsByName("requirements")[0].value,
-                        ]})
-                        document.getElementsByName("requirements")[0].value = "";
+                      if (
+                        document.getElementsByName("requirements")[0].value !=
+                        ""
+                      ) {
+                        dispatch({
+                          type: "SETREQUIREMENTS",
+                          requirements: [
+                            ...state.requirements,
+                            document.getElementsByName("requirements")[0].value,
+                          ],
+                        });
+                        document.getElementsByName("requirements")[0].value =
+                          "";
                       }
                     }}
                   >
@@ -355,13 +383,17 @@ function CompanyJobs() {
                   </List>
                 </Grid>
                 <Grid item xs={12}>
-                <label
+                  <label
                     for="expirydate"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Expiry Date
                   </label>
-                  <DatePicker className="border mb-4 border-blue-300" selected={expiryDate} onChange={(date) => setExpiryDate(date)} />
+                  <DatePicker
+                    className="border mb-4 border-blue-300"
+                    selected={expiryDate}
+                    onChange={(date) => setExpiryDate(date)}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -377,8 +409,10 @@ function CompanyJobs() {
                     name="skills"
                     onChange={(val) => {
                       if (val.length <= 6) {
-                        dispatch({type:"SETSELECTEDSKILLS", selectedSkills:val})
-                       
+                        dispatch({
+                          type: "SETSELECTEDSKILLS",
+                          selectedSkills: val,
+                        });
                       } else {
                         alert("Max number of skills added!");
                       }
@@ -423,7 +457,10 @@ function CompanyJobs() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <FormControlLabel control={<Switch name="hideSalary" />} label="Hide Salary on the job post?" />
+                  <FormControlLabel
+                    control={<Switch name="hideSalary" />}
+                    label="Hide Salary on the job post?"
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -447,17 +484,22 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={2}>
                   <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "green",
-                    ":hover": { backgroundColor: "darkgreen" },
-                  }}
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "green",
+                      ":hover": { backgroundColor: "darkgreen" },
+                    }}
                     onClick={() => {
-                      if( document.getElementsByName("benefits")[0].value != "") {
-                        dispatch({type:"SETBENEFITS", benefits:[
-                          ...state.benefits,
-                          document.getElementsByName("benefits")[0].value,
-                        ]})
+                      if (
+                        document.getElementsByName("benefits")[0].value != ""
+                      ) {
+                        dispatch({
+                          type: "SETBENEFITS",
+                          benefits: [
+                            ...state.benefits,
+                            document.getElementsByName("benefits")[0].value,
+                          ],
+                        });
                         document.getElementsByName("benefits")[0].value = "";
                       }
                     }}
@@ -493,7 +535,10 @@ function CompanyJobs() {
                   </List>
                 </Grid>
                 <Grid item xs={12}>
-                <FormControlLabel control={<Switch name="requestCoverLetter" />} label="Request for a cover letter ?" />
+                  <FormControlLabel
+                    control={<Switch name="requestCoverLetter" />}
+                    label="Request for a cover letter ?"
+                  />
                 </Grid>
               </Grid>
               <Button
@@ -510,13 +555,12 @@ function CompanyJobs() {
               >
                 {state.loading ? "Loading..." : "Create Job"}
               </Button>
-              
             </Box>
           </Box>
         </Container>
       </CustomTabPanel>
       <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           Successfully add Job Post!
         </Alert>
       </Snackbar>

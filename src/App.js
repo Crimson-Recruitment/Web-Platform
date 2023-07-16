@@ -40,13 +40,12 @@ function App() {
         {cookie.get("user-login") ? (
           <>
             <Route path="/skills" element={<Skills />} />
-          
+
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/for-you" element={<ForYou />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/applications" element={<Applications />} />
-    
           </>
         ) : null}
         {cookie.get("company-login") ? (

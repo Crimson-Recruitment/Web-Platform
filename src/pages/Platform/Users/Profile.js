@@ -26,32 +26,37 @@ export default function Profile() {
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkUserEmail(localStorage.getItem("email"));
+      let hasDetails = await firestore.checkUserEmail(
+        localStorage.getItem("email")
+      );
       console.log(hasDetails);
       if (hasDetails.val == true) {
-        navigate("/skills", {state:{notify:true}})
+        navigate("/skills", { state: { notify: true } });
       } else {
-        if(sessionStorage.getItem("userDetails") != null) {
+        if (sessionStorage.getItem("userDetails") != null) {
           setUserData(JSON.parse(sessionStorage.getItem("userDetails")));
           setLoading(false);
           return;
         } else {
           await firestore
-          .getUserDetails(email)
-          .then((user) => {
-            if (user.code == 0) {
-              setUserData(user.val.data());
-              sessionStorage.setItem("userDetails", JSON.stringify(user.val.data()));
+            .getUserDetails(email)
+            .then((user) => {
+              if (user.code == 0) {
+                setUserData(user.val.data());
+                sessionStorage.setItem(
+                  "userDetails",
+                  JSON.stringify(user.val.data())
+                );
+                setLoading(false);
+              } else {
+                alert(user.val);
+                setLoading(false);
+              }
+            })
+            .catch((err) => {
+              alert(err);
               setLoading(false);
-            } else {
-              alert(user.val);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            alert(err);
-            setLoading(false);
-          });
+            });
         }
       }
     })();
@@ -76,7 +81,9 @@ export default function Profile() {
                         />
                       </div>
                       <br />
-                      <p className="text-muted mb-1">{userData.profession.label}</p>
+                      <p className="text-muted mb-1">
+                        {userData.profession.label}
+                      </p>
                       <p className="text-muted mb-4">{userData.location}</p>
 
                       <p className="text-blue-500 mb-1">Download Resume</p>

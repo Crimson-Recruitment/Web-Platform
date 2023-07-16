@@ -55,7 +55,6 @@ export default function CompanyRegister() {
         }
       });
     setLoading(false);
-   
   };
 
   return (

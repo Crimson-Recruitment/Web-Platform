@@ -139,7 +139,7 @@ export default class Firestore {
   ) => {
     let companyDetails = JSON.parse(sessionStorage.getItem("companyDetails"));
     let result = { code: null, val: null };
-    let jobId = uniqid("","-"+companyDetails.companyName)
+    let jobId = uniqid("", "-" + companyDetails.companyName);
     await setDoc(doc(firestore, "Jobs", jobId), {
       companyName: companyDetails.companyName,
       companyId: JSON.parse(sessionStorage.getItem("companyId")),
@@ -153,10 +153,10 @@ export default class Firestore {
       minSalary: minSalary,
       maxSalary: maxSalary,
       benefits: benefits,
-      hideSalary:hideSalary,
-      requestCoverLetter:requestCoverLetter,
-      expiryDate:expiryDate,
-      timestamp: timestamp
+      hideSalary: hideSalary,
+      requestCoverLetter: requestCoverLetter,
+      expiryDate: expiryDate,
+      timestamp: timestamp,
     })
       .then((val) => {
         result = { code: 0, val: val };
@@ -165,9 +165,9 @@ export default class Firestore {
         result = { code: 1, val: err };
       });
     return result;
-  } 
+  };
 
-  getCompanyJobPosts = async(companyId) => {
+  getCompanyJobPosts = async (companyId) => {
     let result = { code: null, val: null };
     const q = query(
       collection(firestore, "Jobs"),
@@ -181,13 +181,11 @@ export default class Firestore {
       result = { code: 0, val: res };
     }
     return result;
-  }
+  };
 
-  getJobs = async() => {
+  getJobs = async () => {
     let result = { code: null, val: null };
-    const q = query(
-      collection(firestore, "Jobs")
-    );
+    const q = query(collection(firestore, "Jobs"));
 
     const res = await getDocs(q);
     if (res.empty == true) {
@@ -196,7 +194,7 @@ export default class Firestore {
       result = { code: 0, val: res };
     }
     return result;
-  }
+  };
 
   checkUserEmail = async (email) => {
     let result = { code: null, val: null };
@@ -208,10 +206,10 @@ export default class Firestore {
     if (res.empty == true) {
       result = { code: 0, val: true };
     } else {
-        result = { code: 0, val: false };
+      result = { code: 0, val: false };
     }
     return result;
-  }
+  };
   checkCompanyEmail = async (email) => {
     let result = { code: null, val: null };
     const q = query(
@@ -222,10 +220,10 @@ export default class Firestore {
     if (res.empty == true) {
       result = { code: 0, val: true };
     } else {
-        result = { code: 0, val: false };
+      result = { code: 0, val: false };
     }
     return result;
-  }
+  };
   updateUserDetails = () => {};
 
   updateCompanyDetails = () => {};

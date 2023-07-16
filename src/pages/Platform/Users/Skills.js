@@ -10,37 +10,37 @@ import { Button } from "@mui/material";
 import { skillsReducer } from "../../../Functions/Reducers";
 
 let initState = {
-  selectedSkills:null,
-  selectedProfession:null,
-  image:null,
-  imagePath:null,
-  resume:null,
-  loading:false
-}
+  selectedSkills: null,
+  selectedProfession: null,
+  image: null,
+  imagePath: null,
+  resume: null,
+  loading: false,
+};
 
 function Skills() {
-  const [state, dispatch] = useReducer(skillsReducer,initState);
+  const [state, dispatch] = useReducer(skillsReducer, initState);
   const navigate = useNavigate();
   const firestore = new Firestore();
   const db = new Storage();
   const notify = useLocation().state;
 
-  useEffect(()=> {
-    if(notify.notify == true) {
-      alert("Please complete registration!")
+  useEffect(() => {
+    if (notify.notify == true) {
+      alert("Please complete registration!");
     }
-  },[])
+  }, []);
 
   const user = JSON.parse(sessionStorage.getItem("userData"));
   const submitHandler = async (event) => {
     event.preventDefault();
-    dispatch({type:"SETLOADING", loading:true})
+    dispatch({ type: "SETLOADING", loading: true });
     let imagelink = "";
     if (state.imagePath != null) {
       imagelink = await db.getFileUrl(`${user.id}-image`, state.imagePath);
       if (imagelink.code === 1) {
         alert(imagelink.val);
-        dispatch({type:"SETLOADING", loading:false})
+        dispatch({ type: "SETLOADING", loading: false });
         return;
       }
     }
@@ -49,7 +49,7 @@ function Skills() {
       resumelink = await db.getFileUrl(`${user.id}-resume`, state.resume);
       if (resumelink.code === 1) {
         alert(resumelink.val);
-        dispatch({type:"SETLOADING", loading:false})
+        dispatch({ type: "SETLOADING", loading: false });
         return;
       }
     }
@@ -70,15 +70,15 @@ function Skills() {
       .then((res) => {
         if (res.code === 0) {
           navigate("/jobs");
-          dispatch({type:"SETLOADING", loading:false})
+          dispatch({ type: "SETLOADING", loading: false });
         } else {
           alert(res.val);
-          dispatch({type:"SETLOADING", loading:false})
+          dispatch({ type: "SETLOADING", loading: false });
         }
       })
       .catch((err) => {
         alert(err);
-        dispatch({type:"SETLOADING", loading:false})
+        dispatch({ type: "SETLOADING", loading: false });
       });
   };
 
@@ -87,19 +87,19 @@ function Skills() {
     reader.readAsArrayBuffer(e.target.files[0]);
 
     reader.onload = () => {
-      dispatch({type:"SETIMAGEPATH", imagePath:reader.result})
+      dispatch({ type: "SETIMAGEPATH", imagePath: reader.result });
     };
     reader.onerror = () => {
       alert(reader.error);
     };
-    dispatch({type:"SETIMAGE", image:e.target.files[0]})
+    dispatch({ type: "SETIMAGE", image: e.target.files[0] });
   };
 
   const resumeHandler = (e) => {
     let reader = new FileReader();
     reader.readAsArrayBuffer(e.target.files[0]);
     reader.onload = () => {
-      dispatch({type:"SETRESUME", resume:reader.result})
+      dispatch({ type: "SETRESUME", resume: reader.result });
     };
     reader.onerror = () => {
       alert(reader.error);
@@ -169,7 +169,10 @@ function Skills() {
             options={professionList}
             placeholder="Medicine, technology,....."
             onChange={(val) => {
-              dispatch({type:"SETSELECTEDPROFESSION", selectedProfession:val})
+              dispatch({
+                type: "SETSELECTEDPROFESSION",
+                selectedProfession: val,
+              });
             }}
             isSearchable={true}
             value={state.selectedProfession}
@@ -202,7 +205,7 @@ function Skills() {
           placeholder="Select skills,..."
           onChange={(val) => {
             if (val.length <= 6) {
-              dispatch({type:"SETSELECTEDSKILLS", selectedSkills:val})
+              dispatch({ type: "SETSELECTEDSKILLS", selectedSkills: val });
             } else {
               alert("Max number of skills added!");
             }

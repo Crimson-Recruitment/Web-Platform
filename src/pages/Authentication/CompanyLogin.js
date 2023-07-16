@@ -31,22 +31,22 @@ export default function CompanyLogin() {
     let isUser = await firestore.checkUserEmail(data.get("email"));
     if (isUser.val == true) {
       await auth
-      .signIn(data.get("email"), data.get("password"))
-      .then((val) => {
-        if (val.code == 0) {
-          cookie.set("company-login", true, { path: "/" });
-          localStorage.setItem("email", data.get("email"));
-          window.location.href = "/company-jobs";
+        .signIn(data.get("email"), data.get("password"))
+        .then((val) => {
+          if (val.code == 0) {
+            cookie.set("company-login", true, { path: "/" });
+            localStorage.setItem("email", data.get("email"));
+            window.location.href = "/company-jobs";
+            setLoading(false);
+          } else {
+            alert(`${val.code} : ${val.val}`);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          alert(err);
           setLoading(false);
-        } else {
-          alert(`${val.code} : ${val.val}`);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        alert(err);
-        setLoading(false);
-      });
+        });
     } else {
       alert("Email registered as a User account!");
       setLoading(false);

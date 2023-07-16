@@ -40,7 +40,7 @@ export const industryProfessions = {
     "Database Administrator",
     "IT Project Manager",
     "UX/UI Designer",
-    "Systems Analyst"
+    "Systems Analyst",
   ],
   Healthcare: [
     "Nurse",
@@ -50,7 +50,7 @@ export const industryProfessions = {
     "Physician Assistant",
     "Radiologist",
     "Physical Therapist",
-    "Occupational Therapist"
+    "Occupational Therapist",
   ],
   Finance: [
     "Accountant",
@@ -60,7 +60,7 @@ export const industryProfessions = {
     "Tax Consultant",
     "Financial Planner",
     "Risk Manager",
-    "Auditor"
+    "Auditor",
   ],
   Education: [
     "Teacher",
@@ -70,7 +70,7 @@ export const industryProfessions = {
     "Special Education Teacher",
     "School Administrator",
     "Curriculum Developer",
-    "Education Consultant"
+    "Education Consultant",
   ],
   Marketing: [
     "Marketing Manager",
@@ -80,7 +80,7 @@ export const industryProfessions = {
     "Social Media Manager",
     "Brand Manager",
     "Advertising Executive",
-    "Content Strategist"
+    "Content Strategist",
   ],
   Construction: [
     "Architect",
@@ -90,7 +90,7 @@ export const industryProfessions = {
     "Contractor",
     "Construction Manager",
     "Structural Engineer",
-    "Building Inspector"
+    "Building Inspector",
   ],
   Entertainment: [
     "Actor",
@@ -100,7 +100,7 @@ export const industryProfessions = {
     "Makeup Artist",
     "Costume Designer",
     "Sound Engineer",
-    "Casting Director"
+    "Casting Director",
   ],
   Hospitality: [
     "Chef",
@@ -110,7 +110,7 @@ export const industryProfessions = {
     "Event Planner",
     "Sommelier",
     "Restaurant Manager",
-    "Catering Coordinator"
+    "Catering Coordinator",
   ],
   Transportation: [
     "Pilot",
@@ -120,7 +120,7 @@ export const industryProfessions = {
     "Ship Captain",
     "Freight Broker",
     "Dispatcher",
-    "Logistics Manager"
+    "Logistics Manager",
   ],
   Retail: [
     "Sales Associate",
@@ -130,9 +130,6 @@ export const industryProfessions = {
     "Customer Service Representative",
     "Inventory Planner",
     "Loss Prevention Specialist",
-    "Retail Operations Manager"
-  ]
+    "Retail Operations Manager",
+  ],
 };
-
-
-

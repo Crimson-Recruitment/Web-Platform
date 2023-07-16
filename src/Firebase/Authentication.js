@@ -38,8 +38,8 @@ export default class Auth {
       .then((val) => {
         this.#cookie.remove("user-login", { path: "/" });
         this.#cookie.remove("company-login", { path: "/" });
-        sessionStorage.removeItem("companyDetails")
-        sessionStorage.removeItem("userDetails")
+        sessionStorage.removeItem("companyDetails");
+        sessionStorage.removeItem("userDetails");
         localStorage.removeItem("email");
         sessionStorage.removeItem("companyId");
         result = { code: 0, val: val };
