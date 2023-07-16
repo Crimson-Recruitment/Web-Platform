@@ -115,23 +115,28 @@ function CompanyJobs() {
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      if(sessionStorage.getItem("companyDetails") != null) {
-        dispatch({type:"SETLOADING", loading:false})
-        return;
+      let hasDetails = await firestore.checkCompanyEmail(localStorage.getItem("email"));
+      if (hasDetails == true) {
+        navigate("/company-details", {state:{notify:true}})
       } else {
-        await firestore
-        .getCompanyDetails(email)
-        .then((user) => {
-          if (user.code == 0) {
-            sessionStorage.setItem("companyDetails", JSON.stringify(user.val.data()));
-            sessionStorage.setItem("companyId", JSON.stringify(user.val.id));
-          } else {
-            alert(user.val);
-          }
-        })
-        .catch((err) => {
-          alert(err);
-        });
+        if(sessionStorage.getItem("companyDetails") != null) {
+          dispatch({type:"SETLOADING", loading:false})
+          return;
+        } else {
+          await firestore
+          .getCompanyDetails(email)
+          .then((user) => {
+            if (user.code == 0) {
+              sessionStorage.setItem("companyDetails", JSON.stringify(user.val.data()));
+              sessionStorage.setItem("companyId", JSON.stringify(user.val.id));
+            } else {
+              alert(user.val);
+            }
+          })
+          .catch((err) => {
+            alert(err);
+          });
+        }
       }
     })();
   (async() => {

@@ -10,6 +10,7 @@ import "../../../Styles/jobs.css";
 import { Box, Button, Grid } from "@mui/material";
 import Firestore from "../../../Firebase/Firestore";
 import UserJobCard from "../../../components/UserJobCard";
+import { useNavigate } from "react-router-dom";
 
 function containsObject(obj, list) {
   var i;
@@ -27,12 +28,16 @@ function Jobs() {
   const [jobsList, setJobsList] = React.useState([]);
   const [loading, setLoading] = React.useState(true)
   const [current, setCurrent] = React.useState(null);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      console.log(email);
-      await firestore
+      let hasDetails = await firestore.checkUserEmail(localStorage.getItem("email"));
+      if (hasDetails.val == true) {
+        navigate("/skills", {state:{notify:true}})
+      } else {
+        await firestore
         .getUserDetails(email)
         .then((user) => {
           if (user.code == 0) {
@@ -51,26 +56,25 @@ function Jobs() {
           alert(err);
           setLoading(false);
         });
+        await firestore.getJobs()
+        .then(val => {
+          if(val.code == 0) {
+            val.val.forEach((job) => {
+              if(!containsObject(job.data(),jobsList)) {
+                setJobsList([...jobsList,job.data()])
+              }
+            })
+          setLoading(false)
+          } else {
+            alert(val.val)
+          setLoading(false)
+          }
+        }).catch(err => {
+          alert(err)
+          setLoading(false)
+        })
+      }
     })();
-    (async() => {
-      await firestore.getJobs()
-      .then(val => {
-        if(val.code == 0) {
-          val.val.forEach((job) => {
-            if(!containsObject(job.data(),jobsList)) {
-              setJobsList([...jobsList,job.data()])
-            }
-          })
-        setLoading(false)
-        } else {
-          alert(val.val)
-        setLoading(false)
-        }
-      }).catch(err => {
-        alert(err)
-        setLoading(false)
-      })
-    })()
   }, []);
 
   return (

@@ -15,18 +15,22 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
+import Firestore from "../../Firebase/Firestore";
 
 const defaultTheme = createTheme();
 
 export default function CompanyLogin() {
   const [loading, setLoading] = React.useState(false);
   const cookie = new Cookies();
+  const firestore = new Firestore();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    await auth
+    let isUser = await firestore.checkUserEmail(data.get("email"));
+    if (isUser.val == true) {
+      await auth
       .signIn(data.get("email"), data.get("password"))
       .then((val) => {
         if (val.code == 0) {
@@ -43,6 +47,10 @@ export default function CompanyLogin() {
         alert(err);
         setLoading(false);
       });
+    } else {
+      alert("Email registered as a User account!");
+      setLoading(false);
+    }
   };
 
   return (

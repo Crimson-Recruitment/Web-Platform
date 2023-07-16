@@ -16,36 +16,43 @@ import {
 } from "mdb-react-ui-kit";
 import SideBar from "../../../components/SideBar";
 import Firestore from "../../../Firebase/Firestore";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const firestore = new Firestore();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({});
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      console.log(email);
-      if(sessionStorage.getItem("userDetails") != null) {
-        setUserData(JSON.parse(sessionStorage.getItem("userDetails")));
-        setLoading(false);
-        return;
+      let hasDetails = await firestore.checkUserEmail(localStorage.getItem("email"));
+      console.log(hasDetails);
+      if (hasDetails.val == true) {
+        navigate("/skills", {state:{notify:true}})
       } else {
-        await firestore
-        .getUserDetails(email)
-        .then((user) => {
-          if (user.code == 0) {
-            setUserData(user.val.data());
-            sessionStorage.setItem("userDetails", JSON.stringify(user.val.data()));
-            setLoading(false);
-          } else {
-            alert(user.val);
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          alert(err);
+        if(sessionStorage.getItem("userDetails") != null) {
+          setUserData(JSON.parse(sessionStorage.getItem("userDetails")));
           setLoading(false);
-        });
+          return;
+        } else {
+          await firestore
+          .getUserDetails(email)
+          .then((user) => {
+            if (user.code == 0) {
+              setUserData(user.val.data());
+              sessionStorage.setItem("userDetails", JSON.stringify(user.val.data()));
+              setLoading(false);
+            } else {
+              alert(user.val);
+              setLoading(false);
+            }
+          })
+          .catch((err) => {
+            alert(err);
+            setLoading(false);
+          });
+        }
       }
     })();
   }, []);

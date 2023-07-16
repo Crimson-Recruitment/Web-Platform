@@ -192,6 +192,34 @@ export default class Firestore {
     return result;
   }
 
+  checkUserEmail = async (email) => {
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "User"),
+      where("emailAddress", "==", email)
+    );
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = { code: 0, val: true };
+    } else {
+        result = { code: 0, val: false };
+    }
+    return result;
+  }
+  checkCompanyEmail = async (email) => {
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Company"),
+      where("emailAddress", "==", email)
+    );
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = { code: 0, val: true };
+    } else {
+        result = { code: 0, val: false };
+    }
+    return result;
+  }
   updateUserDetails = () => {};
 
   updateCompanyDetails = () => {};

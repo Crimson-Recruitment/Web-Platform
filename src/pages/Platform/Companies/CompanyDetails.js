@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Cookies from "universal-cookie";
 import Select from "react-select";
 import "flowbite/dist/flowbite.min.js";
@@ -23,6 +23,12 @@ function CompanyDetails() {
   const company = JSON.parse(sessionStorage.getItem("companyData"));
   const db = new Storage();
   const firestore = new Firestore();
+  const notify = useLocation().state;
+  useEffect(()=> {
+    if(notify.notify == true) {
+      alert("Please complete registration!")
+    }
+  },[])
 
   const submitHandler = async (e) => {
     e.preventDefault();

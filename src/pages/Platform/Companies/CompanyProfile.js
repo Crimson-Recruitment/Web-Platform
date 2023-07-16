@@ -13,37 +13,43 @@ import {
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Firestore from "../../../Firebase/Firestore";
+import { useNavigate } from "react-router-dom";
 
 function CompanyProfile() {
   const [loading, setLoading] = useState(true);
   const [companyData, setCompanyData] = useState({});
   const firestore = new Firestore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      console.log(email);
-      if(sessionStorage.getItem("companyDetails") != null) {
-        setCompanyData(JSON.parse(sessionStorage.getItem("companyDetails")));
-        setLoading(false);
+      let hasDetails = await firestore.checkCompanyEmail(localStorage.getItem("email"));
+      if (hasDetails == true) {
+        navigate("/company-details", {state:{notify:true}})
       } else {
-        await firestore
-        .getCompanyDetails(email)
-        .then((user) => {
-          if (user.code == 0) {
-            setCompanyData(user.val.data());
-            console.log(user.val.data());
-            setLoading(false);
-          } else {
-            alert(user.val);
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          alert(err);
+        if(sessionStorage.getItem("companyDetails") != null) {
+          setCompanyData(JSON.parse(sessionStorage.getItem("companyDetails")));
           setLoading(false);
-        });
-
+        } else {
+          await firestore
+          .getCompanyDetails(email)
+          .then((user) => {
+            if (user.code == 0) {
+              setCompanyData(user.val.data());
+              console.log(user.val.data());
+              setLoading(false);
+            } else {
+              alert(user.val);
+              setLoading(false);
+            }
+          })
+          .catch((err) => {
+            alert(err);
+            setLoading(false);
+          });
+  
+        }
       }
     })();
   }, []);

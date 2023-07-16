@@ -23,6 +23,13 @@ function Skills() {
   const navigate = useNavigate();
   const firestore = new Firestore();
   const db = new Storage();
+  const notify = useLocation().state;
+
+  useEffect(()=> {
+    if(notify.notify == true) {
+      alert("Please complete registration!")
+    }
+  },[])
 
   const user = JSON.parse(sessionStorage.getItem("userData"));
   const submitHandler = async (event) => {

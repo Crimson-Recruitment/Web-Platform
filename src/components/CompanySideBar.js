@@ -18,9 +18,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import Auth from "../Firebase/Authentication";
 import { companyPages } from "../Data/CompanyPages";
+import Firestore from "../Firebase/Firestore";
 
 function CompanySideBar({ children }) {
   const [state, setState] = React.useState(false);
+  const firestore = new Firestore();
+  const navigate = useNavigate();
   const auth = new Auth();
   const logoutHandler = async () => {
     await auth.logout().then(() => {

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Firestore from "../../../Firebase/Firestore";
 import { industryProfessions } from "../../../Data/CompanyIndustries";
 import UserJobCard from "../../../components/UserJobCard";
+import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,15 +49,19 @@ function containsObject(obj, list) {
 
 
 function ForYou() {
-  const [value, setValue] = React.useState(0);
   const firestore = new Firestore();
   const [jobsList, setJobsList] = React.useState([]);
   const [loading, setLoading] = React.useState(true)
   const [current, setCurrent] = React.useState(null);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     (async() => {
-      await firestore.getJobs()
+      let hasDetails = await firestore.checkUserEmail(localStorage.getItem("email"));
+      if (hasDetails.val == true) {
+        navigate("/skills", {state:{notify:true}})
+      } else {
+        await firestore.getJobs()
       .then(val => {
         if(val.code == 0) {
           val.val.forEach((job) => {
@@ -73,6 +78,7 @@ function ForYou() {
         alert(err)
         setLoading(false)
       })
+      }
     })()
   },[])
   return (

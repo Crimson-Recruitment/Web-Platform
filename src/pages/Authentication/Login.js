@@ -14,18 +14,23 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
+import { firestore } from "../../Firebase/FirebaseConfig";
+import Firestore from "../../Firebase/Firestore";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {});
   const cookie = new Cookies();
+  const firestore = new Firestore();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
-    await auth
+    const isCompany = await firestore.checkCompanyEmail(data.get("email"));
+    if (isCompany.val == true) {
+      await auth
       .signIn(data.get("email"), data.get("password"))
       .then((val) => {
         if (val.code == 0) {
@@ -42,6 +47,10 @@ export default function Login() {
         alert(err);
         setLoading(false);
       });
+    } else {
+      alert("Email registered as a Company account!");
+      setLoading(false);
+    }
   };
   return (
     <Grid container component="main" sx={{ minHeight: { lg: "100vh" } }}>
