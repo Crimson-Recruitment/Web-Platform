@@ -9,7 +9,7 @@ function JobCard({title, id, description, timestamp}) {
         if(time < 0) {
             setDef("less than 1 second")
         } else if (time < 60) {
-            setDef(`${time} seconds`)
+            setDef(`${parseInt(time)} seconds`)
         } else if (time < 3600) {
             setDef(`${parseInt(time/60)} mins`)
         } else if (time < 216000) {

@@ -74,7 +74,7 @@ function CompanySideBar({ children }) {
   return (
     <>
       <AppBar
-        sx={{ display: { xs: "block", md: "none" } }}
+        sx={{ display: { xs: "block", lg: "none" } }}
         position="relative"
         color="transparent"
       >
@@ -94,7 +94,7 @@ function CompanySideBar({ children }) {
         {list()}
       </Drawer>
       <Grid container>
-        <Grid item md={1.7} display={{ xs: "none", md: "block" }}>
+        <Grid item md={1.7} display={{ xs: "none", lg: "block" }}>
           <Box style={{ display: "flex", height: "100vh" }}>
             <Sidebar>
               <Menu>

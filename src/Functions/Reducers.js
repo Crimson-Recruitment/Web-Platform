@@ -43,7 +43,7 @@ export const skillsReducer = (state, action) => {
         case "SETLOADING":
             return {...state, loading:action.loading};
         case "SETSELECTEDSKILLS":
-            return {...state, selectedSkills:action.selectedSkills};
+            return {...state, selectedSkills:action.loading};
         case "SETSELECTEDPROFESSION":
             return {...state, selectedProfession:action.selectedProfession};
         case "SETJOBSLIST":

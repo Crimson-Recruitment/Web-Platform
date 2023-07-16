@@ -132,6 +132,9 @@ export default class Firestore {
     minSalary,
     maxSalary,
     benefits,
+    hideSalary,
+    requestCoverLetter,
+    expiryDate,
     timestamp
   ) => {
     let companyDetails = JSON.parse(sessionStorage.getItem("companyDetails"));
@@ -150,6 +153,9 @@ export default class Firestore {
       minSalary: minSalary,
       maxSalary: maxSalary,
       benefits: benefits,
+      hideSalary:hideSalary,
+      requestCoverLetter:requestCoverLetter,
+      expiryDate:expiryDate,
       timestamp: timestamp
     })
       .then((val) => {

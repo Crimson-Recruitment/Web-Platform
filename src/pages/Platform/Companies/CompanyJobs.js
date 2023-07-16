@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState} from "react";
 import CompanySideBar from "../../../components/CompanySideBar";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -18,16 +18,21 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import LocationSearchInput from "../../../components/LocationInput";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { professionList, skills } from "../../../Data/UserProfessions";
+import { skills } from "../../../Data/UserProfessions";
 import Select from "react-select";
 import { industries } from "../../../Data/CompanyIndustries";
 import Firestore from "../../../Firebase/Firestore";
 import JobCard from "../../../components/JobCard";
 import { companyJobsReducer } from "../../../Functions/Reducers";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -72,16 +77,7 @@ let initState = {
   open:false,
   value:0
 }
-function containsObject(obj, list) {
-  var i;
-  for (i = 0; i < list.length; i++) {
-      if (list[i] === obj) {
-          return true;
-      }
-  }
 
-  return false;
-}
 
 function CompanyJobs() {
   const [state, dispatch] = useReducer(companyJobsReducer, initState);
@@ -111,6 +107,8 @@ function CompanyJobs() {
   };
 
   const firestore = new Firestore();
+  const [expiryDate, setExpiryDate] = useState(new Date());
+  var viewList = [];
   
   useEffect(() => {
     (async () => {
@@ -144,18 +142,15 @@ function CompanyJobs() {
     .then(val => {
       if(val.code == 0) {
         val.val.forEach(job => {
-          if(!containsObject(job.data(),state.jobsList)) {
-            dispatch({type:"SETJOBSLIST", jobsList:[...state.jobsList,job.data()]})
-          }
+          viewList = [...viewList, job.data()];
         })
+        dispatch({type:"SETJOBSLIST", jobsList:viewList})
+        viewList = [];
         dispatch({type:"SETLOADING", loading:false})
       } else {
         alert(val.val)
         dispatch({type:"SETLOADING", loading:false})
       }
-    }).catch(err => {
-      alert(err)
-      dispatch({type:"SETLOADING", loading:false})
     })
   })()
   }, []);
@@ -174,6 +169,9 @@ function CompanyJobs() {
       data.get("minSalary"),
       data.get("maxSalary"),
       state.benefits,
+      data.get("hideSalary"),
+      data.get("requestCoverLetter"),
+      expiryDate,
       new Date().getTime()
       ).then(async val => {
         if (val.code == 0) {
@@ -357,6 +355,15 @@ function CompanyJobs() {
                   </List>
                 </Grid>
                 <Grid item xs={12}>
+                <label
+                    for="expirydate"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Expiry Date
+                  </label>
+                  <DatePicker className="border mb-4 border-blue-300" selected={expiryDate} onChange={(date) => setExpiryDate(date)} />
+                </Grid>
+                <Grid item xs={12}>
                   <label
                     for="skills"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -416,6 +423,9 @@ function CompanyJobs() {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                <FormControlLabel control={<Switch name="hideSalary" />} label="Hide Salary on the job post?" />
+                </Grid>
+                <Grid item xs={12}>
                   <label
                     for="benefits"
                     className="block mt-4 mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
@@ -455,7 +465,7 @@ function CompanyJobs() {
                     Add
                   </Button>
                 </Grid>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                   <List>
                     {state.benefits != []
                       ? state.benefits.map((req, index) => {
@@ -481,6 +491,9 @@ function CompanyJobs() {
                         })
                       : null}
                   </List>
+                </Grid>
+                <Grid item xs={12}>
+                <FormControlLabel control={<Switch name="requestCoverLetter" />} label="Request for a cover letter ?" />
                 </Grid>
               </Grid>
               <Button
