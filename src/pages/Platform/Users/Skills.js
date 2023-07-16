@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import Select from "react-select";
 import "flowbite/dist/flowbite.min.js";
@@ -7,14 +7,19 @@ import { professionList, skills } from "../../../Data/UserProfessions";
 import Firestore from "../../../Firebase/Firestore";
 import Storage from "../../../Firebase/Storage";
 import { Button } from "@mui/material";
+import { skillsReducer } from "../../../Functions/Reducers";
+
+let initState = {
+  selectedSkills:null,
+  selectedProfession:null,
+  image:null,
+  imagePath:null,
+  resume:null,
+  loading:false
+}
 
 function Skills() {
-  const [selectedSkills, setSelectedSkills] = useState();
-  const [selectedProfession, setSelectedProfession] = useState();
-  const [image, setImage] = useState(null);
-  const [imagePath, setImagePath] = useState(null);
-  const [resume, setResume] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [state, dispatch] = useReducer(skillsReducer,initState);
   const navigate = useNavigate();
   const firestore = new Firestore();
   const db = new Storage();
@@ -22,22 +27,22 @@ function Skills() {
   const user = JSON.parse(sessionStorage.getItem("userData"));
   const submitHandler = async (event) => {
     event.preventDefault();
-    setLoading(true);
+    dispatch({type:"SETLOADING", loading:true})
     let imagelink = "";
-    if (imagePath != null) {
-      imagelink = await db.getFileUrl(`${user.id}-image`, imagePath);
+    if (state.imagePath != null) {
+      imagelink = await db.getFileUrl(`${user.id}-image`, state.imagePath);
       if (imagelink.code === 1) {
         alert(imagelink.val);
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
         return;
       }
     }
     let resumelink = "";
-    if (resume != null) {
-      resumelink = await db.getFileUrl(`${user.id}-resume`, resume);
+    if (state.resume != null) {
+      resumelink = await db.getFileUrl(`${user.id}-resume`, state.resume);
       if (resumelink.code === 1) {
         alert(resumelink.val);
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
         return;
       }
     }
@@ -50,23 +55,23 @@ function Skills() {
         user.phoneNumber,
         user.location,
         imagelink.val,
-        selectedSkills,
+        state.selectedSkills,
         resumelink.val,
         event.target["about"].value,
-        selectedProfession
+        state.selectedProfession
       )
       .then((res) => {
         if (res.code === 0) {
           navigate("/jobs");
-          setLoading(false);
+          dispatch({type:"SETLOADING", loading:false})
         } else {
           alert(res.val);
-          setLoading(false);
+          dispatch({type:"SETLOADING", loading:false})
         }
       })
       .catch((err) => {
         alert(err);
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
       });
   };
 
@@ -75,34 +80,33 @@ function Skills() {
     reader.readAsArrayBuffer(e.target.files[0]);
 
     reader.onload = () => {
-      setImagePath(reader.result);
+      dispatch({type:"SETIMAGEPATH", imagePath:reader.result})
     };
     reader.onerror = () => {
       alert(reader.error);
     };
-    setImage(e.target.files[0]);
+    dispatch({type:"SETIMAGE", image:e.target.files[0]})
   };
 
   const resumeHandler = (e) => {
     let reader = new FileReader();
     reader.readAsArrayBuffer(e.target.files[0]);
     reader.onload = () => {
-      setResume(reader.result);
+      dispatch({type:"SETRESUME", resume:reader.result})
     };
     reader.onerror = () => {
       alert(reader.error);
     };
-    setResume(reader.result);
   };
   return (
     <div className="p-10 lg:my-12 lg:mx-[200px] sm:m-5 md:m-10 grid place-items-center align-center rounded overflow-hidden shadow-lg h-min-[70vh]">
       <form onSubmit={submitHandler} className="w-full">
         <div className="mb-6">
-          {image != null ? (
+          {state.image != null ? (
             <div className="flex justify-center mb-5">
               <img
                 className="h-[400px] w-[400px] rounded-full"
-                src={URL.createObjectURL(image)}
+                src={URL.createObjectURL(state.image)}
               />
               :
             </div>
@@ -158,10 +162,10 @@ function Skills() {
             options={professionList}
             placeholder="Medicine, technology,....."
             onChange={(val) => {
-              setSelectedProfession(val);
+              dispatch({type:"SETSELECTEDPROFESSION", selectedProfession:val})
             }}
             isSearchable={true}
-            value={selectedProfession}
+            value={state.selectedProfession}
           />
         </div>
         <div className="mb-6">
@@ -191,13 +195,13 @@ function Skills() {
           placeholder="Select skills,..."
           onChange={(val) => {
             if (val.length <= 6) {
-              setSelectedSkills(val);
+              dispatch({type:"SETSELECTEDSKILLS", selectedSkills:val})
             } else {
               alert("Max number of skills added!");
             }
           }}
           isSearchable={true}
-          value={selectedSkills}
+          value={state.selectedSkills}
           isMulti
         />
 
@@ -216,7 +220,7 @@ function Skills() {
         />
 
         <Button
-          disabled={loading}
+          disabled={state.loading}
           type="submit"
           variant="contained"
           sx={{
@@ -226,7 +230,7 @@ function Skills() {
             ":hover": { backgroundColor: "darkgreen" },
           }}
         >
-          {loading ? "Loading..." : "Submit"}
+          {state.loading ? "Loading..." : "Submit"}
         </Button>
       </form>
     </div>

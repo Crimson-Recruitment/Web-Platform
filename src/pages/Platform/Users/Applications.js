@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer } from "react";
 import SideBar from "../../../components/SideBar";
 import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
 

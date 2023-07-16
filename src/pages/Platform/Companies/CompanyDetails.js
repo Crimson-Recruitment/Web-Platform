@@ -1,45 +1,48 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import Cookies from "universal-cookie";
 import Select from "react-select";
 import "flowbite/dist/flowbite.min.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Typography } from "@mui/material";
 import { industries } from "../../../Data/CompanyIndustries";
-import { Troubleshoot } from "@mui/icons-material";
 import Storage from "../../../Firebase/Storage";
 import Firestore from "../../../Firebase/Firestore";
+import { companyDetailsReducer } from "../../../Functions/Reducers";
+
+let initState = {
+  selectedType:null,
+  loading:false,
+  image:null,
+  imagePath:null,
+  license:null
+}
 
 function CompanyDetails() {
-  const cookie = new Cookies();
-  const [selectedType, setSelectedType] = useState();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState(null);
-  const [imagePath, setImagePath] = useState(null);
-  const [license, setLicense] = useState(null);
+  const [state, dispatch] = useReducer(companyDetailsReducer, initState)
   const company = JSON.parse(sessionStorage.getItem("companyData"));
   const db = new Storage();
   const firestore = new Firestore();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch({type:"SETLOADING", loading:true})
     let licenselink = "";
-    if (license != null) {
-      licenselink = await db.getFileUrl(`${company.id}-license`, license);
+    if (state.license != null) {
+      licenselink = await db.getFileUrl(`${company.id}-license`, state.license);
       if (licenselink.code === 1) {
         alert(licenselink.val);
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
         return;
       }
     }
 
     let imagelink = "";
-    if (imagePath != null) {
-      imagelink = await db.getFileUrl(`${company.id}-image`, imagePath);
+    if (state.imagePath != null) {
+      imagelink = await db.getFileUrl(`${company.id}-image`, state.imagePath);
       if (imagelink.code === 1) {
         alert(imagelink.val);
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
         return;
       }
     }
@@ -52,7 +55,7 @@ function CompanyDetails() {
         company.email,
         company.location,
         imagelink.val,
-        selectedType,
+        state.selectedType,
         e.target["overview"].value,
         e.target["bordered-radio"].value,
         licenselink.val
@@ -60,15 +63,15 @@ function CompanyDetails() {
       .then((res) => {
         if (res.code === 0) {
           navigate("/company-jobs");
-          setLoading(false);
+          dispatch({type:"SETLOADING", loading:false})
         } else {
           alert(res.val);
-          setLoading(false);
+          dispatch({type:"SETLOADING", loading:false})
         }
       })
       .catch((err) => {
         alert(err);
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
       });
   };
 
@@ -77,19 +80,19 @@ function CompanyDetails() {
     reader.readAsArrayBuffer(e.target.files[0]);
 
     reader.onload = () => {
-      setImagePath(reader.result);
+      dispatch({type:"SETIMAGEPATH", imagePath:reader.result});
     };
     reader.onerror = () => {
       alert(reader.error);
     };
-    setImage(e.target.files[0]);
+    dispatch({type:"SETIMAGE",image:e.target.files[0]});
   };
 
   const licenseHandler = (e) => {
     let reader = new FileReader();
     reader.readAsArrayBuffer(e.target.files[0]);
     reader.onload = () => {
-      setLicense(reader.result);
+      dispatch({type:"SETLICENSE", license:reader.result});
     };
     reader.onerror = () => {
       alert(reader.error);
@@ -106,11 +109,11 @@ function CompanyDetails() {
           >
             Company Logo
           </label>
-          {image != null ? (
+          {state.image != null ? (
             <div className="flex justify-center mb-5">
               <img
                 className="h-[400px] w-[400px] rounded-full"
-                src={URL.createObjectURL(image)}
+                src={URL.createObjectURL(state.image)}
               />
               :
             </div>
@@ -166,11 +169,11 @@ function CompanyDetails() {
             options={industries}
             placeholder="Healthcare, technology,....."
             onChange={(val) => {
-              setSelectedType(val.value);
+              dispatch({type:"SETSELECTEDTYPE",selectedType:val.value});
             }}
             isSearchable={true}
             value={industries.filter(function(option) {
-              return option.value === selectedType;
+              return option.value === state.selectedType;
             })}
           />
         </div>
@@ -239,7 +242,7 @@ function CompanyDetails() {
         />
 
         <Button
-          disabled={loading}
+          disabled={state.loading}
           type="submit"
           variant="contained"
           sx={{
@@ -249,7 +252,7 @@ function CompanyDetails() {
             ":hover": { backgroundColor: "darkgreen" },
           }}
         >
-          {loading ? "Loading..." : "Submit"}
+          {state.loading ? "Loading..." : "Submit"}
         </Button>
       </form>
     </div>

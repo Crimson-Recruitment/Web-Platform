@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import CompanySideBar from "../../../components/CompanySideBar";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -27,6 +27,7 @@ import Select from "react-select";
 import { industries } from "../../../Data/CompanyIndustries";
 import Firestore from "../../../Firebase/Firestore";
 import JobCard from "../../../components/JobCard";
+import { companyJobsReducer } from "../../../Functions/Reducers";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,31 +62,44 @@ function a11yProps(index) {
   };
 }
 
-function CompanyJobs() {
-  const [value, setValue] = React.useState(0);
+let initState = {
+  requirements:[],
+  benefits:[],
+  loading:false,
+  selectedSkills:null,
+  selectedType:null,
+  jobsList:[],
+  open:false,
+  value:0
+}
+function containsObject(obj, list) {
+  var i;
+  for (i = 0; i < list.length; i++) {
+      if (list[i] === obj) {
+          return true;
+      }
+  }
 
+  return false;
+}
+
+function CompanyJobs() {
+  const [state, dispatch] = useReducer(companyJobsReducer, initState);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch({type:"SETVALUE", value:newValue});
   };
-  const [requirements, setRequirements] = useState([]);
-  const [benefits, setBenefits] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState();
-  const [selectedType, setSelectedType] = useState();
-  const [jobsList, setJobsList] = useState([])
   const navigate = useNavigate()
-  const [open, setOpen] = React.useState(false);
 
   const removeRequirementsHandler = (res) => {
-    const newList = requirements.filter((item) => item !== res);
-    setRequirements(newList);
+    const newList = state.requirements.filter((item) => item !== res);
+    dispatch({type:"SETREQUIREMENTS", requirements:newList});
   };
   const removeBenefitsHandler = (res) => {
-    const newList = benefits.filter((item) => item !== res);
-    setBenefits(newList);
+    const newList = state.benefits.filter((item) => item !== res);
+    dispatch({type:"SETBENEFITS", benefits:newList});
   };
   const handleClick = () => {
-    setOpen(true);
+    dispatch({type:"SETOPEN", open:true})
   };
 
   const handleClose = (event, reason) => {
@@ -93,7 +107,7 @@ function CompanyJobs() {
       return;
     }
 
-    setOpen(false);
+    dispatch({type:"SETOPEN", open:false})
   };
 
   const firestore = new Firestore();
@@ -102,7 +116,7 @@ function CompanyJobs() {
     (async () => {
       let email = localStorage.getItem("email");
       if(sessionStorage.getItem("companyDetails") != null) {
-        setLoading(false);
+        dispatch({type:"SETLOADING", loading:false})
         return;
       } else {
         await firestore
@@ -125,48 +139,50 @@ function CompanyJobs() {
     .then(val => {
       if(val.code == 0) {
         val.val.forEach(job => {
-          setJobsList([...jobsList,job.data()])
+          if(!containsObject(job.data(),state.jobsList)) {
+            dispatch({type:"SETJOBSLIST", jobsList:[...state.jobsList,job.data()]})
+          }
         })
-      setLoading(false)
+        dispatch({type:"SETLOADING", loading:false})
       } else {
         alert(val.val)
-      setLoading(false)
+        dispatch({type:"SETLOADING", loading:false})
       }
     }).catch(err => {
       alert(err)
-      setLoading(false)
+      dispatch({type:"SETLOADING", loading:false})
     })
   })()
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
+    dispatch({type:"SETLOADING", loading:true})
     const data = new FormData(e.currentTarget);
     await firestore.createJobPost(
       data.get("jobTitle"),
-      selectedType,
+      state.selectedType,
       data.get("jobDescription"),
       data.get("location"),
-      requirements,
-      selectedSkills,
+      state.requirements,
+      state.selectedSkills,
       data.get("minSalary"),
       data.get("maxSalary"),
-      benefits,
+      state.benefits,
       new Date().getTime()
       ).then(async val => {
         if (val.code == 0) {
           handleClick()
         await new Promise(res => setTimeout(res,2000))
-        setLoading(false)
+        dispatch({type:"SETLOADING", loading:false})
         navigate(0)
         } else {
           alert(val.val)
-          setLoading(false)
+          dispatch({type:"SETLOADING", loading:false})
         }
       }).catch(err => {
         alert(err)
-        setLoading(false)
+        dispatch({type:"SETLOADING", loading:false})
       })
   }
 
@@ -174,7 +190,7 @@ function CompanyJobs() {
     <CompanySideBar>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          value={value}
+          value={state.value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
@@ -182,9 +198,9 @@ function CompanyJobs() {
           <Tab label="Create Job" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
+      <CustomTabPanel value={state.value} index={0}>
           {
-            jobsList? jobsList.map((job) => {
+            state.jobsList? state.jobsList.map((job) => {
               return(
                 <JobCard title={job.jobTitle} description={job.jobDescription} timestamp={job.timestamp}/>
               )
@@ -192,7 +208,7 @@ function CompanyJobs() {
           }
        
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      <CustomTabPanel value={state.value} index={1}>
         <Container component="main" maxWidth="lg">
           <CssBaseline />
           <Box
@@ -235,10 +251,10 @@ function CompanyJobs() {
             name="field"
             placeholder="Healthcare, technology,....."
             onChange={(val) => {
-              setSelectedType(val.label);
+              dispatch({type:"SETSELECTEDTYPE", selectedType:val.label})
             }}
             value={industries.filter(function(option) {
-              return option.label === selectedType;
+              return option.label === state.selectedType;
             })}
           />
                 </Grid>
@@ -297,10 +313,10 @@ function CompanyJobs() {
                   }}
                     onClick={() => {
                       if(document.getElementsByName("requirements")[0].value != "") {
-                        setRequirements([
-                          ...requirements,
+                        dispatch({type:"SETREQUIREMENTS", requirements:[
+                          ...state.requirements,
                           document.getElementsByName("requirements")[0].value,
-                        ]);
+                        ]})
                         document.getElementsByName("requirements")[0].value = "";
                       }
                     }}
@@ -310,8 +326,8 @@ function CompanyJobs() {
                 </Grid>
                 <Grid xs={12}>
                   <List>
-                    {requirements != []
-                      ? requirements.map((req, index) => {
+                    {state.requirements != []
+                      ? state.requirements.map((req, index) => {
                           return (
                             <ListItem
                               key={index}
@@ -349,13 +365,14 @@ function CompanyJobs() {
                     name="skills"
                     onChange={(val) => {
                       if (val.length <= 6) {
-                        setSelectedSkills(val);
+                        dispatch({type:"SETSELECTEDSKILLS", selectedSkills:val})
+                       
                       } else {
                         alert("Max number of skills added!");
                       }
                     }}
                     isSearchable={true}
-                    value={selectedSkills}
+                    value={state.selectedSkills}
                     isMulti
                   />
                 </Grid>
@@ -422,10 +439,10 @@ function CompanyJobs() {
                   }}
                     onClick={() => {
                       if( document.getElementsByName("benefits")[0].value != "") {
-                        setBenefits([
-                          ...benefits,
+                        dispatch({type:"SETBENEFITS", benefits:[
+                          ...state.benefits,
                           document.getElementsByName("benefits")[0].value,
-                        ]);
+                        ]})
                         document.getElementsByName("benefits")[0].value = "";
                       }
                     }}
@@ -435,8 +452,8 @@ function CompanyJobs() {
                 </Grid>
                 <Grid xs={12}>
                   <List>
-                    {requirements != []
-                      ? benefits.map((req, index) => {
+                    {state.benefits != []
+                      ? state.benefits.map((req, index) => {
                           return (
                             <ListItem
                               key={index}
@@ -462,7 +479,7 @@ function CompanyJobs() {
                 </Grid>
               </Grid>
               <Button
-                disabled={loading}
+                disabled={state.loading}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -473,14 +490,14 @@ function CompanyJobs() {
                   ":hover": { backgroundColor: "darkgreen" },
                 }}
               >
-                {loading ? "Loading..." : "Create Job"}
+                {state.loading ? "Loading..." : "Create Job"}
               </Button>
               
             </Box>
           </Box>
         </Container>
       </CustomTabPanel>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Successfully add Job Post!
         </Alert>
