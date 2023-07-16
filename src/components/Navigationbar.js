@@ -22,7 +22,6 @@ const pages = [
   { pageName: "Home", link: "/" },
   { pageName: "About", link: "/about" },
   { pageName: "Contact Us", link: "/contact-us" },
-  { pageName: "Forum", link: "/forum" },
 ];
 
 function NavigationBar() {
