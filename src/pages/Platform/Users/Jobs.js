@@ -6,10 +6,9 @@ import Firestore from "../../../Firebase/Firestore";
 import UserJobCard from "../../../components/UserJobCard";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
-import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import JobDescription from "../../../components/JobDescription";
+import ApplicationBox from "../../../components/ApplicationBox";
 
 function containsObject(obj, list) {
   var i;
@@ -29,6 +28,7 @@ function Jobs() {
   const [current, setCurrent] = React.useState(null);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState();
+  var viewList = [];
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -36,6 +36,15 @@ function Jobs() {
     }
 
     setOpen(false);
+  };
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   React.useEffect(() => {
@@ -66,10 +75,13 @@ function Jobs() {
         await firestore.getJobs().then((val) => {
           if (val.code == 0) {
             val.val.forEach((job) => {
+              console.log(job.data());
               if (containsObject(job.data(), jobsList) == false) {
-                setJobsList([...jobsList, job.data()]);
+                viewList = [...viewList, job.data()];
               }
             });
+            setJobsList(viewList);
+            viewList = [];
             setLoading(false);
           } else {
             alert(val.val);
@@ -105,7 +117,7 @@ function Jobs() {
             </div>
           ) : (
             jobsList &&
-            jobsList.map((job, index) => {
+            jobsList.sort((a,b) => a.timestamp < b.timestamp).map((job, index) => {
               return (
                 <a onClick={() => setCurrent(index)}>
                   <UserJobCard
@@ -140,64 +152,31 @@ function Jobs() {
           lg={6.9}
         >
           {current !== null ? (
-            <Card
-              sx={{ margin: "10px", paddingX: "5px", paddingY: "3px" }}
-              variant="outlined"
-            >
-              {
-                <>
-                  <CardContent>
-                    <Typography variant="h4" color="text.black" gutterBottom>
-                      {jobsList[current].jobTitle}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                      Company Overview
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      {jobsList[current].companyOverview}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                      Job Description
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      {jobsList[current].jobDescription}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                      Required Skills and Qualifications
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      <ul>
-                        {jobsList[current].requirements.map((req) => {
-                          return <li>{req}</li>;
-                        })}
-                      </ul>
-                    </Typography>
-                    {jobsList[current].skills.length != 0 ? (
-                      <>
-                        <Typography variant="h5" component="div">
-                          Skills
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          <ul>
-                            {jobsList[current].skills.map((skill) => {
-                              return <li>{skill.label}</li>;
-                            })}
-                          </ul>
-                        </Typography>
-                      </>
-                    ) : null}
-                  </CardContent>
-                  <CardActions>
-                    <Button variant="contained" size="small">
-                      Apply
-                    </Button>
-                  </CardActions>
-                </>
-              }
-            </Card>
+            <>
+              <JobDescription
+                jobTitle={jobsList[current].jobTitle}
+                overview={jobsList[current].companyOverview}
+                description={jobsList[current].jobDescription}
+                requirements={jobsList[current].requirements}
+                skills={jobsList[current].skills}
+                minSalary={jobsList[current].minSalary}
+                maxSalary={jobsList[current].maxSalary}
+                location={jobsList[current].location}
+                type={jobsList[current].jobType}
+                hideSalary={jobsList[current].hideSalary}
+                benefits={jobsList[current].benefits}
+              />
+
+              <CardActions>
+                <Button onClick={handleDialogOpen} variant="contained" size="small">
+                  Apply
+                </Button>
+              </CardActions>
+            </>
           ) : null}
         </Grid>
       </Grid>
+      <ApplicationBox needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} open={dialogOpen} onClose={handleDialogClose}/>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

@@ -26,7 +26,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { skills } from "../../../Data/UserProfessions";
 import Select from "react-select";
-import { industries } from "../../../Data/CompanyIndustries";
+import { industries, jobType } from "../../../Data/CompanyIndustries";
 import Firestore from "../../../Firebase/Firestore";
 import JobCard from "../../../components/JobCard";
 import { companyJobsReducer } from "../../../Functions/Reducers";
@@ -76,6 +76,7 @@ let initState = {
   jobsList: [],
   open: false,
   value: 0,
+  jobType:null
 };
 
 function CompanyJobs() {
@@ -172,6 +173,8 @@ function CompanyJobs() {
         data.get("jobTitle"),
         state.selectedType,
         data.get("jobDescription"),
+        data.get("isVolunteer"),
+        state.jobType,
         data.get("location"),
         state.requirements,
         state.selectedSkills,
@@ -227,7 +230,7 @@ function CompanyJobs() {
             />
           </div>
         ) : state.jobsList ? (
-          state.jobsList.map((job) => {
+          state.jobsList.sort((a,b) => a.timestamp < b.timestamp).map((job) => {
             return (
               <JobCard
                 title={job.jobTitle}
@@ -252,7 +255,7 @@ function CompanyJobs() {
             <Box
               component="form"
               onSubmit={handleSubmit}
-              noValidate={true}
+              noValidate={false}
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
@@ -270,6 +273,35 @@ function CompanyJobs() {
                     id="jobTitle"
                     label="Job Title"
                     autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="location"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Job Type
+                  </label>
+                  <Select
+                    required
+                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    options={jobType}
+                    placeholder="Select the type of job."
+                    onChange={(val) => {
+                      dispatch({
+                        type: "SETJOBTYPE",
+                        jobType: val.label,
+                      });
+                    }}
+                    value={jobType.filter(function (option) {
+                      return option.label === state.jobType;
+                    })}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Switch name="isVolunteer" />}
+                    label="Is this a volunteering job or a non-volunteering job?"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -333,7 +365,6 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={10}>
                   <TextField
-                    required
                     fullWidth
                     type="text"
                     id="requirements"
@@ -404,6 +435,7 @@ function CompanyJobs() {
                     Expiry Date
                   </label>
                   <DatePicker
+                  required
                     className="border mb-4 border-blue-300"
                     selected={expiryDate}
                     onChange={(date) => setExpiryDate(date)}
@@ -417,6 +449,7 @@ function CompanyJobs() {
                     Skills (Not needed for non-programming jobs)
                   </label>
                   <Select
+                
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={skills}
                     placeholder="Select skills,..."
@@ -441,7 +474,7 @@ function CompanyJobs() {
                     for="minSalary"
                     className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Min Salary in USD
+                    Min Salary in USD (Annual)
                   </label>
                   <TextField
                     name="minSalary"
@@ -458,7 +491,7 @@ function CompanyJobs() {
                     for="maxSalary"
                     className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Max Salary in USD
+                    Max Salary in USD (Annual)
                   </label>
                   <TextField
                     name="maxSalary"
@@ -487,7 +520,6 @@ function CompanyJobs() {
 
                 <Grid item xs={10}>
                   <TextField
-                    required
                     fullWidth
                     type="text"
                     id="benefits"
