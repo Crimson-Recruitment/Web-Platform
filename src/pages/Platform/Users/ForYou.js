@@ -1,17 +1,17 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import SideBar from "../../../components/SideBar";
+import SideBar from "../../../components/Users/SideBar";
 import "../../../Styles/jobs.css";
 import { Alert, Grid, Button, Snackbar, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import Firestore from "../../../Firebase/Firestore";
 import { industryProfessions } from "../../../Data/CompanyIndustries";
-import UserJobCard from "../../../components/UserJobCard";
+import UserJobCard from "../../../components/Users/UserJobCard";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
-import JobDescription from "../../../components/JobDescription";
+import JobDescription from "../../../components/Users/JobDescription";
 import CardActions from "@mui/material/CardActions";
-import ApplicationBox from "../../../components/ApplicationBox";
+import ApplicationBox from "../../../components/Users/ApplicationBox";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -89,7 +89,7 @@ function ForYou() {
             if (val.code == 0) {
               val.val.forEach((job) => {
                 if (!containsObject(job.data(), jobsList)) {
-                  viewList = [...viewList, job.data()]
+                  viewList = [...viewList, {...job.data(), id:job.id}]
                 }
               });
               setJobsList(viewList);
@@ -196,8 +196,11 @@ function ForYou() {
         </Grid>
       </Grid>
       <ApplicationBox 
+      jobId={current !== null ? jobsList[current].id : null}
+      jobName={current !== null ? jobsList[current].jobTitle : null}
+      companyId={current !== null ? jobsList[current].companyId:null} 
       needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} 
-      open={dialogOpen} onClose={handleDialogClose}/>
+      isOpen={dialogOpen} onClose={handleDialogClose}/>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

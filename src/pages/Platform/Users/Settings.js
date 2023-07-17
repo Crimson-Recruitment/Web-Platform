@@ -1,5 +1,5 @@
 import React from "react";
-import SideBar from "../../../components/SideBar";
+import SideBar from "../../../components/Users/SideBar";
 import "../../../Styles/settings.css";
 
 const Settings = () => {

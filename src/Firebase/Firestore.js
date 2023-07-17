@@ -228,6 +228,72 @@ export default class Firestore {
     }
     return result;
   };
+
+  createApplication = async (jobId,jobName, companyId, coverLetter="") => {
+    let user = JSON.parse(sessionStorage.getItem("userDetails"));
+    let userId = JSON.parse(sessionStorage.getItem("userId"));
+    let applicationId = uniqid(user.firstName+"-"+user.lastName+"-", "-application");
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Applications"),
+      where("jobId", "==", jobId),
+      where("userId", "==", userId)
+    );
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      await setDoc(doc(firestore, "Applications", applicationId), {
+        fullNames: user.firstName+" "+user.lastName,
+        userId: userId,
+        jobId: jobId,
+        companyId:companyId,
+        jobName: jobName,
+        resume: user.resume,
+        timeOfApplication: new Date().toDateString(),
+        applicationStatus: "Submitted",
+        coverLetter: coverLetter,
+      }).then((val) => {
+        result = { code: 0, val: val };
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    } else {
+      result = { code: 1, val: "Already submitted an Application" };
+    }
+  return result;
+  }
+
+  getUserApplications = async() => {
+    let userId = JSON.parse(sessionStorage.getItem("userId"));
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Applications"),
+      where("userId", "==", userId),
+    );
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = {code:1, val:"No applications retrieved!"}
+    } else {
+      result = {code:0, val:res}
+    }
+      return result;
+  };
+  getCompanyApplications = async() => {
+    let companyId = JSON.parse(sessionStorage.getItem("companyId"));
+    let result = { code: null, val: null };
+    const q = query(
+      collection(firestore, "Applications"),
+      where("companyId", "==", companyId),
+    );
+    const res = await getDocs(q);
+    if (res.empty == true) {
+      result = {code:1, val:"No applications retrieved!"}
+    } else {
+      result = {code:0, val:res}
+    }
+      return result;
+  };
+
   updateUserDetails = () => {};
 
   updateCompanyDetails = () => {};

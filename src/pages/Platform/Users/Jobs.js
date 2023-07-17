@@ -1,14 +1,14 @@
 import * as React from "react";
-import SideBar from "../../../components/SideBar";
+import SideBar from "../../../components/Users/SideBar";
 import "../../../Styles/jobs.css";
 import { Alert, Box, Button, Grid, Snackbar } from "@mui/material";
 import Firestore from "../../../Firebase/Firestore";
-import UserJobCard from "../../../components/UserJobCard";
+import UserJobCard from "../../../components/Users/UserJobCard";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
 import CardActions from "@mui/material/CardActions";
-import JobDescription from "../../../components/JobDescription";
-import ApplicationBox from "../../../components/ApplicationBox";
+import JobDescription from "../../../components/Users/JobDescription";
+import ApplicationBox from "../../../components/Users/ApplicationBox";
 
 function containsObject(obj, list) {
   var i;
@@ -28,6 +28,7 @@ function Jobs() {
   const [current, setCurrent] = React.useState(null);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState();
+
   var viewList = [];
 
   const handleClose = (event, reason) => {
@@ -66,6 +67,10 @@ function Jobs() {
               "userDetails",
               JSON.stringify(user.val.data())
             );
+            sessionStorage.setItem(
+              "userId",
+              JSON.stringify(user.val.id)
+            );
             setLoading(false);
           } else {
             alert(user.val);
@@ -77,7 +82,7 @@ function Jobs() {
             val.val.forEach((job) => {
               console.log(job.data());
               if (containsObject(job.data(), jobsList) == false) {
-                viewList = [...viewList, job.data()];
+                viewList = [...viewList, {...job.data(), id:job.id}];
               }
             });
             setJobsList(viewList);
@@ -176,7 +181,12 @@ function Jobs() {
           ) : null}
         </Grid>
       </Grid>
-      <ApplicationBox needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} open={dialogOpen} onClose={handleDialogClose}/>
+      <ApplicationBox 
+      jobId={current !== null ? jobsList[current].id:null} 
+      jobName={current !== null ? jobsList[current].jobTitle:null} 
+      companyId={current !== null ? jobsList[current].companyId:null} 
+      needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} 
+      isOpen={dialogOpen} onClose={handleDialogClose}/>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

@@ -16,9 +16,23 @@ import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
 import { firestore } from "../../Firebase/FirebaseConfig";
 import Firestore from "../../Firebase/Firestore";
+import { Alert, Snackbar } from "@mui/material";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleClick = () => {
+    setOpen(true)
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+   setOpen(false)
+  };
 
   React.useEffect(() => {});
   const cookie = new Cookies();
@@ -39,16 +53,19 @@ export default function Login() {
             window.location.href = "/jobs";
             setLoading(false);
           } else {
-            alert(`${val.code} : ${val.val}`);
+            setMessage(`${val.code} : ${val.val}`);
+            handleClick();
             setLoading(false);
           }
         })
         .catch((err) => {
-          alert(err);
+          setMessage(err);
+          handleClick()
           setLoading(false);
         });
     } else {
-      alert("Email registered as a Company account!");
+      setMessage("Error on authentication!");
+      handleClick();
       setLoading(false);
     }
   };
@@ -161,6 +178,11 @@ export default function Login() {
           backgroundPosition: "center",
         }}
       />
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 }

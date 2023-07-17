@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CompanySideBar from "../../../components/CompanySideBar";
+import CompanySideBar from "../../../components/Companies/CompanySideBar"
 import {
   MDBCol,
   MDBContainer,
@@ -40,6 +40,14 @@ function CompanyProfile() {
             .then((user) => {
               if (user.code == 0) {
                 setCompanyData(user.val.data());
+                sessionStorage.setItem(
+                  "companyDetails",
+                  JSON.stringify(user.val.data())
+                );
+                sessionStorage.setItem(
+                  "companyId",
+                  JSON.stringify(user.val.id)
+                );
                 console.log(user.val.data());
                 setLoading(false);
               } else {

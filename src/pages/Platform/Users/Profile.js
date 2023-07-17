@@ -14,7 +14,7 @@ import {
   MDBListGroup,
   MDBListGroupItem,
 } from "mdb-react-ui-kit";
-import SideBar from "../../../components/SideBar";
+import SideBar from "../../../components/Users/SideBar";
 import Firestore from "../../../Firebase/Firestore";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
@@ -47,6 +47,10 @@ export default function Profile() {
                 sessionStorage.setItem(
                   "userDetails",
                   JSON.stringify(user.val.data())
+                );
+                sessionStorage.setItem(
+                  "userId",
+                  JSON.stringify(user.val.id)
                 );
                 setLoading(false);
               } else {

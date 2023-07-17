@@ -16,6 +16,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
 import Firestore from "../../Firebase/Firestore";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -23,6 +24,19 @@ export default function CompanyLogin() {
   const [loading, setLoading] = React.useState(false);
   const cookie = new Cookies();
   const firestore = new Firestore();
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const handleClick = () => {
+    setOpen(true)
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+   setOpen(false)
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -39,16 +53,19 @@ export default function CompanyLogin() {
             window.location.href = "/company-jobs";
             setLoading(false);
           } else {
-            alert(`${val.code} : ${val.val}`);
+            setMessage(`${val.code} : ${val.val}`);
+            handleClick();
             setLoading(false);
           }
         })
         .catch((err) => {
-          alert(err);
+          setMessage(err);
+          handleClick();
           setLoading(false);
         });
     } else {
-      alert("Email registered as a User account!");
+      setMessage("Error on authentication!");
+      handleClick();
       setLoading(false);
     }
   };
@@ -165,6 +182,11 @@ export default function CompanyLogin() {
           }}
         />
       </Grid>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

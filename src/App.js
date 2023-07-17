@@ -22,7 +22,6 @@ import Profile from "./pages/Platform/Users/Profile";
 import Settings from "./pages/Platform/Users/Settings";
 import Applications from "./pages/Platform/Users/Applications";
 import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
-import SideBar from "./components/SideBar";
 
 function App() {
   const cookie = new Cookies();

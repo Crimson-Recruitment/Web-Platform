@@ -82,7 +82,7 @@ export default function Footer() {
                 </Link>
               </p>
               <p>
-                <Link href="/contact-us" className="text-reset">
+                <Link to="/contact-us" className="text-reset">
                   Contact Us
                 </Link>
               </p>

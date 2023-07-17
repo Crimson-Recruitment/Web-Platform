@@ -1,94 +1,66 @@
-import React, { useReducer } from "react";
-import SideBar from "../../../components/SideBar";
-import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
+import React, { useEffect, useState } from "react";
+import SideBar from "../../../components/Users/SideBar";
+import Firestore from "../../../Firebase/Firestore";
+import ApplicationsCard from "../../../components/Users/ApplicationsCard";
+import { Grid as GridLoader } from "react-loader-spinner";
+import { Grid } from "@mui/material";
+
 
 function Applications() {
+  const firestore = new Firestore();
+  var applicationList = [];
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    (async() => {
+      await firestore.getUserApplications()
+      .then(val => {
+        if(val.code == 0) {
+          val.val.forEach(application => {
+            applicationList = [...applicationList, {...application.data(), id:application.id}]
+          })
+          setApplications(applicationList);
+          applicationList = [];
+          setLoading(false);
+        } else {
+          alert(val.val);
+          setLoading(false)
+        }
+      })
+    })()
+  },[])
   return (
     <SideBar>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
-      <MDBCard className="my-3 me-3 w-75">
-        <MDBCardBody>
-          <MDBCardTitle>Card title</MDBCardTitle>
-          <MDBCardText>
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </MDBCardText>
-          <MDBCardText>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </MDBCardText>
-        </MDBCardBody>
-      </MDBCard>
+ { loading ? <div className="flex justify-center mt-12">
+              <GridLoader
+                height="130"
+                width="130"
+                color="#4fa94d"
+                ariaLabel="grid-loading"
+                radius="12.5"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>:
+            applicationList !== null ? 
+            <>
+            {applications.map((application) => {
+              return(
+                <ApplicationsCard 
+                applicant={application.fullNames} 
+                jobName={application.jobName} 
+                timeOfApplication={application.timeOfApplication}
+                applicationStatus={application.applicationStatus}
+
+                />
+              )
+            })}
+            </>:null
+
+
+ }
     </SideBar>
   );
 }

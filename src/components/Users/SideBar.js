@@ -16,9 +16,9 @@ import { GridView } from "@mui/icons-material";
 import Logout from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
-import Auth from "../Firebase/Authentication";
-import { userPages } from "../Data/UserPages";
-import Firestore from "../Firebase/Firestore";
+import Auth from "../../Firebase/Authentication";
+import { userPages } from "../../Data/UserPages";
+import Firestore from "../../Firebase/Firestore";
 
 function SideBar({ children }) {
   const [state, setState] = React.useState(false);

@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import CompanySideBar from "../../../components/CompanySideBar";
+import CompanySideBar from "../../../components/Companies/CompanySideBar"
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -28,7 +28,7 @@ import { skills } from "../../../Data/UserProfessions";
 import Select from "react-select";
 import { industries, jobType } from "../../../Data/CompanyIndustries";
 import Firestore from "../../../Firebase/Firestore";
-import JobCard from "../../../components/JobCard";
+import JobCard from "../../../components/Companies/JobCard";
 import { companyJobsReducer } from "../../../Functions/Reducers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -70,7 +70,7 @@ function a11yProps(index) {
 let initState = {
   requirements: [],
   benefits: [],
-  loading: false,
+  loading: true,
   selectedSkills: null,
   selectedType: null,
   jobsList: [],
@@ -119,13 +119,10 @@ function CompanyJobs() {
       if (hasDetails == true) {
         navigate("/company-details", { state: { notify: true } });
       } else {
-        if (sessionStorage.getItem("companyDetails") != null) {
-          dispatch({ type: "SETLOADING", loading: false });
-          return;
-        } else {
+        if (sessionStorage.getItem("companyDetails") === null) {
           await firestore
             .getCompanyDetails(email)
-            .then((user) => {
+            .then(async (user) => {
               if (user.code == 0) {
                 sessionStorage.setItem(
                   "companyDetails",
@@ -139,28 +136,24 @@ function CompanyJobs() {
                 alert(user.val);
               }
             })
-            .catch((err) => {
-              alert(err);
-            });
         }
       }
-    })();
-    (async () => {
       await firestore
-        .getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
-        .then((val) => {
-          if (val.code == 0) {
-            val.val.forEach((job) => {
-              viewList = [...viewList, job.data()];
-            });
-            dispatch({ type: "SETJOBSLIST", jobsList: viewList });
-            viewList = [];
-            dispatch({ type: "SETLOADING", loading: false });
-          } else {
-            alert(val.val);
-            dispatch({ type: "SETLOADING", loading: false });
-          }
-        });
+      .getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
+      .then((val) => {
+        if (val.code == 0) {
+          val.val.forEach((job) => {
+            viewList = [...viewList, job.data()];
+          });
+          console.log(viewList)
+          dispatch({ type: "SETJOBSLIST", jobsList: viewList });
+          viewList = [];
+          dispatch({ type: "SETLOADING", loading: false });
+        } else {
+          alert(val.val);
+          dispatch({ type: "SETLOADING", loading: false });
+        }
+      });
     })();
   }, []);
 
