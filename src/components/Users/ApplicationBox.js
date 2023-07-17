@@ -26,9 +26,9 @@ export default function ApplicationBox({needCoverLetter, onClose, isOpen, jobId,
     setOpen(false);
   };
 
-  const submitHandler = async(e) => {
+  const submitHandler = async() => {
     setLoading(true)
-    await new Firestore().createApplication(jobId,jobName, companyId,e.target.value)
+    await new Firestore().createApplication(jobId,jobName, companyId,document.getElementsByName("coverLetter")[0].value)
     .then(async val => {
       if(val.code == 0) {
         handleClick({message:"Successfully applied for job!", type:"success"})

@@ -27,23 +27,30 @@ export default function Register() {
     setLoading(true);
     let auth = new Auth();
     const data = new FormData(event.currentTarget);
+    let id = uniqid(
+      `${data.get("firstName")}_${data.get("lastName")}-`,
+      "-user"
+    );
     await auth
-      .signUp(data.get("email"), data.get("password"))
+      .signUserUp(id,
+        data.get("email"), 
+        data.get("password"),
+        data.get("firstName"),
+      data.get("lastName"),
+     data.get("phonenumber"),
+      data.get("location"))
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
           localStorage.setItem("email", data.get("email"));
           sessionStorage.setItem(
-            "userData",
+            "userDetails",
             JSON.stringify({
-              id: uniqid(
-                `${data.get("firstName")}_${data.get("lastName")}-`,
-                "-user"
-              ),
+              id: id,
               firstName: data.get("firstName"),
               lastName: data.get("lastName"),
               phoneNumber: data.get("phonenumber"),
-              email: data.get("email"),
+              emailAddress: data.get("email"),
               location: data.get("location"),
             })
           );

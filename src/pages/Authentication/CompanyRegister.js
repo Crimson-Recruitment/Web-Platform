@@ -31,20 +31,22 @@ export default function CompanyRegister() {
     setLoading(true);
     const data = new FormData(event.currentTarget);
     await auth
-      .signUp(data.get("email"), data.get("password"))
+      .signCompanyUp(uniqid(
+        `${data.get("companyName")}-`, "-company"), data.get("companyName"),data.get("phonenumber1"),
+        data.get("phonenumber2"),data.get("email"), data.get("password"), data.get("location"))
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });
           localStorage.setItem("email", data.get("email"));
           sessionStorage.setItem(
-            "companyData",
+            "companyDetails",
             JSON.stringify({
               id: uniqid(`${data.get("companyName")}-`, "-company"),
               companyName: data.get("companyName"),
               phoneNumber1: data.get("phonenumber1"),
               phoneNumber2: data.get("phonenumber2"),
               location: data.get("location"),
-              email: data.get("email"),
+              emailAddress: data.get("email"),
             })
           );
           window.location.href = "/company-details";

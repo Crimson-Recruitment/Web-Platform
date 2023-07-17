@@ -33,6 +33,8 @@ export const companyJobsReducer = (state, action) => {
       return { ...state, jobsList: action.jobsList };
     case "SETOPEN":
       return { ...state, open: action.open };
+    case "SETMESSAGE":
+      return { ...state, message: action.message };
     case "SETJOBTYPE":
       return { ...state, jobType: action.jobType };
     default:

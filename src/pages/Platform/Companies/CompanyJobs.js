@@ -76,11 +76,14 @@ let initState = {
   jobsList: [],
   open: false,
   value: 0,
-  jobType:null
+  jobType:null,
+  message: {type:null, message:null},
 };
 
 function CompanyJobs() {
   const [state, dispatch] = useReducer(companyJobsReducer, initState);
+  const [message, setMessage] = useState()
+
   const handleChange = (event, newValue) => {
     dispatch({ type: "SETVALUE", value: newValue });
   };
@@ -94,7 +97,8 @@ function CompanyJobs() {
     const newList = state.benefits.filter((item) => item !== res);
     dispatch({ type: "SETBENEFITS", benefits: newList });
   };
-  const handleClick = () => {
+  const handleClick = (message) => {
+    dispatch({type:"SETMESSAGE", message:{type : message.type, message : message.message}}) 
     dispatch({ type: "SETOPEN", open: true });
   };
 
@@ -113,12 +117,6 @@ function CompanyJobs() {
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkCompanyEmail(
-        localStorage.getItem("email")
-      );
-      if (hasDetails == true) {
-        navigate("/company-details", { state: { notify: true } });
-      } else {
         if (sessionStorage.getItem("companyDetails") === null) {
           await firestore
             .getCompanyDetails(email)
@@ -132,28 +130,58 @@ function CompanyJobs() {
                   "companyId",
                   JSON.stringify(user.val.id)
                 );
+                let hasDetails = await firestore.checkCompanyCompletedRegistration();
+                if (hasDetails.val == false) {
+                  handleClick({type:"error", message:"Failed to load jobs!"})
+                  await new Promise(res => setTimeout(res, 2000))
+                  navigate("/company-details", { state: { notify: true } });
+                } else {
+                  await firestore
+                  .getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
+                  .then((val) => {
+                    if (val.code == 0) {
+                      val.val.forEach((job) => {
+                        viewList = [...viewList, job.data()];
+                      });
+                      console.log(viewList)
+                      dispatch({ type: "SETJOBSLIST", jobsList: viewList });
+                      viewList = [];
+                      dispatch({ type: "SETLOADING", loading: false });
+                    } else {
+                      alert(val.val);
+                      dispatch({ type: "SETLOADING", loading: false });
+                    }
+                  });
+                }
               } else {
                 alert(user.val);
               }
             })
-        }
-      }
-      await firestore
-      .getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
-      .then((val) => {
-        if (val.code == 0) {
-          val.val.forEach((job) => {
-            viewList = [...viewList, job.data()];
-          });
-          console.log(viewList)
-          dispatch({ type: "SETJOBSLIST", jobsList: viewList });
-          viewList = [];
-          dispatch({ type: "SETLOADING", loading: false });
         } else {
-          alert(val.val);
-          dispatch({ type: "SETLOADING", loading: false });
+          let hasDetails = await firestore.checkCompanyCompletedRegistration();
+          if (hasDetails.val == false) {
+            handleClick({type:"error", message:"Failed to load jobs!"})
+                  await new Promise(res => setTimeout(res, 2000))
+            navigate("/company-details", { state: { notify: true } });
+          }  else {
+            await firestore
+            .getCompanyJobPosts(sessionStorage.getItem("companyId"))
+            .then((val) => {
+              if (val.code == 0) {
+                val.val.forEach((job) => {
+                  viewList = [...viewList, job.data()];
+                });
+                console.log(viewList)
+                dispatch({ type: "SETJOBSLIST", jobsList: viewList });
+                viewList = [];
+                dispatch({ type: "SETLOADING", loading: false });
+              } else {
+                alert(val.val);
+                dispatch({ type: "SETLOADING", loading: false });
+              }
+            });
+          }
         }
-      });
     })();
   }, []);
 
@@ -181,7 +209,7 @@ function CompanyJobs() {
       )
       .then(async (val) => {
         if (val.code == 0) {
-          handleClick();
+          handleClick({type:"success", message:"Successfully added Job Post!"});
           await new Promise((res) => setTimeout(res, 2000));
           dispatch({ type: "SETLOADING", loading: false });
           navigate(0);
@@ -599,8 +627,8 @@ function CompanyJobs() {
         </Container>
       </CustomTabPanel>
       <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          Successfully add Job Post!
+        <Alert onClose={handleClose} severity={state.message.type} sx={{ width: "100%" }}>
+          {state.message.message}
         </Alert>
       </Snackbar>
     </CompanySideBar>

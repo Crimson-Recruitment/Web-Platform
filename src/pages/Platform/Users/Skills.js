@@ -10,7 +10,6 @@ import { Button } from "@mui/material";
 import { skillsReducer } from "../../../Functions/Reducers";
 
 let initState = {
-  selectedSkills: null,
   selectedProfession: null,
   image: null,
   imagePath: null,
@@ -20,18 +19,21 @@ let initState = {
 
 function Skills() {
   const [state, dispatch] = useReducer(skillsReducer, initState);
+  const [selectedSkills, setSelectedSkills] = useState(null);
   const navigate = useNavigate();
   const firestore = new Firestore();
   const db = new Storage();
   const notify = useLocation().state;
 
   useEffect(() => {
-    if (notify.notify == true) {
-      alert("Please complete registration!");
+    if (notify != null) {
+      if (notify.notify == true) {
+        alert("Please complete registration!");
+      }
     }
   }, []);
 
-  const user = JSON.parse(sessionStorage.getItem("userData"));
+  const user = JSON.parse(sessionStorage.getItem("userDetails"));
   const submitHandler = async (event) => {
     event.preventDefault();
     dispatch({ type: "SETLOADING", loading: true });
@@ -55,20 +57,21 @@ function Skills() {
     }
     await firestore
       .createUserDetails(
-        user.id,
-        user.firstName,
-        user.lastName,
-        user.email,
-        user.phoneNumber,
-        user.location,
         imagelink.val,
-        state.selectedSkills,
+        selectedSkills,
         resumelink.val,
         event.target["about"].value,
         state.selectedProfession
       )
       .then((res) => {
         if (res.code === 0) {
+          sessionStorage.setItem("userDetails", 
+          JSON.stringify({...JSON.parse(sessionStorage.getItem("userDetails")),
+          profileImage : imagelink.val,
+          skills : selectedSkills,
+          about:event.target["about"].value,
+          profession:state.selectedProfession
+        }))
           navigate("/jobs");
           dispatch({ type: "SETLOADING", loading: false });
         } else {
@@ -76,34 +79,40 @@ function Skills() {
           dispatch({ type: "SETLOADING", loading: false });
         }
       })
-      .catch((err) => {
-        alert(err);
-        dispatch({ type: "SETLOADING", loading: false });
-      });
   };
 
   const imageHandler = (e) => {
     let reader = new FileReader();
-    reader.readAsArrayBuffer(e.target.files[0]);
+    if (e.target.files[0].size > (1048576*5)) {
+      alert("Image uploaded is too big!")
+      e.target.value = ""
+    } else {
+      reader.readAsArrayBuffer(e.target.files[0]);
 
-    reader.onload = () => {
-      dispatch({ type: "SETIMAGEPATH", imagePath: reader.result });
-    };
-    reader.onerror = () => {
-      alert(reader.error);
-    };
-    dispatch({ type: "SETIMAGE", image: e.target.files[0] });
+      reader.onload = () => {
+        dispatch({ type: "SETIMAGEPATH", imagePath: reader.result });
+      };
+      reader.onerror = () => {
+        alert(reader.error);
+      };
+      dispatch({ type: "SETIMAGE", image: e.target.files[0] });
+    }
   };
 
   const resumeHandler = (e) => {
     let reader = new FileReader();
+    if (e.target.files[0].size > 2097152) {
+      alert("File uploaded is too big!")
+      e.target.value = ""
+      return;
+    }
     reader.readAsArrayBuffer(e.target.files[0]);
-    reader.onload = () => {
-      dispatch({ type: "SETRESUME", resume: reader.result });
-    };
-    reader.onerror = () => {
-      alert(reader.error);
-    };
+      reader.onload = () => {
+        dispatch({ type: "SETRESUME", resume: reader.result });
+      };
+      reader.onerror = () => {
+        alert(reader.error);
+      };
   };
   return (
     <div className="p-10 lg:my-12 lg:mx-[200px] sm:m-5 md:m-10 grid place-items-center align-center rounded overflow-hidden shadow-lg h-min-[70vh]">
@@ -111,10 +120,10 @@ function Skills() {
         <div className="mb-6">
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-              <img
+              <div
                 className="h-[400px] w-[400px] rounded-full"
-                src={URL.createObjectURL(state.image)}
-              />
+                style={{backgroundImage:`url(${URL.createObjectURL(state.image)})`, backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center center"}}
+              ></div>
               :
             </div>
           ) : (
@@ -144,7 +153,7 @@ function Skills() {
                     and drop
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400">
-                    JPEG, PNG, or JPG
+                    JPEG, PNG, or JPG (5mbs max)
                   </p>
                 </div>
               </label>
@@ -205,13 +214,13 @@ function Skills() {
           placeholder="Select skills,..."
           onChange={(val) => {
             if (val.length <= 6) {
-              dispatch({ type: "SETSELECTEDSKILLS", selectedSkills: val });
+              setSelectedSkills(val)
             } else {
               alert("Max number of skills added!");
             }
           }}
           isSearchable={true}
-          value={state.selectedSkills}
+          value={selectedSkills}
           isMulti
         />
 
@@ -219,7 +228,7 @@ function Skills() {
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           for="file_input"
         >
-          Upload you Resume
+          Upload you Resume (max size 2mbs)
         </label>
         <input
           onChange={resumeHandler}

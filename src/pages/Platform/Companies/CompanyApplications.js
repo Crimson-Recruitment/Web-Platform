@@ -14,7 +14,8 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { Grid } from "@mui/material";
+import { Alert, Grid, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const drawerBleeding = 56;
 
@@ -38,6 +39,15 @@ function CompanyApplications() {
   const [applications, setApplications] = useState([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState(null)
+  const navigate = useNavigate()
+  const [open, setOpen] = React.useState();
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const expandedHandler = (index) => {
     if (expanded == index) {
@@ -50,8 +60,14 @@ function CompanyApplications() {
 
   useEffect(() => {
     (async() => {
-      await firestore.getCompanyApplications()
-      .then(val => {
+      let hasDetails = await firestore.checkCompanyCompletedRegistration();
+      if (hasDetails.val == false) {
+        setOpen(true)
+        await new Promise(res => setTimeout(res, 2000))
+        navigate("/company-details", { state: { notify: true } });
+      }  else {
+         await firestore.getCompanyApplications()
+      .then(async val => {
         if(val.code == 0) {
           val.val.forEach(application => {
             applicationList = [...applicationList, {...application.data(), id:application.id}]
@@ -64,6 +80,8 @@ function CompanyApplications() {
           setLoading(false)
         }
       })
+      }
+     
     })()
   },[])
   return (
@@ -172,7 +190,11 @@ function CompanyApplications() {
             </>:null
  } 
       </div>
-     
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Failed to load Applications!
+        </Alert>
+      </Snackbar>
     </CompanySideBar>
   );
 }

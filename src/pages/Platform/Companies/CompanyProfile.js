@@ -15,31 +15,41 @@ import { Carousel } from "react-responsive-carousel";
 import Firestore from "../../../Firebase/Firestore";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
+import { Alert, Snackbar } from "@mui/material";
 
 function CompanyProfile() {
   const [loading, setLoading] = useState(true);
-  const [companyData, setCompanyData] = useState({});
+  const [companyData, setCompanyData] = useState(null);
   const firestore = new Firestore();
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState();
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkCompanyEmail(
-        localStorage.getItem("email")
-      );
-      if (hasDetails == true) {
-        navigate("/company-details", { state: { notify: true } });
-      } else {
         if (sessionStorage.getItem("companyDetails") != null) {
-          setCompanyData(JSON.parse(sessionStorage.getItem("companyDetails")));
+          let hasDetails = await firestore.checkCompanyCompletedRegistration();
+          if (hasDetails.val == false) {
+            setOpen(true)
+            await new Promise(res => setTimeout(res, 2000))
+            navigate("/company-details", { state: { notify: true } });
+          } else {
+            setCompanyData(JSON.parse(sessionStorage.getItem("companyDetails")));
+          }
           setLoading(false);
         } else {
           await firestore
             .getCompanyDetails(email)
-            .then((user) => {
+            .then(async (user) => {
               if (user.code == 0) {
-                setCompanyData(user.val.data());
+                
                 sessionStorage.setItem(
                   "companyDetails",
                   JSON.stringify(user.val.data())
@@ -48,7 +58,14 @@ function CompanyProfile() {
                   "companyId",
                   JSON.stringify(user.val.id)
                 );
-                console.log(user.val.data());
+                let hasDetails = await firestore.checkCompanyCompletedRegistration();
+                if (hasDetails.val == false) {
+                  setOpen(true)
+            await new Promise(res => setTimeout(res, 2000))
+                  navigate("/company-details", { state: { notify: true } });
+                } else {
+                  setCompanyData(user.val.data());
+                }
                 setLoading(false);
               } else {
                 alert(user.val);
@@ -60,7 +77,6 @@ function CompanyProfile() {
               setLoading(false);
             });
         }
-      }
     })();
   }, []);
   return (
@@ -96,7 +112,7 @@ function CompanyProfile() {
                       style={{ width: "150px" }}
                     >
                       <MDBCardImage
-                        src={companyData.logo.val}
+                        src={companyData != null ? companyData.logo:null}
                         alt="Generic placeholder image"
                         className="mt-4 mb-2 img-thumbnail"
                         fluid
@@ -165,6 +181,11 @@ function CompanyProfile() {
           </MDBContainer>
         )
       )}
+       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Failed to load Profile!
+        </Alert>
+      </Snackbar>
     </CompanySideBar>
   );
 }

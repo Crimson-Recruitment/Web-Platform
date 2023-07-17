@@ -51,15 +51,16 @@ function Jobs() {
   React.useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkUserEmail(
-        localStorage.getItem("email")
-      );
-      if (hasDetails.val == true) {
-        setOpen(true);
-      } else {
-        await firestore.getUserDetails(email).then((user) => {
+        await firestore.getUserDetails(email)
+        .then(async (user) => {
           if (user.code == 0) {
             if (sessionStorage.getItem("userDetails") != null) {
+              let hasDetails = await firestore.checkUserCompletedRegistration();
+              if (hasDetails.val == false) {
+                setOpen(true);
+                await new Promise((res) => setTimeout(res, 2000));
+                navigate("/skills", {state:{notify:true}})
+              }
               setLoading(false);
               return;
             }
@@ -71,6 +72,12 @@ function Jobs() {
               "userId",
               JSON.stringify(user.val.id)
             );
+            let hasDetails = await firestore.checkUserCompletedRegistration();
+            if (hasDetails.val == false) {
+              setOpen(true);
+              await new Promise((res) => setTimeout(res, 2000));
+              navigate("/skills", {state:{notify:true}})
+            }
             setLoading(false);
           } else {
             alert(user.val);
@@ -80,7 +87,6 @@ function Jobs() {
         await firestore.getJobs().then((val) => {
           if (val.code == 0) {
             val.val.forEach((job) => {
-              console.log(job.data());
               if (containsObject(job.data(), jobsList) == false) {
                 viewList = [...viewList, {...job.data(), id:job.id}];
               }
@@ -93,10 +99,8 @@ function Jobs() {
             setLoading(false);
           }
         });
-      }
     })();
   }, []);
-
   return (
     <SideBar>
       <Grid container padding="0px">

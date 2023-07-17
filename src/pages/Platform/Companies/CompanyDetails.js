@@ -20,13 +20,15 @@ let initState = {
 function CompanyDetails() {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(companyDetailsReducer, initState);
-  const company = JSON.parse(sessionStorage.getItem("companyData"));
+  const company = JSON.parse(sessionStorage.getItem("companyDetails"));
   const db = new Storage();
   const firestore = new Firestore();
   const notify = useLocation().state;
   useEffect(() => {
-    if (notify.notify == true) {
-      alert("Please complete registration!");
+    if(notify != null) {
+      if (notify.notify == true) {
+        alert("Please complete registration!");
+      }
     }
   }, []);
 
@@ -54,12 +56,6 @@ function CompanyDetails() {
     }
     await firestore
       .createCompanyDetails(
-        company.id,
-        company.companyName,
-        company.phoneNumber1,
-        company.phoneNumber2,
-        company.email,
-        company.location,
         imagelink.val,
         state.selectedType,
         e.target["overview"].value,
@@ -69,16 +65,19 @@ function CompanyDetails() {
       .then((res) => {
         if (res.code === 0) {
           navigate("/company-jobs");
+          sessionStorage.setItem("companyDetails",
+          JSON.stringify({...JSON.parse(sessionStorage.getItem("companyDetails")), 
+          logo: imagelink.val,
+          type:state.selectedType, 
+          overview:e.target["overview"].value, 
+          isLicensed:e.target["bordered-radio"].value,
+          license:licenselink.val}));
           dispatch({ type: "SETLOADING", loading: false });
         } else {
           alert(res.val);
           dispatch({ type: "SETLOADING", loading: false });
         }
       })
-      .catch((err) => {
-        alert(err);
-        dispatch({ type: "SETLOADING", loading: false });
-      });
   };
 
   const imageHandler = (e) => {
@@ -175,7 +174,7 @@ function CompanyDetails() {
             options={industries}
             placeholder="Healthcare, technology,....."
             onChange={(val) => {
-              dispatch({ type: "SETSELECTEDTYPE", selectedType: val.value });
+              dispatch({ type: "SETSELECTEDTYPE", selectedType: val });
             }}
             isSearchable={true}
             value={industries.filter(function (option) {

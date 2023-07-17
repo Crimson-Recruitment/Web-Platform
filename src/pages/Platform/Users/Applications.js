@@ -3,7 +3,8 @@ import SideBar from "../../../components/Users/SideBar";
 import Firestore from "../../../Firebase/Firestore";
 import ApplicationsCard from "../../../components/Users/ApplicationsCard";
 import { Grid as GridLoader } from "react-loader-spinner";
-import { Grid } from "@mui/material";
+import { Alert, Grid, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
 function Applications() {
@@ -11,9 +12,24 @@ function Applications() {
   var applicationList = [];
   const [applications, setApplications] = useState([])
   const [loading, setLoading] = useState(true)
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
     (async() => {
+      let hasDetails = await firestore.checkUserCompletedRegistration();
+          if (hasDetails.val == false) {
+                  setOpen(true)
+                  await new Promise(res => setTimeout(res, 2000))
+            navigate("/skills", { state: { notify: true } });
+          } else {
       await firestore.getUserApplications()
       .then(val => {
         if(val.code == 0) {
@@ -27,7 +43,7 @@ function Applications() {
           alert(val.val);
           setLoading(false)
         }
-      })
+      })}
     })()
   },[])
   return (
@@ -61,6 +77,11 @@ function Applications() {
 
 
  }
+  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Failed to load Applications!
+        </Alert>
+      </Snackbar>
     </SideBar>
   );
 }

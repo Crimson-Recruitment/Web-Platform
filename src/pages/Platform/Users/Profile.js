@@ -18,30 +18,38 @@ import SideBar from "../../../components/Users/SideBar";
 import Firestore from "../../../Firebase/Firestore";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
+import { Alert, Snackbar } from "@mui/material";
 
 export default function Profile() {
   const firestore = new Firestore();
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState();
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-      let hasDetails = await firestore.checkUserEmail(
-        localStorage.getItem("email")
-      );
-      console.log(hasDetails);
-      if (hasDetails.val == true) {
-        navigate("/skills", { state: { notify: true } });
-      } else {
         if (sessionStorage.getItem("userDetails") != null) {
+          let hasDetails = await firestore.checkUserCompletedRegistration();
+          if (hasDetails.val == false) {
+            setOpen(true);
+            await new Promise((res) => setTimeout(res, 2000));
+            navigate("/skills", {state:{notify:true}})
+          }
           setUserData(JSON.parse(sessionStorage.getItem("userDetails")));
           setLoading(false);
           return;
         } else {
           await firestore
             .getUserDetails(email)
-            .then((user) => {
+            .then(async (user) => {
               if (user.code == 0) {
                 setUserData(user.val.data());
                 sessionStorage.setItem(
@@ -50,8 +58,14 @@ export default function Profile() {
                 );
                 sessionStorage.setItem(
                   "userId",
-                  JSON.stringify(user.val.id)
+                  user.val.id
                 );
+                let hasDetails = await firestore.checkUserCompletedRegistration();
+                if (hasDetails.val == false) {
+                  setOpen(true);
+                  await new Promise((res) => setTimeout(res, 2000));
+                  navigate("/skills", {state:{notify:true}})
+                }
                 setLoading(false);
               } else {
                 alert(user.val);
@@ -62,7 +76,7 @@ export default function Profile() {
               alert(err);
               setLoading(false);
             });
-        }
+        
       }
     })();
   }, []);
@@ -89,13 +103,14 @@ export default function Profile() {
                 <MDBCard className="mb-4">
                   <MDBCardBody className="text-center">
                     <div className="flex justify-center">
-                      <MDBCardImage
-                        src={userData.profileImage}
-                        alt="avatar"
-                        className="rounded-circle text-center"
-                        style={{ width: "150px" }}
-                        fluid
-                      />
+                    <div
+                className="h-[150px] w-[150px] rounded-circle"
+                style={{
+                  backgroundImage:`url(${userData.profileImage})`, 
+                  backgroundSize:"contain", 
+                  backgroundRepeat:"no-repeat", 
+                  backgroundPosition:"center center"}}
+              ></div>
                     </div>
                     <br />
                     <p className="text-muted mb-1">
@@ -232,6 +247,11 @@ export default function Profile() {
           </MDBContainer>
         )
       )}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Failed to load Profile!
+        </Alert>
+      </Snackbar>
     </SideBar>
   );
 }

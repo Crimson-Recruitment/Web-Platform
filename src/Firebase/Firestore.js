@@ -13,13 +13,30 @@ import {
 import uniqid from "uniqid";
 
 export default class Firestore {
-  createUserDetails = async (
-    id,
+  initUserDetails = async ( id,
     firstName,
     lastname,
     emailAddress,
     phoneNumber,
-    location,
+    location,) => {
+      let result = {val:null, code:null}
+      await setDoc(doc(firestore, "User", id), {
+        firstName: firstName,
+        lastName: lastname,
+        emailAddress: emailAddress,
+        phoneNumber: phoneNumber,
+        location: location,
+      }) .then((val) => {
+        result = { code: 0, val: val };
+        sessionStorage.setItem("userId", id);
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+      return result
+  }
+
+  createUserDetails = async (
     image = "",
     skills = [],
     resume = "",
@@ -27,13 +44,9 @@ export default class Firestore {
     profession
   ) => {
     let result = { code: null, val: null };
-    await setDoc(doc(firestore, "User", id), {
-      firstName: firstName,
-      lastName: lastname,
-      emailAddress: emailAddress,
-      phoneNumber: phoneNumber,
+    let id = sessionStorage.getItem("userId");
+    await updateDoc(doc(firestore, "User", id), {
       profileImage: image,
-      location: location,
       profession: profession,
       about: about,
       skills: skills,
@@ -49,18 +62,13 @@ export default class Firestore {
     return result;
   };
 
-  createCompanyDetails = async (
+  initCompanyDetails = async (
     id,
     companyName,
     phoneNumber1,
     phoneNumber2 = "",
     email,
     location,
-    logo = "",
-    type,
-    overview,
-    isLicensed,
-    license
   ) => {
     let result = { code: null, val: null };
     await setDoc(doc(firestore, "Company", id), {
@@ -68,8 +76,31 @@ export default class Firestore {
       phoneNumber1: phoneNumber1,
       phoneNumber2: phoneNumber2,
       emailAddress: email,
-      logo: logo,
       location: location,
+    })
+    .then((val) => {
+      result = { code: 0, val: val };
+      sessionStorage.setItem("companyId", id);
+    })
+    .catch((err) => {
+      result = { code: 1, val: err };
+    });
+
+  return result;
+
+  }
+
+  createCompanyDetails = async (
+    logo = "",
+    type,
+    overview,
+    isLicensed,
+    license
+  ) => {
+    let result = { code: null, val: null };
+    let id = sessionStorage.getItem("companyId");
+    await updateDoc(doc(firestore, "Company", id), {
+      logo: logo,
       type: type,
       overview: overview,
       isLicensed: isLicensed,
@@ -214,6 +245,30 @@ export default class Firestore {
     }
     return result;
   };
+
+  checkUserCompletedRegistration = () => {
+    let result = { code: null, val: null };
+    let user = JSON.parse(sessionStorage.getItem("userDetails"))
+    if(user.profession == undefined) {
+      result = { code: 0, val: false };
+    } else {
+      result = { code: 0, val: true };
+    }
+    return result;
+
+  }
+
+  checkCompanyCompletedRegistration = () => {
+    let result = { code: null, val: null };
+    let company = JSON.parse(sessionStorage.getItem("companyDetails"))
+    if(company.type == undefined) {
+      result = { code: 0, val: false };
+    } else {
+      result = { code: 0, val: true };
+    }
+    return result;
+
+  }
   checkCompanyEmail = async (email) => {
     let result = { code: null, val: null };
     const q = query(
@@ -264,7 +319,7 @@ export default class Firestore {
   }
 
   getUserApplications = async() => {
-    let userId = JSON.parse(sessionStorage.getItem("userId"));
+    let userId = sessionStorage.getItem("userId");
     let result = { code: null, val: null };
     const q = query(
       collection(firestore, "Applications"),
@@ -279,7 +334,7 @@ export default class Firestore {
       return result;
   };
   getCompanyApplications = async() => {
-    let companyId = JSON.parse(sessionStorage.getItem("companyId"));
+    let companyId = sessionStorage.getItem("companyId");
     let result = { code: null, val: null };
     const q = query(
       collection(firestore, "Applications"),

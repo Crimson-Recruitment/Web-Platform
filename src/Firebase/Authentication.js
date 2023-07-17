@@ -5,6 +5,7 @@ import {
   signOut,
 } from "firebase/auth";
 import Cookies from "universal-cookie";
+import Firestore from "./Firestore";
 
 export default class Auth {
   #cookie = new Cookies();
@@ -20,11 +21,25 @@ export default class Auth {
     return result;
   };
 
-  signUp = async (email, password) => {
+  signUserUp = async (id,email, password, firstName, lastName, phoneNumber, location) => {
     let result = { code: null, val: null };
+    let firestore = new Firestore();
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((val) => {
-        result = { code: 0, val: val };
+      .then(async () => {
+        await firestore.initUserDetails(
+          id,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        location)
+        .then(val => {
+            if (val.code == 0) {
+              result = { code: 0, val: val.val };      
+            } else {
+              result = { code: 1, val: val.val };
+            }
+        })
       })
       .catch((err) => {
         result = { code: 1, val: err };
@@ -32,6 +47,32 @@ export default class Auth {
     return result;
   };
 
+  signCompanyUp = async ( id,
+    companyName,
+    phoneNumber1,
+    phoneNumber2 = "",
+    email,
+    password,
+    location) => {
+    let result = { code: null, val: null };
+    let firestore = new Firestore();
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then(async () => {
+        await firestore
+        .initCompanyDetails(id,companyName,phoneNumber1,phoneNumber2,email,location)
+        .then(async (val) => {
+          if (val.code == 0) {
+            result = { code: 0, val: val.val };      
+          } else {
+            result = { code: 1, val: val.val };
+          }
+        });
+      }).catch(err => {
+        result = { code: 1, val: err };
+      })
+      return result;
+
+  }
   logout = async () => {
     let result = { code: null, val: null };
     await signOut(auth)

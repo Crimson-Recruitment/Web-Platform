@@ -77,12 +77,12 @@ function ForYou() {
 
   React.useEffect(() => {
     (async () => {
-      let hasDetails = await firestore.checkUserEmail(
-        localStorage.getItem("email")
-      );
-      if (hasDetails.val == true) {
-        setOpen(true);
-      } else {
+      let hasDetails = await firestore.checkUserCompletedRegistration();
+              if (hasDetails.val == false) {
+                setOpen(true);
+                await new Promise((res) => setTimeout(res, 2000));
+                navigate("/skills", {state:{notify:true}})
+              }
         await firestore
           .getJobs()
           .then((val) => {
@@ -104,7 +104,6 @@ function ForYou() {
             alert(err);
             setLoading(false);
           });
-      }
     })();
   }, []);
   return (
