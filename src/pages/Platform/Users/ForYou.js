@@ -2,13 +2,16 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import SideBar from "../../../components/SideBar";
 import "../../../Styles/jobs.css";
-import { Alert, Grid, IconButton, Snackbar, Typography } from "@mui/material";
+import { Alert, Grid, Button, Snackbar, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import Firestore from "../../../Firebase/Firestore";
 import { industryProfessions } from "../../../Data/CompanyIndustries";
 import UserJobCard from "../../../components/UserJobCard";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
+import JobDescription from "../../../components/JobDescription";
+import CardActions from "@mui/material/CardActions";
+import ApplicationBox from "../../../components/ApplicationBox";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,6 +57,15 @@ function ForYou() {
   const [current, setCurrent] = React.useState(null);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  var viewList = [];
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -77,9 +89,11 @@ function ForYou() {
             if (val.code == 0) {
               val.val.forEach((job) => {
                 if (!containsObject(job.data(), jobsList)) {
-                  setJobsList([...jobsList, job.data()]);
+                  viewList = [...viewList, job.data()]
                 }
               });
+              setJobsList(viewList);
+              viewList = [];
               setLoading(false);
             } else {
               alert(val.val);
@@ -112,7 +126,7 @@ function ForYou() {
             </div>
           ) : (
             jobsList &&
-            jobsList
+            jobsList.sort((a,b) => a.timestamp < b.timestamp)
               .filter((val) => {
                 if (
                   industryProfessions[val.jobField].indexOf(
@@ -156,34 +170,34 @@ function ForYou() {
           }}
           md={6.9}
         >
-          {current !== null ? (
-            <div className="job-description">
-              <h2>{jobsList[current].jobTitle}</h2>
-              <h4>Company Overview</h4>
-              <p>{jobsList[current].companyOverview}</p>
-              <h4>Job Description</h4>
-              {jobsList[current].jobDescription}
+           {current !== null ? (
+            <>
+              <JobDescription
+                jobTitle={jobsList[current].jobTitle}
+                overview={jobsList[current].companyOverview}
+                description={jobsList[current].jobDescription}
+                requirements={jobsList[current].requirements}
+                skills={jobsList[current].skills}
+                minSalary={jobsList[current].minSalary}
+                maxSalary={jobsList[current].maxSalary}
+                location={jobsList[current].location}
+                type={jobsList[current].jobType}
+                hideSalary={jobsList[current].hideSalary}
+                benefits={jobsList[current].benefits}
+              />
 
-              <h4>Required Skills and Qualifications</h4>
-              <ul>
-                {jobsList[current].requirements.map((req) => {
-                  return <li>{req}</li>;
-                })}
-              </ul>
-              <ul>
-                {jobsList[current].skills.length != 0 ? (
-                  <>
-                    <h4>Skills</h4>
-                    {jobsList[current].skills.map((skill) => {
-                      return <li>{skill.label}</li>;
-                    })}
-                  </>
-                ) : null}
-              </ul>
-            </div>
+              <CardActions>
+                <Button onClick={handleDialogOpen} variant="contained" size="small">
+                  Apply
+                </Button>
+              </CardActions>
+            </>
           ) : null}
         </Grid>
       </Grid>
+      <ApplicationBox 
+      needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} 
+      open={dialogOpen} onClose={handleDialogClose}/>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

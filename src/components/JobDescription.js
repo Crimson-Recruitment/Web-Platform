@@ -34,31 +34,31 @@ function JobDescription({
             <Typography variant="h4" color="text.black" gutterBottom>
               {jobTitle}
             </Typography>
-            <Typography variant="h5" component="div">
+            <Typography variant="h6" component="div">
               Company Overview
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {overview}
             </Typography>
-            <Typography variant="h5" component="div">
+            <Typography variant="h6" component="div">
               Job type
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {type}
             </Typography>
-            <Typography variant="h5" component="div">
+            <Typography variant="h6" component="div">
               Location
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {location}
             </Typography>
-            <Typography variant="h5" component="div">
+            <Typography variant="h6" component="div">
               Job Description
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {description}
             </Typography>
-            <Typography variant="h5" component="div">
+            <Typography variant="h6" component="div">
               Required Skills and Qualifications
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -68,7 +68,7 @@ function JobDescription({
                 })}
               </ul>
             </Typography>
-            <Typography variant="h5" component="div">
+            <Typography variant="h6" component="div">
               Salary (Annual in USD)
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -103,7 +103,7 @@ function JobDescription({
             </Typography>
             {skills.length != 0 ? (
               <>
-                <Typography variant="h5" component="div">
+                <Typography variant="h6" component="div">
                   Skills
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -117,7 +117,7 @@ function JobDescription({
             ) : null}
             {benefits !== null?  benefits.length != 0 ? (
               <>
-                <Typography variant="h5" component="div">
+                <Typography variant="h6" component="div">
                   Benefits
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
