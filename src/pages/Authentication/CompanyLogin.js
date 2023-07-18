@@ -27,7 +27,7 @@ export default function CompanyLogin() {
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const handleClick = () => {
-    setOpen(true)
+    setOpen(true);
   };
 
   const handleClose = (event, reason) => {
@@ -35,7 +35,7 @@ export default function CompanyLogin() {
       return;
     }
 
-   setOpen(false)
+    setOpen(false);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();

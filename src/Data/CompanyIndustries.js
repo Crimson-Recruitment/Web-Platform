@@ -31,10 +31,10 @@ export const industries = [
 ];
 
 export const jobType = [
-  {value:"full_time", label:"Full Time"},
-  {value:"part_time", label:"Part Time"},
-  {value:"contract", label:"Contract"},
-]
+  { value: "full_time", label: "Full Time" },
+  { value: "part_time", label: "Part Time" },
+  { value: "contract", label: "Contract" },
+];
 
 export const industryProfessions = {
   Technology: [

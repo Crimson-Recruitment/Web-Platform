@@ -23,7 +23,7 @@ export default function Login() {
   const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
-    setOpen(true)
+    setOpen(true);
   };
 
   const handleClose = (event, reason) => {
@@ -31,7 +31,7 @@ export default function Login() {
       return;
     }
 
-   setOpen(false)
+    setOpen(false);
   };
 
   React.useEffect(() => {});
@@ -60,7 +60,7 @@ export default function Login() {
         })
         .catch((err) => {
           setMessage(err);
-          handleClick()
+          handleClick();
           setLoading(false);
         });
     } else {

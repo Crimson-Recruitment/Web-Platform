@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import CompanySideBar from "../../../components/Companies/CompanySideBar"
+import CompanySideBar from "../../../components/Companies/CompanySideBar";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -76,13 +76,13 @@ let initState = {
   jobsList: [],
   open: false,
   value: 0,
-  jobType:null,
-  message: {type:null, message:null},
+  jobType: null,
+  message: { type: null, message: null },
 };
 
 function CompanyJobs() {
   const [state, dispatch] = useReducer(companyJobsReducer, initState);
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState();
 
   const handleChange = (event, newValue) => {
     dispatch({ type: "SETVALUE", value: newValue });
@@ -98,7 +98,10 @@ function CompanyJobs() {
     dispatch({ type: "SETBENEFITS", benefits: newList });
   };
   const handleClick = (message) => {
-    dispatch({type:"SETMESSAGE", message:{type : message.type, message : message.message}}) 
+    dispatch({
+      type: "SETMESSAGE",
+      message: { type: message.type, message: message.message },
+    });
     dispatch({ type: "SETOPEN", open: true });
   };
 
@@ -117,61 +120,57 @@ function CompanyJobs() {
   useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-        if (sessionStorage.getItem("companyDetails") === null) {
-          await firestore
-            .getCompanyDetails(email)
-            .then(async (user) => {
-              if (user.code == 0) {
-                sessionStorage.setItem(
-                  "companyDetails",
-                  JSON.stringify(user.val.data())
-                );
-                sessionStorage.setItem(
-                  "companyId",
-                  JSON.stringify(user.val.id)
-                );
-                let hasDetails = await firestore.checkCompanyCompletedRegistration();
-                if (hasDetails.val == false) {
-                  handleClick({type:"error", message:"Failed to load jobs!"})
-                  await new Promise(res => setTimeout(res, 2000))
-                  navigate("/company-details", { state: { notify: true } });
-                } else {
-                  await firestore
-                  .getCompanyJobPosts(JSON.parse(sessionStorage.getItem("companyId")))
-                  .then((val) => {
-                    if (val.code == 0) {
-                      val.val.forEach((job) => {
-                        viewList = [...viewList, job.data()];
-                      });
-                      console.log(viewList)
-                      dispatch({ type: "SETJOBSLIST", jobsList: viewList });
-                      viewList = [];
-                      dispatch({ type: "SETLOADING", loading: false });
-                    } else {
-                      alert(val.val);
-                      dispatch({ type: "SETLOADING", loading: false });
-                    }
-                  });
-                }
-              } else {
-                alert(user.val);
-              }
-            })
+      if (sessionStorage.getItem("companyDetails") === null) {
+        await firestore.getCompanyDetails(email).then(async (user) => {
+          if (user.code == 0) {
+            sessionStorage.setItem(
+              "companyDetails",
+              JSON.stringify(user.val.data())
+            );
+            sessionStorage.setItem("companyId", user.val.id);
+            let hasDetails =
+              await firestore.checkCompanyCompletedRegistration();
+            if (hasDetails.val == false) {
+              handleClick({ type: "error", message: "Failed to load jobs!" });
+              await new Promise((res) => setTimeout(res, 2000));
+              navigate("/company-details", { state: { notify: true } });
+            } else {
+              await firestore
+                .getCompanyJobPosts(sessionStorage.getItem("companyId"))
+                .then((val) => {
+                  if (val.code == 0) {
+                    val.val.forEach((job) => {
+                      viewList = [...viewList, job.data()];
+                    });
+                    console.log(viewList);
+                    dispatch({ type: "SETJOBSLIST", jobsList: viewList });
+                    viewList = [];
+                    dispatch({ type: "SETLOADING", loading: false });
+                  } else {
+                    alert(val.val);
+                    dispatch({ type: "SETLOADING", loading: false });
+                  }
+                });
+            }
+          } else {
+            handleClick({ type: "error", message: user.val });
+          }
+        });
+      } else {
+        let hasDetails = await firestore.checkCompanyCompletedRegistration();
+        if (hasDetails.val == false) {
+          handleClick({ type: "error", message: "Failed to load jobs!" });
+          await new Promise((res) => setTimeout(res, 2000));
+          navigate("/company-details", { state: { notify: true } });
         } else {
-          let hasDetails = await firestore.checkCompanyCompletedRegistration();
-          if (hasDetails.val == false) {
-            handleClick({type:"error", message:"Failed to load jobs!"})
-                  await new Promise(res => setTimeout(res, 2000))
-            navigate("/company-details", { state: { notify: true } });
-          }  else {
-            await firestore
+          await firestore
             .getCompanyJobPosts(sessionStorage.getItem("companyId"))
             .then((val) => {
               if (val.code == 0) {
                 val.val.forEach((job) => {
                   viewList = [...viewList, job.data()];
                 });
-                console.log(viewList)
+                console.log(viewList);
                 dispatch({ type: "SETJOBSLIST", jobsList: viewList });
                 viewList = [];
                 dispatch({ type: "SETLOADING", loading: false });
@@ -180,8 +179,8 @@ function CompanyJobs() {
                 dispatch({ type: "SETLOADING", loading: false });
               }
             });
-          }
         }
+      }
     })();
   }, []);
 
@@ -209,7 +208,10 @@ function CompanyJobs() {
       )
       .then(async (val) => {
         if (val.code == 0) {
-          handleClick({type:"success", message:"Successfully added Job Post!"});
+          handleClick({
+            type: "success",
+            message: "Successfully added Job Post!",
+          });
           await new Promise((res) => setTimeout(res, 2000));
           dispatch({ type: "SETLOADING", loading: false });
           navigate(0);
@@ -251,15 +253,17 @@ function CompanyJobs() {
             />
           </div>
         ) : state.jobsList ? (
-          state.jobsList.sort((a,b) => a.timestamp < b.timestamp).map((job) => {
-            return (
-              <JobCard
-                title={job.jobTitle}
-                description={job.jobDescription}
-                timestamp={job.timestamp}
-              />
-            );
-          })
+          state.jobsList
+            .sort((a, b) => a.timestamp < b.timestamp)
+            .map((job) => {
+              return (
+                <JobCard
+                  title={job.jobTitle}
+                  description={job.jobDescription}
+                  timestamp={job.timestamp}
+                />
+              );
+            })
         ) : null}
       </CustomTabPanel>
       <CustomTabPanel value={state.value} index={1}>
@@ -456,7 +460,7 @@ function CompanyJobs() {
                     Expiry Date
                   </label>
                   <DatePicker
-                  required
+                    required
                     className="border mb-4 border-blue-300"
                     selected={expiryDate}
                     onChange={(date) => setExpiryDate(date)}
@@ -470,7 +474,6 @@ function CompanyJobs() {
                     Skills (Not needed for non-programming jobs)
                   </label>
                   <Select
-                
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={skills}
                     placeholder="Select skills,..."
@@ -627,7 +630,11 @@ function CompanyJobs() {
         </Container>
       </CustomTabPanel>
       <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={state.message.type} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleClose}
+          severity={state.message.type}
+          sx={{ width: "100%" }}
+        >
           {state.message.message}
         </Alert>
       </Snackbar>

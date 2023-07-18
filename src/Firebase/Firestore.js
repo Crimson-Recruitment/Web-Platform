@@ -13,28 +13,31 @@ import {
 import uniqid from "uniqid";
 
 export default class Firestore {
-  initUserDetails = async ( id,
+  initUserDetails = async (
+    id,
     firstName,
     lastname,
     emailAddress,
     phoneNumber,
-    location,) => {
-      let result = {val:null, code:null}
-      await setDoc(doc(firestore, "User", id), {
-        firstName: firstName,
-        lastName: lastname,
-        emailAddress: emailAddress,
-        phoneNumber: phoneNumber,
-        location: location,
-      }) .then((val) => {
+    location
+  ) => {
+    let result = { val: null, code: null };
+    await setDoc(doc(firestore, "User", id), {
+      firstName: firstName,
+      lastName: lastname,
+      emailAddress: emailAddress,
+      phoneNumber: phoneNumber,
+      location: location,
+    })
+      .then((val) => {
         result = { code: 0, val: val };
         sessionStorage.setItem("userId", id);
       })
       .catch((err) => {
         result = { code: 1, val: err };
       });
-      return result
-  }
+    return result;
+  };
 
   createUserDetails = async (
     image = "",
@@ -68,7 +71,7 @@ export default class Firestore {
     phoneNumber1,
     phoneNumber2 = "",
     email,
-    location,
+    location
   ) => {
     let result = { code: null, val: null };
     await setDoc(doc(firestore, "Company", id), {
@@ -78,17 +81,16 @@ export default class Firestore {
       emailAddress: email,
       location: location,
     })
-    .then((val) => {
-      result = { code: 0, val: val };
-      sessionStorage.setItem("companyId", id);
-    })
-    .catch((err) => {
-      result = { code: 1, val: err };
-    });
+      .then((val) => {
+        result = { code: 0, val: val };
+        sessionStorage.setItem("companyId", id);
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
 
-  return result;
-
-  }
+    return result;
+  };
 
   createCompanyDetails = async (
     logo = "",
@@ -128,6 +130,38 @@ export default class Firestore {
         res.forEach((doc) => {
           result = { code: 0, val: doc };
         });
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    return result;
+  };
+
+  getUserDetailsById = async (id) => {
+    let result = { code: null, val: null };
+    await getDoc(doc(firestore, "User", id))
+      .then((val) => {
+        if (val.exists() == true) {
+          result = { code: 0, val: val };
+        } else {
+          result = { code: 1, val: "This user doesn't exist!" };
+        }
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    return result;
+  };
+
+  getCompanyDetailsById = async (id) => {
+    let result = { code: null, val: null };
+    await getDoc(doc(firestore, "Company", id))
+      .then((val) => {
+        if (val.exists() == true) {
+          result = { code: 0, val: val };
+        } else {
+          result = { code: 1, val: "This Company doesn't exist!" };
+        }
       })
       .catch((err) => {
         result = { code: 1, val: err };
@@ -248,27 +282,25 @@ export default class Firestore {
 
   checkUserCompletedRegistration = () => {
     let result = { code: null, val: null };
-    let user = JSON.parse(sessionStorage.getItem("userDetails"))
-    if(user.profession == undefined) {
+    let user = JSON.parse(sessionStorage.getItem("userDetails"));
+    if (user.profession == undefined) {
       result = { code: 0, val: false };
     } else {
       result = { code: 0, val: true };
     }
     return result;
-
-  }
+  };
 
   checkCompanyCompletedRegistration = () => {
     let result = { code: null, val: null };
-    let company = JSON.parse(sessionStorage.getItem("companyDetails"))
-    if(company.type == undefined) {
+    let company = JSON.parse(sessionStorage.getItem("companyDetails"));
+    if (company.type == undefined) {
       result = { code: 0, val: false };
     } else {
       result = { code: 0, val: true };
     }
     return result;
-
-  }
+  };
   checkCompanyEmail = async (email) => {
     let result = { code: null, val: null };
     const q = query(
@@ -284,10 +316,13 @@ export default class Firestore {
     return result;
   };
 
-  createApplication = async (jobId,jobName, companyId, coverLetter="") => {
+  createApplication = async (jobId, jobName, companyId, coverLetter = "") => {
     let user = JSON.parse(sessionStorage.getItem("userDetails"));
-    let userId = JSON.parse(sessionStorage.getItem("userId"));
-    let applicationId = uniqid(user.firstName+"-"+user.lastName+"-", "-application");
+    let userId = sessionStorage.getItem("userId");
+    let applicationId = uniqid(
+      user.firstName + "-" + user.lastName + "-",
+      "-application"
+    );
     let result = { code: null, val: null };
     const q = query(
       collection(firestore, "Applications"),
@@ -297,56 +332,58 @@ export default class Firestore {
     const res = await getDocs(q);
     if (res.empty == true) {
       await setDoc(doc(firestore, "Applications", applicationId), {
-        fullNames: user.firstName+" "+user.lastName,
+        fullNames: user.firstName + " " + user.lastName,
         userId: userId,
         jobId: jobId,
-        companyId:companyId,
+        companyId: companyId,
         jobName: jobName,
         resume: user.resume,
         timeOfApplication: new Date().toDateString(),
         applicationStatus: "Submitted",
         coverLetter: coverLetter,
-      }).then((val) => {
-        result = { code: 0, val: val };
       })
-      .catch((err) => {
-        result = { code: 1, val: err };
-      });
+        .then((val) => {
+          result = { code: 0, val: val };
+        })
+        .catch((err) => {
+          result = { code: 1, val: err };
+        });
     } else {
       result = { code: 1, val: "Already submitted an Application" };
     }
-  return result;
-  }
+    return result;
+  };
 
-  getUserApplications = async() => {
+  getUserApplications = async () => {
     let userId = sessionStorage.getItem("userId");
     let result = { code: null, val: null };
     const q = query(
       collection(firestore, "Applications"),
-      where("userId", "==", userId),
+      where("userId", "==", userId)
     );
     const res = await getDocs(q);
     if (res.empty == true) {
-      result = {code:1, val:"No applications retrieved!"}
+      result = { code: 1, val: "No applications retrieved!" };
     } else {
-      result = {code:0, val:res}
+      result = { code: 0, val: res };
     }
-      return result;
+    return result;
   };
-  getCompanyApplications = async() => {
+
+  getCompanyApplications = async () => {
     let companyId = sessionStorage.getItem("companyId");
     let result = { code: null, val: null };
     const q = query(
       collection(firestore, "Applications"),
-      where("companyId", "==", companyId),
+      where("companyId", "==", companyId)
     );
     const res = await getDocs(q);
     if (res.empty == true) {
-      result = {code:1, val:"No applications retrieved!"}
+      result = { code: 1, val: "No applications retrieved!" };
     } else {
-      result = {code:0, val:res}
+      result = { code: 0, val: res };
     }
-      return result;
+    return result;
   };
 
   updateUserDetails = () => {};

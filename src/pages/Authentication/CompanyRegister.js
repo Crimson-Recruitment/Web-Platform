@@ -31,9 +31,15 @@ export default function CompanyRegister() {
     setLoading(true);
     const data = new FormData(event.currentTarget);
     await auth
-      .signCompanyUp(uniqid(
-        `${data.get("companyName")}-`, "-company"), data.get("companyName"),data.get("phonenumber1"),
-        data.get("phonenumber2"),data.get("email"), data.get("password"), data.get("location"))
+      .signCompanyUp(
+        uniqid(`${data.get("companyName")}-`, "-company"),
+        data.get("companyName"),
+        data.get("phonenumber1"),
+        data.get("phonenumber2"),
+        data.get("email"),
+        data.get("password"),
+        data.get("location")
+      )
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });

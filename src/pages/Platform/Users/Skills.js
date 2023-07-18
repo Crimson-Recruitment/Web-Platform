@@ -65,27 +65,30 @@ function Skills() {
       )
       .then((res) => {
         if (res.code === 0) {
-          sessionStorage.setItem("userDetails", 
-          JSON.stringify({...JSON.parse(sessionStorage.getItem("userDetails")),
-          profileImage : imagelink.val,
-          skills : selectedSkills,
-          about:event.target["about"].value,
-          profession:state.selectedProfession
-        }))
+          sessionStorage.setItem(
+            "userDetails",
+            JSON.stringify({
+              ...JSON.parse(sessionStorage.getItem("userDetails")),
+              profileImage: imagelink.val,
+              skills: selectedSkills,
+              about: event.target["about"].value,
+              profession: state.selectedProfession,
+            })
+          );
           navigate("/jobs");
           dispatch({ type: "SETLOADING", loading: false });
         } else {
           alert(res.val);
           dispatch({ type: "SETLOADING", loading: false });
         }
-      })
+      });
   };
 
   const imageHandler = (e) => {
     let reader = new FileReader();
-    if (e.target.files[0].size > (1048576*5)) {
-      alert("Image uploaded is too big!")
-      e.target.value = ""
+    if (e.target.files[0].size > 1048576 * 5) {
+      alert("Image uploaded is too big!");
+      e.target.value = "";
     } else {
       reader.readAsArrayBuffer(e.target.files[0]);
 
@@ -102,17 +105,17 @@ function Skills() {
   const resumeHandler = (e) => {
     let reader = new FileReader();
     if (e.target.files[0].size > 2097152) {
-      alert("File uploaded is too big!")
-      e.target.value = ""
+      alert("File uploaded is too big!");
+      e.target.value = "";
       return;
     }
     reader.readAsArrayBuffer(e.target.files[0]);
-      reader.onload = () => {
-        dispatch({ type: "SETRESUME", resume: reader.result });
-      };
-      reader.onerror = () => {
-        alert(reader.error);
-      };
+    reader.onload = () => {
+      dispatch({ type: "SETRESUME", resume: reader.result });
+    };
+    reader.onerror = () => {
+      alert(reader.error);
+    };
   };
   return (
     <div className="p-10 lg:my-12 lg:mx-[200px] sm:m-5 md:m-10 grid place-items-center align-center rounded overflow-hidden shadow-lg h-min-[70vh]">
@@ -122,7 +125,12 @@ function Skills() {
             <div className="flex justify-center mb-5">
               <div
                 className="h-[400px] w-[400px] rounded-full"
-                style={{backgroundImage:`url(${URL.createObjectURL(state.image)})`, backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center center"}}
+                style={{
+                  backgroundImage: `url(${URL.createObjectURL(state.image)})`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center center",
+                }}
               ></div>
               :
             </div>
@@ -214,7 +222,7 @@ function Skills() {
           placeholder="Select skills,..."
           onChange={(val) => {
             if (val.length <= 6) {
-              setSelectedSkills(val)
+              setSelectedSkills(val);
             } else {
               alert("Max number of skills added!");
             }

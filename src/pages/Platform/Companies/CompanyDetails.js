@@ -25,7 +25,7 @@ function CompanyDetails() {
   const firestore = new Firestore();
   const notify = useLocation().state;
   useEffect(() => {
-    if(notify != null) {
+    if (notify != null) {
       if (notify.notify == true) {
         alert("Please complete registration!");
       }
@@ -65,19 +65,23 @@ function CompanyDetails() {
       .then((res) => {
         if (res.code === 0) {
           navigate("/company-jobs");
-          sessionStorage.setItem("companyDetails",
-          JSON.stringify({...JSON.parse(sessionStorage.getItem("companyDetails")), 
-          logo: imagelink.val,
-          type:state.selectedType, 
-          overview:e.target["overview"].value, 
-          isLicensed:e.target["bordered-radio"].value,
-          license:licenselink.val}));
+          sessionStorage.setItem(
+            "companyDetails",
+            JSON.stringify({
+              ...JSON.parse(sessionStorage.getItem("companyDetails")),
+              logo: imagelink.val,
+              type: state.selectedType,
+              overview: e.target["overview"].value,
+              isLicensed: e.target["bordered-radio"].value,
+              license: licenselink.val,
+            })
+          );
           dispatch({ type: "SETLOADING", loading: false });
         } else {
           alert(res.val);
           dispatch({ type: "SETLOADING", loading: false });
         }
-      })
+      });
   };
 
   const imageHandler = (e) => {

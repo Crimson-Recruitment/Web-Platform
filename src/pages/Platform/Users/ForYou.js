@@ -78,32 +78,32 @@ function ForYou() {
   React.useEffect(() => {
     (async () => {
       let hasDetails = await firestore.checkUserCompletedRegistration();
-              if (hasDetails.val == false) {
-                setOpen(true);
-                await new Promise((res) => setTimeout(res, 2000));
-                navigate("/skills", {state:{notify:true}})
+      if (hasDetails.val == false) {
+        setOpen(true);
+        await new Promise((res) => setTimeout(res, 2000));
+        navigate("/skills", { state: { notify: true } });
+      }
+      await firestore
+        .getJobs()
+        .then((val) => {
+          if (val.code == 0) {
+            val.val.forEach((job) => {
+              if (!containsObject(job.data(), jobsList)) {
+                viewList = [...viewList, { ...job.data(), id: job.id }];
               }
-        await firestore
-          .getJobs()
-          .then((val) => {
-            if (val.code == 0) {
-              val.val.forEach((job) => {
-                if (!containsObject(job.data(), jobsList)) {
-                  viewList = [...viewList, {...job.data(), id:job.id}]
-                }
-              });
-              setJobsList(viewList);
-              viewList = [];
-              setLoading(false);
-            } else {
-              alert(val.val);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            alert(err);
+            });
+            setJobsList(viewList);
+            viewList = [];
             setLoading(false);
-          });
+          } else {
+            alert(val.val);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+          setLoading(false);
+        });
     })();
   }, []);
   return (
@@ -125,7 +125,8 @@ function ForYou() {
             </div>
           ) : (
             jobsList &&
-            jobsList.sort((a,b) => a.timestamp < b.timestamp)
+            jobsList
+              .sort((a, b) => a.timestamp < b.timestamp)
               .filter((val) => {
                 if (
                   industryProfessions[val.jobField].indexOf(
@@ -169,7 +170,7 @@ function ForYou() {
           }}
           md={6.9}
         >
-           {current !== null ? (
+          {current !== null ? (
             <>
               <JobDescription
                 jobTitle={jobsList[current].jobTitle}
@@ -186,7 +187,11 @@ function ForYou() {
               />
 
               <CardActions>
-                <Button onClick={handleDialogOpen} variant="contained" size="small">
+                <Button
+                  onClick={handleDialogOpen}
+                  variant="contained"
+                  size="small"
+                >
                   Apply
                 </Button>
               </CardActions>
@@ -194,12 +199,16 @@ function ForYou() {
           ) : null}
         </Grid>
       </Grid>
-      <ApplicationBox 
-      jobId={current !== null ? jobsList[current].id : null}
-      jobName={current !== null ? jobsList[current].jobTitle : null}
-      companyId={current !== null ? jobsList[current].companyId:null} 
-      needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} 
-      isOpen={dialogOpen} onClose={handleDialogClose}/>
+      <ApplicationBox
+        jobId={current !== null ? jobsList[current].id : null}
+        jobName={current !== null ? jobsList[current].jobTitle : null}
+        companyId={current !== null ? jobsList[current].companyId : null}
+        needCoverLetter={
+          current !== null ? jobsList[current].requestCoverLetter : null
+        }
+        isOpen={dialogOpen}
+        onClose={handleDialogClose}
+      />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

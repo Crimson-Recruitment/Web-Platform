@@ -14,7 +14,7 @@ function JobCard({ title, id, description, timestamp }) {
       setDef(`${parseInt(time / 60)} mins`);
     } else if (time < 86400) {
       setDef(`${parseInt(time / 3600)} hrs`);
-    }else if (time >= 86400) {
+    } else if (time >= 86400) {
       setDef(`${parseInt(time / 86400)} days`);
     }
   };

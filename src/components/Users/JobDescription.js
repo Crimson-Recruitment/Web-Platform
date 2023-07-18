@@ -115,20 +115,22 @@ function JobDescription({
                 </Typography>
               </>
             ) : null}
-            {benefits !== null?  benefits.length != 0 ? (
-              <>
-                <Typography variant="h6" component="div">
-                  Benefits
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  <ul>
-                    {benefits.map((benefit) => {
-                      return <li>{benefit}</li>;
-                    })}
-                  </ul>
-                </Typography>
-              </>
-            ) : null:null}
+            {benefits !== null ? (
+              benefits.length != 0 ? (
+                <>
+                  <Typography variant="h6" component="div">
+                    Benefits
+                  </Typography>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    <ul>
+                      {benefits.map((benefit) => {
+                        return <li>{benefit}</li>;
+                      })}
+                    </ul>
+                  </Typography>
+                </>
+              ) : null
+            ) : null}
           </CardContent>
         </>
       }

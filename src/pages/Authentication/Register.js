@@ -32,13 +32,15 @@ export default function Register() {
       "-user"
     );
     await auth
-      .signUserUp(id,
-        data.get("email"), 
+      .signUserUp(
+        id,
+        data.get("email"),
         data.get("password"),
         data.get("firstName"),
-      data.get("lastName"),
-     data.get("phonenumber"),
-      data.get("location"))
+        data.get("lastName"),
+        data.get("phonenumber"),
+        data.get("location")
+      )
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });

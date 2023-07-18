@@ -1,5 +1,5 @@
 import React from "react";
-import CompanySideBar from "../../../components/Companies/CompanySideBar"
+import CompanySideBar from "../../../components/Companies/CompanySideBar";
 
 function CompanySettings() {
   return (

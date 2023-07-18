@@ -51,54 +51,50 @@ function Jobs() {
   React.useEffect(() => {
     (async () => {
       let email = localStorage.getItem("email");
-        await firestore.getUserDetails(email)
-        .then(async (user) => {
-          if (user.code == 0) {
-            if (sessionStorage.getItem("userDetails") != null) {
-              let hasDetails = await firestore.checkUserCompletedRegistration();
-              if (hasDetails.val == false) {
-                setOpen(true);
-                await new Promise((res) => setTimeout(res, 2000));
-                navigate("/skills", {state:{notify:true}})
-              }
-              setLoading(false);
-              return;
-            }
-            sessionStorage.setItem(
-              "userDetails",
-              JSON.stringify(user.val.data())
-            );
-            sessionStorage.setItem(
-              "userId",
-              JSON.stringify(user.val.id)
-            );
+      await firestore.getUserDetails(email).then(async (user) => {
+        if (user.code == 0) {
+          if (sessionStorage.getItem("userDetails") != null) {
             let hasDetails = await firestore.checkUserCompletedRegistration();
             if (hasDetails.val == false) {
               setOpen(true);
               await new Promise((res) => setTimeout(res, 2000));
-              navigate("/skills", {state:{notify:true}})
+              navigate("/skills", { state: { notify: true } });
             }
             setLoading(false);
-          } else {
-            alert(user.val);
-            setLoading(false);
+            return;
           }
-        });
-        await firestore.getJobs().then((val) => {
-          if (val.code == 0) {
-            val.val.forEach((job) => {
-              if (containsObject(job.data(), jobsList) == false) {
-                viewList = [...viewList, {...job.data(), id:job.id}];
-              }
-            });
-            setJobsList(viewList);
-            viewList = [];
-            setLoading(false);
-          } else {
-            alert(val.val);
-            setLoading(false);
+          sessionStorage.setItem(
+            "userDetails",
+            JSON.stringify(user.val.data())
+          );
+          sessionStorage.setItem("userId", user.val.id);
+          let hasDetails = await firestore.checkUserCompletedRegistration();
+          if (hasDetails.val == false) {
+            setOpen(true);
+            await new Promise((res) => setTimeout(res, 2000));
+            navigate("/skills", { state: { notify: true } });
           }
-        });
+          setLoading(false);
+        } else {
+          alert(user.val);
+          setLoading(false);
+        }
+      });
+      await firestore.getJobs().then((val) => {
+        if (val.code == 0) {
+          val.val.forEach((job) => {
+            if (containsObject(job.data(), jobsList) == false) {
+              viewList = [...viewList, { ...job.data(), id: job.id }];
+            }
+          });
+          setJobsList(viewList);
+          viewList = [];
+          setLoading(false);
+        } else {
+          alert(val.val);
+          setLoading(false);
+        }
+      });
     })();
   }, []);
   return (
@@ -126,18 +122,20 @@ function Jobs() {
             </div>
           ) : (
             jobsList &&
-            jobsList.sort((a,b) => a.timestamp < b.timestamp).map((job, index) => {
-              return (
-                <a onClick={() => setCurrent(index)}>
-                  <UserJobCard
-                    key={index}
-                    title={job.jobTitle}
-                    description={job.jobDescription}
-                    timestamp={job.timestamp}
-                  />
-                </a>
-              );
-            })
+            jobsList
+              .sort((a, b) => a.timestamp < b.timestamp)
+              .map((job, index) => {
+                return (
+                  <a onClick={() => setCurrent(index)}>
+                    <UserJobCard
+                      key={index}
+                      title={job.jobTitle}
+                      description={job.jobDescription}
+                      timestamp={job.timestamp}
+                    />
+                  </a>
+                );
+              })
           )}
         </Grid>
         <Grid item sx={{ display: { md: "block", xs: "none" } }} md={0.1}>
@@ -177,7 +175,11 @@ function Jobs() {
               />
 
               <CardActions>
-                <Button onClick={handleDialogOpen} variant="contained" size="small">
+                <Button
+                  onClick={handleDialogOpen}
+                  variant="contained"
+                  size="small"
+                >
                   Apply
                 </Button>
               </CardActions>
@@ -185,12 +187,16 @@ function Jobs() {
           ) : null}
         </Grid>
       </Grid>
-      <ApplicationBox 
-      jobId={current !== null ? jobsList[current].id:null} 
-      jobName={current !== null ? jobsList[current].jobTitle:null} 
-      companyId={current !== null ? jobsList[current].companyId:null} 
-      needCoverLetter={current !== null ? jobsList[current].requestCoverLetter : null} 
-      isOpen={dialogOpen} onClose={handleDialogClose}/>
+      <ApplicationBox
+        jobId={current !== null ? jobsList[current].id : null}
+        jobName={current !== null ? jobsList[current].jobTitle : null}
+        companyId={current !== null ? jobsList[current].companyId : null}
+        needCoverLetter={
+          current !== null ? jobsList[current].requestCoverLetter : null
+        }
+        isOpen={dialogOpen}
+        onClose={handleDialogClose}
+      />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

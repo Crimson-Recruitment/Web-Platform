@@ -22,6 +22,8 @@ import Profile from "./pages/Platform/Users/Profile";
 import Settings from "./pages/Platform/Users/Settings";
 import Applications from "./pages/Platform/Users/Applications";
 import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
+import UserView from "./pages/Platform/Users/UserView";
+import CompanyView from "./pages/Platform/Companies/CompanyView";
 
 function App() {
   const cookie = new Cookies();
@@ -36,6 +38,8 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/register" element={<Register />} />
         <Route path="/company-register" element={<CompanyRegister />} />
+        <Route path="/user-view/:id" element={<UserView />} />
+        <Route path="/company-view/:id" element={<CompanyView />} />
         {cookie.get("user-login") ? (
           <>
             <Route path="/skills" element={<Skills />} />
