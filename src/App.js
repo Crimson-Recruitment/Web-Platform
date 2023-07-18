@@ -24,6 +24,8 @@ import Applications from "./pages/Platform/Users/Applications";
 import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
 import UserView from "./pages/Platform/Users/UserView";
 import CompanyView from "./pages/Platform/Companies/CompanyView";
+import UpdateCompanyProfile from "./pages/Platform/Companies/UpdateCompanyProfile";
+import UpdateUserProfile from "./pages/Platform/Users/UpdateUserProfile";
 
 function App() {
   const cookie = new Cookies();

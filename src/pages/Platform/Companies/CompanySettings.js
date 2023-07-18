@@ -1,168 +1,35 @@
 import React from "react";
 import CompanySideBar from "../../../components/Companies/CompanySideBar";
+import { MDBCardText, MDBListGroup, MDBListGroupItem } from "mdb-react-ui-kit";
+import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function CompanySettings() {
+  const navigate = useNavigate();
   return (
     <CompanySideBar>
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-12 col-lg-10 col-xl-8 mx-auto">
-            <h2 className="h3 mb-4 page-title">Settings</h2>
-            <div className="my-4">
-              <hr className="my-4" />
-              <strong className="mb-0">Profile</strong>
-              <p>Make changes to your profile.</p>
-              <div className="list-group mb-5 shadow">
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">Update profile</strong>
-                      <p className="text-muted mb-0">
-                        Donec in quam sed urna bibendum tincidunt quis mollis
-                        mauris.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">Privacy Settings</strong>
-                      <p className="text-muted mb-0">
-                        Fusce lacinia elementum eros, sed vulputate urna
-                        eleifend nec.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <strong className="mb-0">Security</strong>
-              <p>Control security alert you will be notified.</p>
-              <div className="list-group mb-5 shadow">
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">
-                        Unusual activity notifications
-                      </strong>
-                      <p className="text-muted mb-0">
-                        Donec in quam sed urna bibendum tincidunt quis mollis
-                        mauris.
-                      </p>
-                    </div>
-                    <div className="col-auto">
-                      <div className="custom-control custom-switch">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="alert1"
-                        />
-                        <span className="custom-control-label"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">
-                        Unauthorized financial activity
-                      </strong>
-                      <p className="text-muted mb-0">
-                        Fusce lacinia elementum eros, sed vulputate urna
-                        eleifend nec.
-                      </p>
-                    </div>
-                    <div className="col-auto">
-                      <div className="custom-control custom-switch">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="alert2"
-                        />
-                        <span className="custom-control-label"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr className="my-4" />
-              <strong className="mb-0">System</strong>
-              <p>Please enable system alert you will get.</p>
-              <div className="list-group mb-5 shadow">
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">
-                        Notify me about new features and updates
-                      </strong>
-                      <p className="text-muted mb-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      </p>
-                    </div>
-                    <div className="col-auto">
-                      <div className="custom-control custom-switch">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="alert3"
-                        />
-                        <span className="custom-control-label"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">
-                        Notify me by email for latest news
-                      </strong>
-                      <p className="text-muted mb-0">
-                        Nulla et tincidunt sapien. Sed eleifend volutpat
-                        elementum.
-                      </p>
-                    </div>
-                    <div className="col-auto">
-                      <div className="custom-control custom-switch">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="alert4"
-                        />
-                        <span className="custom-control-label"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="list-group-item">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <strong className="mb-0">
-                        Notify me about tips on using account
-                      </strong>
-                      <p className="text-muted mb-0">
-                        Donec in quam sed urna bibendum tincidunt quis mollis
-                        mauris.
-                      </p>
-                    </div>
-                    <div className="col-auto">
-                      <div className="custom-control custom-switch">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="alert5"
-                        />
-                        <span className="custom-control-label"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+   
+                    <MDBListGroup flush className="rounded-3 m-20">
+                    <Typography sx={{marginY:"20px"}} variant="h5">
+Company Settings
+    </Typography>
+                      <MDBListGroupItem className="p-3 my-2">
+                        <MDBCardText>Update Profile</MDBCardText>
+                      </MDBListGroupItem>
+                      <MDBListGroupItem className="p-3 my-2">
+                        <MDBCardText>Verify Email</MDBCardText>
+                      </MDBListGroupItem>
+                      <MDBListGroupItem className="p-3 my-2">
+                        <MDBCardText>Verify Primary Phone Number</MDBCardText>
+                      </MDBListGroupItem>
+                      <MDBListGroupItem className="p-3 my-2">
+                        <MDBCardText>Privacy Policy</MDBCardText>
+                      </MDBListGroupItem>
+                      <MDBListGroupItem className="p-3 my-2">
+                        <MDBCardText>Terms and conditions</MDBCardText>
+                      </MDBListGroupItem>
+                    </MDBListGroup>
+                
     </CompanySideBar>
   );
 }

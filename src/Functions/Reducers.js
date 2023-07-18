@@ -15,6 +15,23 @@ export const companyDetailsReducer = (state, action) => {
   }
 };
 
+export const updateCompanyProfileReducer = (state, action) => {
+  switch (action.type) {
+    case "SETSELECTEDTYPE":
+      return { ...state, selectedType: action.selectedType };
+    case "SETLOADING":
+      return { ...state, loading: action.loading };
+    case "SETIMAGE":
+      return { ...state, image: action.image };
+    case "SETIMAGEPATH":
+      return { ...state, imagePath: action.imagePath };
+    case "SETLICENSE":
+      return { ...state, license: action.license };
+    default:
+      return state;
+  }
+};
+
 export const companyJobsReducer = (state, action) => {
   switch (action.type) {
     case "SETVALUE":
@@ -43,6 +60,27 @@ export const companyJobsReducer = (state, action) => {
 };
 
 export const skillsReducer = (state, action) => {
+  switch (action.type) {
+    case "SETLOADING":
+      return { ...state, loading: action.loading };
+    case "SETSELECTEDSKILLS":
+      return { ...state, selectedSkills: action.loading };
+    case "SETSELECTEDPROFESSION":
+      return { ...state, selectedProfession: action.selectedProfession };
+    case "SETJOBSLIST":
+      return { ...state, jobsList: action.jobsList };
+    case "SETIMAGE":
+      return { ...state, image: action.image };
+    case "SETIMAGEPATH":
+      return { ...state, imagePath: action.imagePath };
+    case "SETRESUME":
+      return { ...state, resume: action.resume };
+    default:
+      return state;
+  }
+};
+
+export const updateUserProfileReducer = (state, action) => {
   switch (action.type) {
     case "SETLOADING":
       return { ...state, loading: action.loading };
