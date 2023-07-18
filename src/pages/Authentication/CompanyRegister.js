@@ -43,7 +43,7 @@ export default function CompanyRegister() {
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });
-          localStorage.setItem("email", data.get("email"));
+          localStorage.setItem("companyEmail", data.get("email"));
           sessionStorage.setItem(
             "companyDetails",
             JSON.stringify({

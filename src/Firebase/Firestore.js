@@ -281,8 +281,6 @@ export default class Firestore {
     return result;
   };
 
-
-
   checkUserEmail = async (email) => {
     let result = { code: null, val: null };
     const q = query(
@@ -335,18 +333,18 @@ export default class Firestore {
   };
 
   updateApplication = async (applicationId, status) => {
-    let result = {code:null, val:null}
+    let result = { code: null, val: null };
     await updateDoc(doc(firestore, "Applications", applicationId), {
-      applicationStatus:status
-    }).then((val) => {
-      result = { code: 0, val: val };
+      applicationStatus: status,
     })
-    .catch((err) => {
-      result = { code: 1, val: err };
-    });
-    return result
-  }
-
+      .then((val) => {
+        result = { code: 0, val: val };
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    return result;
+  };
 
   createApplication = async (jobId, jobName, companyId, coverLetter = "") => {
     let user = JSON.parse(sessionStorage.getItem("userDetails"));

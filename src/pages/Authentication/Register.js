@@ -44,7 +44,7 @@ export default function Register() {
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          localStorage.setItem("email", data.get("email"));
+          localStorage.setItem("userEmail", data.get("email"));
           sessionStorage.setItem(
             "userDetails",
             JSON.stringify({

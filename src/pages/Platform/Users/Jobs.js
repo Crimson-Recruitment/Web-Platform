@@ -38,15 +38,13 @@ function Jobs() {
     setOpen(false);
   };
 
-  const jobHandler = (jobId,index) => {
-    
+  const jobHandler = (jobId, index) => {
     if (window.innerWidth <= 1080) {
-        navigate(`/jobs/${jobId}`)
+      navigate(`/jobs/${jobId}`);
     } else {
-      setCurrent(index)   
+      setCurrent(index);
     }
- 
-}
+  };
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleDialogOpen = () => {
@@ -59,7 +57,7 @@ function Jobs() {
 
   React.useEffect(() => {
     (async () => {
-      let email = localStorage.getItem("email");
+      let email = localStorage.getItem("userEmail");
       await firestore.getUserDetails(email).then(async (user) => {
         if (user.code == 0) {
           if (sessionStorage.getItem("userDetails") != null) {
@@ -135,7 +133,7 @@ function Jobs() {
               .sort((a, b) => a.timestamp < b.timestamp)
               .map((job, index) => {
                 return (
-                  <a onClick={() =>  jobHandler(job.id, index)}>
+                  <a onClick={() => jobHandler(job.id, index)}>
                     <UserJobCard
                       key={index}
                       title={job.jobTitle}

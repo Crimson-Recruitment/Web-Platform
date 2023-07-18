@@ -33,7 +33,7 @@ function CompanyProfile() {
 
   useEffect(() => {
     (async () => {
-      let email = localStorage.getItem("email");
+      let email = localStorage.getItem("companyEmail");
       if (sessionStorage.getItem("companyDetails") != null) {
         let hasDetails = await firestore.checkCompanyCompletedRegistration();
         if (hasDetails.val == false) {

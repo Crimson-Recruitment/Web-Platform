@@ -84,9 +84,10 @@ export default function AboutUs() {
               paragraph
               sx={{ fontSize: "25px", marginLeft: "20px" }}
             >
-              Frustrated with waiting for recruiter responses or 
-              dealing with lengthy job applications? We've got you covered. Our platform streamlines the process, 
-              reducing waiting times and simplifying applications, so you can focus on finding your dream job.
+              Frustrated with waiting for recruiter responses or dealing with
+              lengthy job applications? We've got you covered. Our platform
+              streamlines the process, reducing waiting times and simplifying
+              applications, so you can focus on finding your dream job.
             </Typography>
           </Grid>
         </Grid>
@@ -106,10 +107,12 @@ export default function AboutUs() {
             paragraph
             sx={{ fontSize: "25px" }}
           >
-            Discover a seamless job-seeking experience with us. 
-            Gain access to a wide array of on-demand jobs and experience the convenience 
-            of our platform that not only facilitates swift and easy job applications but also ensures quick responses from recruiters.
-             Maximize your opportunities and take charge of your career journey with our user-friendly system."
+            Discover a seamless job-seeking experience with us. Gain access to a
+            wide array of on-demand jobs and experience the convenience of our
+            platform that not only facilitates swift and easy job applications
+            but also ensures quick responses from recruiters. Maximize your
+            opportunities and take charge of your career journey with our
+            user-friendly system."
           </Typography>
         </Grid>
         <Grid container sx={{ marginTop: "100px" }}>
@@ -123,23 +126,23 @@ export default function AboutUs() {
               minHeight: "300px",
             }}
           />
-      
-          <Grid item xs={12}
-            sm={6} ustifyContent="flex-end">
+
+          <Grid item xs={12} sm={6} ustifyContent="flex-end">
             <Typography
-            variant="blockquote"
+              variant="blockquote"
               align="center"
               color="text.black"
               paragraph
               sx={{ fontSize: "25px" }}
             >
-   "Our mission is to simplify your job search, making it effortless 
-   and more efficient, while also focusing on enhancing your skills and professional development. With our dedicated 
-   support and resources, you can confidently pursue your career goals, knowing we are here to assist you every step of the way!"
+              "Our mission is to simplify your job search, making it effortless
+              and more efficient, while also focusing on enhancing your skills
+              and professional development. With our dedicated support and
+              resources, you can confidently pursue your career goals, knowing
+              we are here to assist you every step of the way!"
             </Typography>
           </Grid>
-          </Grid>
-          
+        </Grid>
       </Container>
     </main>
   );

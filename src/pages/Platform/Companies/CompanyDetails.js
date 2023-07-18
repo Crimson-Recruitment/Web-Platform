@@ -120,7 +120,7 @@ function CompanyDetails() {
           </label>
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-               <div
+              <div
                 className="h-[400px] w-[400px] rounded-full"
                 style={{
                   backgroundImage: `url(${URL.createObjectURL(state.image)})`,

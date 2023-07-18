@@ -119,7 +119,7 @@ function CompanyJobs() {
 
   useEffect(() => {
     (async () => {
-      let email = localStorage.getItem("email");
+      let email = localStorage.getItem("companyEmail");
       if (sessionStorage.getItem("companyDetails") === null) {
         await firestore.getCompanyDetails(email).then(async (user) => {
           if (user.code == 0) {
@@ -147,7 +147,7 @@ function CompanyJobs() {
                     viewList = [];
                     dispatch({ type: "SETLOADING", loading: false });
                   } else {
-                    handleClick({ type: "error", message:val.val});
+                    handleClick({ type: "error", message: val.val });
                     dispatch({ type: "SETLOADING", loading: false });
                   }
                 });
@@ -175,7 +175,7 @@ function CompanyJobs() {
                 viewList = [];
                 dispatch({ type: "SETLOADING", loading: false });
               } else {
-                handleClick({ type: "error", message:val.val });
+                handleClick({ type: "error", message: val.val });
                 dispatch({ type: "SETLOADING", loading: false });
               }
             });
@@ -216,10 +216,10 @@ function CompanyJobs() {
           dispatch({ type: "SETLOADING", loading: false });
           navigate(0);
         } else {
-          handleClick({ type: "error", message:val.val });
+          handleClick({ type: "error", message: val.val });
           dispatch({ type: "SETLOADING", loading: false });
         }
-      })
+      });
   };
 
   return (
@@ -481,7 +481,10 @@ function CompanyJobs() {
                           selectedSkills: val,
                         });
                       } else {
-                        handleClick({ type: "error", message: "Max number of skills Added!" });
+                        handleClick({
+                          type: "error",
+                          message: "Max number of skills Added!",
+                        });
                       }
                     }}
                     isSearchable={true}

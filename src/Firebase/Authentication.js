@@ -100,7 +100,8 @@ export default class Auth {
         this.#cookie.remove("company-login", { path: "/" });
         sessionStorage.removeItem("companyDetails");
         sessionStorage.removeItem("userDetails");
-        localStorage.removeItem("email");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("companyEmail");
         sessionStorage.removeItem("companyId");
         result = { code: 0, val: val };
       })

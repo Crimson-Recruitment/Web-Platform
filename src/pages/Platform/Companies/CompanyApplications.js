@@ -40,7 +40,7 @@ function CompanyApplications() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
   const navigate = useNavigate();
-  const [message, setMessage] = useState({message:"", severity:""});
+  const [message, setMessage] = useState({ message: "", severity: "" });
   const [open, setOpen] = React.useState();
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -59,26 +59,33 @@ function CompanyApplications() {
   };
 
   const updateHandler = async (applicationId, status) => {
-    await firestore.updateApplication(applicationId, status)
-    .then(async val => {
-      if(val.code == 0){
-        setMessage({message:"Successfully updated application status!",severity:"success"});
-        setOpen(true);
-        await new Promise((res) => setTimeout(res, 2000));
-        navigate(0)
-      } else {
-        console.log(val)
-        setMessage({severity:"error", message:val.val})
-        setOpen(true)
-      }
-    })
-  }
- 
+    await firestore
+      .updateApplication(applicationId, status)
+      .then(async (val) => {
+        if (val.code == 0) {
+          setMessage({
+            message: "Successfully updated application status!",
+            severity: "success",
+          });
+          setOpen(true);
+          await new Promise((res) => setTimeout(res, 2000));
+          navigate(0);
+        } else {
+          console.log(val);
+          setMessage({ severity: "error", message: val.val });
+          setOpen(true);
+        }
+      });
+  };
+
   useEffect(() => {
     (async () => {
       let hasDetails = await firestore.checkCompanyCompletedRegistration();
       if (hasDetails.val == false) {
-        setMessage({message:"Failed to load Applications!",severity:"error"});
+        setMessage({
+          message: "Failed to load Applications!",
+          severity: "error",
+        });
         setOpen(true);
         await new Promise((res) => setTimeout(res, 2000));
         navigate("/company-details", { state: { notify: true } });
@@ -95,7 +102,7 @@ function CompanyApplications() {
             applicationList = [];
             setLoading(false);
           } else {
-            setMessage({message:val.val, severity:"error"});
+            setMessage({ message: val.val, severity: "error" });
             setOpen(true);
             setLoading(false);
           }
@@ -194,10 +201,10 @@ function CompanyApplications() {
                           <Button
                             onClick={() => {
                               window.open(
-                                `${application.resume}.pdf`,"_blank"
-                                
+                                `${application.resume}.pdf`,
+                                "_blank"
                               );
-                              updateHandler(application.id, "Reviewing")
+                              updateHandler(application.id, "Reviewing");
                             }}
                           >
                             Download Resume
@@ -214,8 +221,23 @@ function CompanyApplications() {
                             </>
                           ) : null}
                         </Grid>
-                        <Button onClick={() => updateHandler(application.id, "Success")} variant="contained" color="success">Recruit</Button>
-                        <Button onClick={() => updateHandler(application.id, "Rejected")} color="error">Reject Application</Button>
+                        <Button
+                          onClick={() =>
+                            updateHandler(application.id, "Success")
+                          }
+                          variant="contained"
+                          color="success"
+                        >
+                          Recruit
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            updateHandler(application.id, "Rejected")
+                          }
+                          color="error"
+                        >
+                          Reject Application
+                        </Button>
                       </Grid>
                     ) : null}
                   </Grid>
@@ -226,7 +248,11 @@ function CompanyApplications() {
         ) : null}
       </div>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={message.severity} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleClose}
+          severity={message.severity}
+          sx={{ width: "100%" }}
+        >
           {message.message}
         </Alert>
       </Snackbar>

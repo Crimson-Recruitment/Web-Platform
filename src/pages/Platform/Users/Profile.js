@@ -35,7 +35,7 @@ export default function Profile() {
   };
   useEffect(() => {
     (async () => {
-      let email = localStorage.getItem("email");
+      let email = localStorage.getItem("userEmail");
       if (sessionStorage.getItem("userDetails") != null) {
         let hasDetails = await firestore.checkUserCompletedRegistration();
         if (hasDetails.val == false) {
