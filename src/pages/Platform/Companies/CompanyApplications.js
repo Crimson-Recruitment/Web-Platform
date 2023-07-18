@@ -194,7 +194,7 @@ function CompanyApplications() {
                           <Button
                             onClick={() => {
                               window.open(
-                                `${application.resume}.pdf`
+                                `${application.resume}.pdf`,"_blank"
                                 
                               );
                               updateHandler(application.id, "Reviewing")
