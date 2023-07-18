@@ -82,11 +82,11 @@ export default function AboutUs() {
               align="center"
               color="text.black"
               paragraph
-              sx={{ fontSize: "30px", marginLeft: "20px" }}
+              sx={{ fontSize: "25px", marginLeft: "20px" }}
             >
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam atque
-              dolore voluptatibus nisi. Nihil placeat, eius a harum tenetur,
-              nemo, ipsam fugiat quos itaque nam est ipsa maxime quod ducimus!
+              Frustrated with waiting for recruiter responses or 
+              dealing with lengthy job applications? We've got you covered. Our platform streamlines the process, r
+              educing waiting times and simplifying applications, so you can focus on finding your dream job.
             </Typography>
           </Grid>
         </Grid>
@@ -104,26 +104,15 @@ export default function AboutUs() {
             align="center"
             color="text.black"
             paragraph
-            sx={{ fontSize: "30px" }}
+            sx={{ fontSize: "25px" }}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam atque
-            dolore voluptatibus nisi. Nihil placeat, eius a harum tenetur, nemo,
-            ipsam fugiat quos itaque nam est ipsa maxime quod ducimus!
+            Discover a seamless job-seeking experience with us. 
+            Gain access to a wide array of on-demand jobs and experience the convenience 
+            of our platform that not only facilitates swift and easy job applications but also ensures quick responses from recruiters.
+             Maximize your opportunities and take charge of your career journey with our user-friendly system."
           </Typography>
         </Grid>
-        <Grid container spacing={4} sx={{ marginTop: "100px" }}>
-          <Grid xs={12} sm={6}>
-            <Typography
-              align="center"
-              color="text.black"
-              paragraph
-              sx={{ fontSize: "30px" }}
-            >
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam atque
-              dolore voluptatibus nisi. Nihil placeat, eius a harum tenetur,
-              nemo, ipsam fugiat quos itaque nam est ipsa maxime quod ducimus!
-            </Typography>
-          </Grid>
+        <Grid container sx={{ marginTop: "100px" }}>
           <Grid
             item
             xs={12}
@@ -134,7 +123,23 @@ export default function AboutUs() {
               minHeight: "300px",
             }}
           />
-        </Grid>
+      
+          <Grid item xs={12}
+            sm={6} ustifyContent="flex-end">
+            <Typography
+            variant="blockquote"
+              align="center"
+              color="text.black"
+              paragraph
+              sx={{ fontSize: "25px" }}
+            >
+   "Our mission is to simplify your job search, making it effortless 
+   and more efficient, while also focusing on enhancing your skills and professional development. With our dedicated 
+   support and resources, you can confidently pursue your career goals, knowing we are here to assist you every step of the way!"
+            </Typography>
+          </Grid>
+          </Grid>
+          
       </Container>
     </main>
   );
