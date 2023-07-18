@@ -75,6 +75,16 @@ function ForYou() {
     setOpen(false);
   };
 
+  const jobHandler = (jobId,index) => {
+    
+    if (window.innerWidth <= 1080) {
+        navigate(`/jobs/${jobId}`)
+    } else {
+      setCurrent(index)   
+    }
+ 
+}
+
   React.useEffect(() => {
     (async () => {
       let hasDetails = await firestore.checkUserCompletedRegistration();
@@ -141,7 +151,7 @@ function ForYou() {
               })
               .map((job, index) => {
                 return (
-                  <a onClick={() => setCurrent(index)}>
+                  <a onClick={() => jobHandler(job.id,index)}>
                     <UserJobCard
                       key={index}
                       title={job.jobTitle}

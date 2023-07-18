@@ -169,6 +169,22 @@ export default class Firestore {
     return result;
   };
 
+  getJobById = async (id) => {
+    let result = { code: null, val: null };
+    await getDoc(doc(firestore, "Jobs", id))
+      .then((val) => {
+        if (val.exists() == true) {
+          result = { code: 0, val: val };
+        } else {
+          result = { code: 1, val: "This Job doesn't exist!" };
+        }
+      })
+      .catch((err) => {
+        result = { code: 1, val: err };
+      });
+    return result;
+  };
+
   getCompanyDetails = async (email) => {
     let result = { code: null, val: null };
     const q = query(

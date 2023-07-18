@@ -147,7 +147,7 @@ function CompanyJobs() {
                     viewList = [];
                     dispatch({ type: "SETLOADING", loading: false });
                   } else {
-                    alert(val.val);
+                    handleClick({ type: "error", message:val.val});
                     dispatch({ type: "SETLOADING", loading: false });
                   }
                 });
@@ -175,7 +175,7 @@ function CompanyJobs() {
                 viewList = [];
                 dispatch({ type: "SETLOADING", loading: false });
               } else {
-                alert(val.val);
+                handleClick({ type: "error", message:val.val });
                 dispatch({ type: "SETLOADING", loading: false });
               }
             });
@@ -216,14 +216,10 @@ function CompanyJobs() {
           dispatch({ type: "SETLOADING", loading: false });
           navigate(0);
         } else {
-          alert(val.val);
+          handleClick({ type: "error", message:val.val });
           dispatch({ type: "SETLOADING", loading: false });
         }
       })
-      .catch((err) => {
-        alert(err);
-        dispatch({ type: "SETLOADING", loading: false });
-      });
   };
 
   return (
@@ -485,7 +481,7 @@ function CompanyJobs() {
                           selectedSkills: val,
                         });
                       } else {
-                        alert("Max number of skills added!");
+                        handleClick({ type: "error", message: "Max number of skills Added!" });
                       }
                     }}
                     isSearchable={true}

@@ -24,6 +24,7 @@ import Applications from "./pages/Platform/Users/Applications";
 import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
 import UserView from "./pages/Platform/Users/UserView";
 import CompanyView from "./pages/Platform/Companies/CompanyView";
+import JobView from "./pages/Platform/Users/JobView";
 
 function App() {
   const cookie = new Cookies();
@@ -40,6 +41,7 @@ function App() {
         <Route path="/company-register" element={<CompanyRegister />} />
         <Route path="/user-view/:id" element={<UserView />} />
         <Route path="/company-view/:id" element={<CompanyView />} />
+        <Route path="/jobs/:id" element={<JobView />} />
         {cookie.get("user-login") ? (
           <>
             <Route path="/skills" element={<Skills />} />

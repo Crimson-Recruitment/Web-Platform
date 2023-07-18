@@ -85,8 +85,8 @@ export default function AboutUs() {
               sx={{ fontSize: "25px", marginLeft: "20px" }}
             >
               Frustrated with waiting for recruiter responses or 
-              dealing with lengthy job applications? We've got you covered. Our platform streamlines the process, r
-              educing waiting times and simplifying applications, so you can focus on finding your dream job.
+              dealing with lengthy job applications? We've got you covered. Our platform streamlines the process, 
+              reducing waiting times and simplifying applications, so you can focus on finding your dream job.
             </Typography>
           </Grid>
         </Grid>

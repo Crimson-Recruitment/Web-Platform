@@ -120,10 +120,15 @@ function CompanyDetails() {
           </label>
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-              <img
+               <div
                 className="h-[400px] w-[400px] rounded-full"
-                src={URL.createObjectURL(state.image)}
-              />
+                style={{
+                  backgroundImage: `url(${URL.createObjectURL(state.image)})`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center center",
+                }}
+              ></div>
               :
             </div>
           ) : (
@@ -182,7 +187,7 @@ function CompanyDetails() {
             }}
             isSearchable={true}
             value={industries.filter(function (option) {
-              return option.value === state.selectedType;
+              return option.value === state.selectedType.value;
             })}
           />
         </div>

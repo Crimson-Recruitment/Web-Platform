@@ -35,9 +35,18 @@ function Jobs() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
+
+  const jobHandler = (jobId,index) => {
+    
+    if (window.innerWidth <= 1080) {
+        navigate(`/jobs/${jobId}`)
+    } else {
+      setCurrent(index)   
+    }
+ 
+}
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleDialogOpen = () => {
@@ -126,7 +135,7 @@ function Jobs() {
               .sort((a, b) => a.timestamp < b.timestamp)
               .map((job, index) => {
                 return (
-                  <a onClick={() => setCurrent(index)}>
+                  <a onClick={() =>  jobHandler(job.id, index)}>
                     <UserJobCard
                       key={index}
                       title={job.jobTitle}
