@@ -15,45 +15,68 @@ import Auth from "../../Firebase/Authentication";
 import uniqid from "uniqid";
 import LocationSearchInput from "../../components/LocationInput";
 import Cookies from "universal-cookie";
+import { useForm} from 'react-hook-form';
+import { object, string} from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const defaultTheme = createTheme();
 
 export default function Register() {
   const [loading, setLoading] = React.useState(false);
-  const navigate = useNavigate();
   const cookie = new Cookies();
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+
+  const validationSchema = object({
+    firstName: string().nonempty("Field is required!"),
+    lastName: string().nonempty("Field is required!"),
+    email: string().email("Email is invalid").nonempty("Field is required!"),
+    password: string().min(5,"You must enter atleast 5 characters!").max(16,"You must enter at most 16 characters!").nonempty("Field is required!")
+  });
+
+  const {
+    register,
+    formState: { errors, isSubmitSuccessful },
+    reset,
+    handleSubmit,
+  } = useForm({
+    resolver: zodResolver(validationSchema),
+  });
+
+  React.useEffect(() => {
+    if (isSubmitSuccessful) {
+    }
+  }, [isSubmitSuccessful, reset]);
+
+
+  const onSubmitHandler = async (values) => {
     setLoading(true);
     let auth = new Auth();
-    const data = new FormData(event.currentTarget);
     let id = uniqid(
-      `${data.get("firstName")}_${data.get("lastName")}-`,
+      `${values.firstName}_${values.lastName}-`,
       "-user"
     );
     await auth
       .signUserUp(
         id,
-        data.get("email"),
-        data.get("password"),
-        data.get("firstName"),
-        data.get("lastName"),
-        data.get("phonenumber"),
-        data.get("location")
+        values.email,
+        values.password,
+        values.firstName,
+        values.lastName,
+      document.getElementsByName("phonenumber")[0].value,
+      document.getElementsByName("location")[0].values
       )
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("user-login", true, { path: "/" });
-          localStorage.setItem("userEmail", data.get("email"));
+          localStorage.setItem("userEmail", values.email);
           sessionStorage.setItem(
             "userDetails",
             JSON.stringify({
               id: id,
-              firstName: data.get("firstName"),
-              lastName: data.get("lastName"),
-              phoneNumber: data.get("phonenumber"),
-              emailAddress: data.get("email"),
-              location: data.get("location"),
+              firstName: values.firstName,
+              lastName: values.lastName,
+              phoneNumber: document.getElementsByName("phonenumber")[0].value,
+              emailAddress: values.email,
+              location: document.getElementsByName("location")[0].value,
             })
           );
           window.location.href = "/skills";
@@ -86,8 +109,8 @@ export default function Register() {
           </Typography>
           <Box
             component="form"
-            noValidate
-            onSubmit={handleSubmit}
+            noValidate={false}
+            onSubmit={handleSubmit(onSubmitHandler)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -99,9 +122,14 @@ export default function Register() {
                   fullWidth
                   id="firstName"
                   label="First Name"
+                  error={errors['firstName'] !== null? errors["firstName"]:null}
+          helperText={errors['firstName'] ? errors['firstName'].message : ''}
+          {...register('firstName')}
                   autoFocus
                 />
+          
               </Grid>
+              
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -109,12 +137,14 @@ export default function Register() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  autoComplete="family-name"
+                  error={errors['lastName'] !== null? errors["lastName"]:null}
+          helperText={errors['lastName'] ? errors['lastName'].message : ''}
+          {...register('lastName')}
                 />
               </Grid>
               <Grid item xs={12}>
                 <MuiPhoneNumber
-                  required
+                  required={true}
                   variant="outlined"
                   id="phonenumber"
                   label="Phone Number"
@@ -122,9 +152,11 @@ export default function Register() {
                   fullWidth
                   defaultCountry={"ug"}
                 />
+          
               </Grid>
               <Grid item xs={12}>
-                <LocationSearchInput />
+                <LocationSearchInput {...register('location')} />
+             
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -135,7 +167,11 @@ export default function Register() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  error={errors['email'] !== null? errors["email"]:null}
+                  helperText={errors['email'] ? errors['email'].message : ''}
+                  {...register('email')}
                 />
+     
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -145,8 +181,12 @@ export default function Register() {
                   label="Password"
                   type="password"
                   id="password"
+                  error={errors['password'] !== null? errors["password"]:null}
+                  helperText={errors['password'] ? errors['password'].message : ''}
+                  {...register('password')}
                   autoComplete="new-password"
                 />
+           
               </Grid>
             </Grid>
             <Button

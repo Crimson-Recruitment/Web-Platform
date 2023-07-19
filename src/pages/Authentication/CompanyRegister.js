@@ -15,10 +15,10 @@ import Cookies from "universal-cookie";
 import LocationSearchInput from "../../components/LocationInput";
 import Auth from "../../Firebase/Authentication";
 import uniqid from "uniqid";
+import { useForm} from 'react-hook-form';
+import { object, string} from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
 
 export default function CompanyRegister() {
   const cookie = new Cookies();
@@ -26,33 +26,56 @@ export default function CompanyRegister() {
   const [loading, setLoading] = React.useState(false);
   let auth = new Auth();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const validationSchema = object({
+    companyName: string().nonempty("Field is required!"),
+    email: string().email("Email is invalid").nonempty("Field is required!"),
+    password: string()
+    .min(5,"You must enter atleast 5 characters!")
+    .max(16,"You must enter at most 16 characters!")
+    .nonempty("Field is required!")
+  });
+
+  const {
+    register,
+    formState: { errors, isSubmitSuccessful },
+    reset,
+    handleSubmit,
+  } = useForm({
+    resolver: zodResolver(validationSchema),
+  });
+
+  React.useEffect(() => {
+    if (isSubmitSuccessful) {
+    }
+  }, [isSubmitSuccessful, reset]);
+
+
+  const onSubmitHandler = async (values) => {
     setLoading(true);
-    const data = new FormData(event.currentTarget);
+    let id =  uniqid(`${values.companyName}-`, "-company")
     await auth
       .signCompanyUp(
-        uniqid(`${data.get("companyName")}-`, "-company"),
-        data.get("companyName"),
-        data.get("phonenumber1"),
-        data.get("phonenumber2"),
-        data.get("email"),
-        data.get("password"),
-        data.get("location")
+        id,
+        values.companyName,
+        document.getElementsByName("phonenumber1")[0].value,
+        document.getElementsByName("phonenumber2")[0].value,
+        values.email,
+        values.password,
+        document.getElementsByName("location")[0].value,
       )
       .then(async (val) => {
         if (val.code == 0) {
           cookie.set("company-login", true, { path: "/" });
-          localStorage.setItem("companyEmail", data.get("email"));
+          localStorage.setItem("companyEmail", values.email);
           sessionStorage.setItem(
             "companyDetails",
             JSON.stringify({
-              id: uniqid(`${data.get("companyName")}-`, "-company"),
-              companyName: data.get("companyName"),
-              phoneNumber1: data.get("phonenumber1"),
-              phoneNumber2: data.get("phonenumber2"),
-              location: data.get("location"),
-              emailAddress: data.get("email"),
+              id: id,
+              companyName: values.companyName,
+              phoneNumber1: document.getElementsByName("phonenumber1")[0].value,
+              phoneNumber2: document.getElementsByName("phonenumber2")[0].value,
+              location: document.getElementsByName("location")[0].value,
+              emailAddress: values.email,
             })
           );
           window.location.href = "/company-details";
@@ -66,7 +89,6 @@ export default function CompanyRegister() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -86,8 +108,8 @@ export default function CompanyRegister() {
           </Typography>
           <Box
             component="form"
-            noValidate
-            onSubmit={handleSubmit}
+            noValidate={false}
+            onSubmit={handleSubmit(onSubmitHandler)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -98,6 +120,9 @@ export default function CompanyRegister() {
                   id="companyname"
                   label="Company Name"
                   name="companyName"
+                  error={errors['companyName'] !== null? errors["companyName"]:null}
+                  helperText={errors['companyName'] ? errors['companyName'].message : ''}
+                  {...register('companyName')}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -132,6 +157,9 @@ export default function CompanyRegister() {
                   id="email"
                   label="Email Address"
                   name="email"
+                  error={errors['email'] !== null? errors["email"]:null}
+                  helperText={errors['email'] ? errors['email'].message : ''}
+                  {...register('email')}
                   autoComplete="email"
                 />
               </Grid>
@@ -142,6 +170,9 @@ export default function CompanyRegister() {
                   name="password"
                   label="Password"
                   type="password"
+                  error={errors['password'] !== null? errors["password"]:null}
+                  helperText={errors['password'] ? errors['password'].message : ''}
+                  {...register('password')}
                   id="password"
                 />
               </Grid>
@@ -174,6 +205,5 @@ export default function CompanyRegister() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
   );
 }

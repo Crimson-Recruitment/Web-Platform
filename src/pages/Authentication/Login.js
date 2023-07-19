@@ -17,6 +17,9 @@ import Cookies from "universal-cookie";
 import { firestore } from "../../Firebase/FirebaseConfig";
 import Firestore from "../../Firebase/Firestore";
 import { Alert, Snackbar } from "@mui/material";
+import { useForm} from 'react-hook-form';
+import { object, string} from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
@@ -26,6 +29,26 @@ export default function Login() {
     setOpen(true);
   };
 
+
+  const validationSchema = object({
+    email: string().nonempty("Field is required!"),
+    password: string().nonempty("Field is required!")
+  });
+
+  const {
+    register,
+    formState: { errors, isSubmitSuccessful },
+    reset,
+    handleSubmit,
+  } = useForm({
+    resolver: zodResolver(validationSchema),
+  });
+
+  React.useEffect(() => {
+    if (isSubmitSuccessful) {
+    }
+  }, [isSubmitSuccessful, reset]);
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -34,22 +57,21 @@ export default function Login() {
     setOpen(false);
   };
 
-  React.useEffect(() => {});
   const cookie = new Cookies();
   const firestore = new Firestore();
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+
+
+  const onSubmitHandler = async (values) => {
     setLoading(true);
-    let auth = new Auth();
-    const data = new FormData(event.currentTarget);
-    const isCompany = await firestore.checkCompanyEmail(data.get("email"));
+    const isCompany = await firestore.checkCompanyEmail(values.email);
     if (isCompany.val == true) {
+      let auth = new Auth();
       await auth
-        .signIn(data.get("email"), data.get("password"))
+        .signIn(values.email, values.password)
         .then((val) => {
           if (val.code == 0) {
             cookie.set("user-login", true, { path: "/" });
-            localStorage.setItem("userEmail", data.get("email"));
+            localStorage.setItem("userEmail", values.email);
             window.location.href = "/jobs";
             setLoading(false);
           } else {
@@ -91,7 +113,7 @@ export default function Login() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmitHandler)}
             sx={{ mt: 1 }}
           >
             <TextField
@@ -102,6 +124,9 @@ export default function Login() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              error={errors['email'] !== null? errors["email"]:null}
+              helperText={errors['email'] ? errors['email'].message : ''}
+              {...register('email')}
               autoFocus
             />
             <TextField
@@ -112,6 +137,9 @@ export default function Login() {
               label="Password"
               type="password"
               id="password"
+              error={errors['password'] !== null? errors["password"]:null}
+              helperText={errors['password'] ? errors['password'].message : ''}
+              {...register('password')}
               autoComplete="current-password"
             />
             <FormControlLabel
