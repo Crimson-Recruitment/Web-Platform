@@ -187,6 +187,7 @@ function CompanyDetails() {
             }}
             isSearchable={true}
             value={industries.filter(function (option) {
+              if(state.selectedType !== null)
               return option.value === state.selectedType.value;
             })}
           />
