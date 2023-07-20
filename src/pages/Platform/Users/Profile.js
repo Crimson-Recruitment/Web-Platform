@@ -18,7 +18,7 @@ import SideBar from "../../../components/Users/SideBar";
 import Firestore from "../../../Firebase/Firestore";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Avatar, Snackbar } from "@mui/material";
 
 export default function Profile() {
   const firestore = new Firestore();
@@ -93,15 +93,7 @@ export default function Profile() {
                 <MDBCard className="mb-4">
                   <MDBCardBody className="text-center">
                     <div className="flex justify-center">
-                      <div
-                        className="h-[150px] w-[150px] rounded-circle"
-                        style={{
-                          backgroundImage: `url(${userData.profileImage})`,
-                          backgroundSize: "contain",
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center center",
-                        }}
-                      ></div>
+                    <Avatar alt="Logo" sx={{height:"150px", width:"150px"}} src={userData.profileImage}/>
                     </div>
                     <br />
                     <p className="text-muted mb-1">

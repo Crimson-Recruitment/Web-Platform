@@ -3,7 +3,7 @@ import Cookies from "universal-cookie";
 import Select from "react-select";
 import "flowbite/dist/flowbite.min.js";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, TextareaAutosize, Avatar } from "@mui/material";
 import { industries } from "../../../Data/CompanyIndustries";
 import Storage from "../../../Firebase/Storage";
 import Firestore from "../../../Firebase/Firestore";
@@ -120,16 +120,7 @@ function CompanyDetails() {
           </label>
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-              <div
-                className="h-[400px] w-[400px] rounded-full"
-                style={{
-                  backgroundImage: `url(${URL.createObjectURL(state.image)})`,
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center center",
-                }}
-              ></div>
-              :
+              <Avatar alt="Logo" sx={{height:"400px", width:"400px"}} src={URL.createObjectURL(state.image)}/>
             </div>
           ) : (
             <div class="flex items-center justify-center w-full">
@@ -165,6 +156,7 @@ function CompanyDetails() {
             </div>
           )}
           <input
+          required
             onChange={imageHandler}
             id="dropzone-file"
             type="file"
@@ -179,6 +171,7 @@ function CompanyDetails() {
             Company Type
           </label>
           <Select
+          required
             className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
             options={industries}
             placeholder="Healthcare, technology,....."
@@ -194,17 +187,18 @@ function CompanyDetails() {
         </div>
         <div className="mb-6">
           <label
-            for="About you"
+            for="overview"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Company Overview
           </label>
           <textarea
+          required
             id="overview"
             name="overview"
             rows="4"
             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
-            placeholder="Describe yourself,..."
+            placeholder="About the company"
           ></textarea>
         </div>
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -212,6 +206,7 @@ function CompanyDetails() {
         </label>
         <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
           <input
+          required
             checked
             id="bordered-radio-1"
             type="radio"
@@ -228,6 +223,7 @@ function CompanyDetails() {
         </div>
         <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 mb-5">
           <input
+          required
             id="bordered-radio-2"
             type="radio"
             value={false}
@@ -249,6 +245,7 @@ function CompanyDetails() {
           Copy of Company License
         </label>
         <input
+        required
           onChange={licenseHandler}
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="file_input"

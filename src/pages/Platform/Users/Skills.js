@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { professionList, skills } from "../../../Data/UserProfessions";
 import Firestore from "../../../Firebase/Firestore";
 import Storage from "../../../Firebase/Storage";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { skillsReducer } from "../../../Functions/Reducers";
 
 let initState = {
@@ -86,7 +86,7 @@ function Skills() {
 
   const imageHandler = (e) => {
     let reader = new FileReader();
-    if (e.target.files[0].size > 1048576 * 5) {
+    if (e.target.files[0].size > 1048576 * 3) {
       alert("Image uploaded is too big!");
       e.target.value = "";
     } else {
@@ -123,16 +123,7 @@ function Skills() {
         <div className="mb-6">
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-              <div
-                className="h-[400px] w-[400px] rounded-full"
-                style={{
-                  backgroundImage: `url(${URL.createObjectURL(state.image)})`,
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center center",
-                }}
-              ></div>
-              :
+             <Avatar alt="Logo" sx={{height:"400px", width:"400px"}} src={URL.createObjectURL(state.image)}/>
             </div>
           ) : (
             <div class="flex items-center justify-center w-full">
@@ -161,13 +152,14 @@ function Skills() {
                     and drop
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400">
-                    JPEG, PNG, or JPG (5mbs max)
+                    JPEG, PNG, or JPG (3mbs max)
                   </p>
                 </div>
               </label>
             </div>
           )}
           <input
+          required
             onChange={imageHandler}
             id="dropzone-file"
             type="file"
@@ -182,6 +174,7 @@ function Skills() {
             Profession
           </label>
           <Select
+          required
             className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
             options={professionList}
             placeholder="Medicine, technology,....."
@@ -197,12 +190,13 @@ function Skills() {
         </div>
         <div className="mb-6">
           <label
-            for="About you"
+            for="about"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             About you
           </label>
           <textarea
+          required
             id="about"
             rows="4"
             name="about"
@@ -217,6 +211,7 @@ function Skills() {
           Select your prominent skills (6 max).
         </label>
         <Select
+        required
           className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
           options={skills}
           placeholder="Select skills,..."
@@ -239,6 +234,7 @@ function Skills() {
           Upload you Resume (max size 2mbs)
         </label>
         <input
+        required
           onChange={resumeHandler}
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="file_input"

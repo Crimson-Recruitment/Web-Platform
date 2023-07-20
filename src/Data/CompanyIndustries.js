@@ -23,6 +23,7 @@ export const industries = [
   { value: "environmental", label: "Environmental" },
   { value: "government", label: "Government" },
   { value: "insurance", label: "Insurance" },
+  { value: "recruitment", label: "Recruitment" },
   { value: "sports", label: "Sports" },
   { value: "art_and_design", label: "Art and Design" },
   { value: "construction", label: "Construction" },

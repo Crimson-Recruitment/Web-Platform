@@ -67,6 +67,7 @@ function a11yProps(index) {
   };
 }
 
+
 let initState = {
   requirements: [],
   benefits: [],
@@ -77,12 +78,21 @@ let initState = {
   open: false,
   value: 0,
   jobType: null,
+  jobLocationType:null,
   message: { type: null, message: null },
 };
 
 function CompanyJobs() {
   const [state, dispatch] = useReducer(companyJobsReducer, initState);
-  const [message, setMessage] = useState();
+  
+  const dateHandler = (date=expiryDate) => {
+    if(date.getTime() <= new Date().getTime()){
+      throw Error("Invalid Date, please enter a date in the future!");
+    } else {
+      setExpiryDate(date)
+    }
+  }
+
 
   const handleChange = (event, newValue) => {
     dispatch({ type: "SETVALUE", value: newValue });
@@ -184,10 +194,10 @@ function CompanyJobs() {
     })();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
     dispatch({ type: "SETLOADING", loading: true });
-    const data = new FormData(e.currentTarget);
     await firestore
       .createJobPost(
         data.get("jobTitle"),
@@ -195,6 +205,7 @@ function CompanyJobs() {
         data.get("jobDescription"),
         data.get("isVolunteer"),
         state.jobType,
+        state.jobLocationType,
         data.get("location"),
         state.requirements,
         state.selectedSkills,
@@ -204,7 +215,8 @@ function CompanyJobs() {
         data.get("hideSalary"),
         data.get("requestCoverLetter"),
         expiryDate,
-        new Date().getTime()
+        new Date().getTime(),
+        data.get("otherDetails")
       )
       .then(async (val) => {
         if (val.code == 0) {
@@ -275,7 +287,7 @@ function CompanyJobs() {
           >
             <Box
               component="form"
-              onSubmit={handleSubmit}
+              onSubmit={onSubmitHandler}
               noValidate={false}
               sx={{ mt: 3 }}
             >
@@ -293,12 +305,13 @@ function CompanyJobs() {
                     fullWidth
                     id="jobTitle"
                     label="Job Title"
+                
                     autoFocus
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="location"
+                    for="type"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Job Type
@@ -323,6 +336,39 @@ function CompanyJobs() {
                   <FormControlLabel
                     control={<Switch name="isVolunteer" />}
                     label="Is this a volunteering job or a non-volunteering job?"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <label
+                    for="type"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Job location Type
+                  </label>
+                  <Select
+                    required
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    options={[
+                      {value:"remote", label:"Remote"},
+                      {value:"on_site", label:"On-site"},
+                      {value:"hybrid", label:"Hybrid"}
+                    ]}
+                    placeholder="Select the type of job."
+                    onChange={(val) => {
+                      dispatch({
+                        type: "SETJOBLOCATIONTYPE",
+                        jobLocationType: val.label,
+                      });
+                    }}
+                    value={[
+                      {value:"remote", label:"Remote"},
+                      {value:"on_site", label:"On-site"},
+                      {value:"hybrid", label:"Hybrid"}
+                    ].filter(function (option) {
+                     
+                        return option.label === state.jobLocationType;
+                      
+                    })}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -365,6 +411,7 @@ function CompanyJobs() {
                     id="jobDescription"
                     label="Job Description"
                     name="jobDescription"
+                  
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -459,7 +506,14 @@ function CompanyJobs() {
                     required
                     className="border mb-4 border-blue-300"
                     selected={expiryDate}
-                    onChange={(date) => setExpiryDate(date)}
+                    onChange={(date) => {
+                      try {
+                        dateHandler(date)
+                      } catch (error) {
+                        handleClick({type:"error", message:error.message})
+                      }
+                    
+                  }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -470,6 +524,7 @@ function CompanyJobs() {
                     Skills (Not needed for non-programming jobs)
                   </label>
                   <Select
+                
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={skills}
                     placeholder="Select skills,..."
@@ -501,12 +556,13 @@ function CompanyJobs() {
                   </label>
                   <TextField
                     name="minSalary"
-                    type="number"
+                    type="text"
                     required
                     fullWidth
                     id="minSalary"
                     label="Min Salary"
                     autoFocus
+                  
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -519,10 +575,11 @@ function CompanyJobs() {
                   <TextField
                     name="maxSalary"
                     required
-                    type="number"
+                    type="text"
                     fullWidth
                     id="maxSalary"
                     label="Max Salary"
+              
                     autoFocus
                   />
                 </Grid>
@@ -608,6 +665,20 @@ function CompanyJobs() {
                     control={<Switch name="requestCoverLetter" />}
                     label="Request for a cover letter ?"
                   />
+                </Grid>
+                <Grid item xs={12}>
+                <label
+            for="overview"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Incase of any other details.
+          </label>
+          <textarea
+            id="otherDetails"
+            name="otherDetails"
+            rows="4"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+          ></textarea>
                 </Grid>
               </Grid>
               <Button

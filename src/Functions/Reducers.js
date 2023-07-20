@@ -54,6 +54,8 @@ export const companyJobsReducer = (state, action) => {
       return { ...state, message: action.message };
     case "SETJOBTYPE":
       return { ...state, jobType: action.jobType };
+    case "SETJOBLOCATIONTYPE":
+      return { ...state, jobLocationType: action.jobLocationType };
     default:
       return state;
   }

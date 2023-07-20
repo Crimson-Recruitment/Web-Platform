@@ -209,6 +209,7 @@ export default class Firestore {
     jobDescription,
     isVolunteer,
     jobType,
+    jobLocationType,
     location,
     requirements,
     skills,
@@ -218,20 +219,22 @@ export default class Firestore {
     hideSalary,
     requestCoverLetter,
     expiryDate,
-    timestamp
+    timestamp,
+    otherDetails
   ) => {
     let companyDetails = JSON.parse(sessionStorage.getItem("companyDetails"));
     let result = { code: null, val: null };
     let jobId = uniqid("", "-" + companyDetails.companyName);
     await setDoc(doc(firestore, "Jobs", jobId), {
       companyName: companyDetails.companyName,
-      companyId: JSON.parse(sessionStorage.getItem("companyId")),
+      companyId: sessionStorage.getItem("companyId"),
       companyOverview: companyDetails.overview,
       jobTitle: jobTitle,
       jobField: jobField,
       jobDescription: jobDescription,
       isVolunteer: isVolunteer,
       jobType: jobType,
+      jobLocationType:jobLocationType,
       location: location,
       requirements: requirements,
       skills: skills,
@@ -242,6 +245,7 @@ export default class Firestore {
       requestCoverLetter: requestCoverLetter,
       expiryDate: expiryDate,
       timestamp: timestamp,
+      otherDetails:otherDetails
     })
       .then((val) => {
         result = { code: 0, val: val };
