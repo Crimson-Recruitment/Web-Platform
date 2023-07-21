@@ -1,15 +1,47 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
-import { TextField, Button, Typography, Grid, Box } from "@mui/material";
+import { TextField, Button, Typography, Grid, Box, Snackbar, Alert } from "@mui/material";
+import emailjs from "emailjs-com";
+import { API_KEY_EMAILJS, SERVICE_ID, TEMPLATE_ID } from "../credentials";
+import { useNavigate } from "react-router-dom";
 
 export default function ContactUs() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState({message:"", severity:""});
+  const [open, setOpen] = useState();
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+const form = useRef();
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //
+    setLoading(true)
+    emailjs.sendForm(
+      SERVICE_ID, 
+      TEMPLATE_ID, 
+      form.current, API_KEY_EMAILJS)
+    .then(async () => {
+      setMessage({message:"You have successfully sent a message, we will be contacting you soon!", severity:"success"})
+      setOpen(true)
+      setLoading(false)
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      navigate('/')
+    }, (error) => {
+      setMessage({message:`Error: ${error.text}`, severity:"error"})
+      setOpen(true)
+      setLoading(false)
+    });
   };
 
   return (
@@ -26,7 +58,12 @@ export default function ContactUs() {
             <Typography variant="h4" align="center" mb={2}>
               Contact Us
             </Typography>
-            <form onSubmit={handleSubmit}>
+            <form
+            ref={form}
+            id="contact-form"
+          onSubmit={handleSubmit}
+          noValidate={false}  
+        >
               <Grid container spacing={2}>
                 <Grid>
                   <TextField
@@ -35,6 +72,7 @@ export default function ContactUs() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     margin="normal"
+                    name="from_name"
                     required
                   />
                   <TextField
@@ -44,20 +82,20 @@ export default function ContactUs() {
                     onChange={(e) => setEmail(e.target.value)}
                     margin="normal"
                     required
+                    name="email"
                     type="email"
                   />
                   <TextField
                     fullWidth
                     label="Message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
                     margin="normal"
                     required
+                    name="message"
                     multiline
                     rows={4}
                   />
-                  <Button variant="contained" type="submit" sx={{ mt: 2 }}>
-                    Submit
+                  <Button disabled={loading} variant="contained" type="submit" sx={{ mt: 2 }}>
+                    {loading ? "Sending...": "Submit"}
                   </Button>
                 </Grid>
               </Grid>
@@ -65,6 +103,15 @@ export default function ContactUs() {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={message.severity}
+          sx={{ width: "100%" }}
+        >
+          {message.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

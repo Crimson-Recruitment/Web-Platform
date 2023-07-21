@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from "react-google-login";
-import { clientId } from "../../../Functions/GoogleCalendar";
 import { gapi } from "gapi-script";
 
 function CompanyApplications() {
@@ -23,11 +22,6 @@ function CompanyApplications() {
   const [message, setMessage] = useState({ message: "", severity: "" });
   const [open, setOpen] = React.useState();
 
-  gapi.load("client:auth2", () => gapi.client.init({
-    clientId: clientId,
-    scope: "openid email profile https://www.googleapis.com/auth/calendar",
-    plugin_name: "calendar",
-  }));
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -233,7 +227,6 @@ function CompanyApplications() {
                         </Button>
                           :
                         <GoogleLogin
-                          clientId={clientId}
                           buttonText="Sign to schedule meetings"
                           cookiePolicy="single_host_origin"
                           onSuccess={handleGoogleAuth}

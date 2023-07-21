@@ -19,7 +19,7 @@
 .env.production.local
 
 *.env
-*GoogleCalendar.js
+*credentials.js
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
