@@ -2,6 +2,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import BusinessIcon from "@mui/icons-material/Business";
 import ArticleIcon from "@mui/icons-material/Article";
 import Settings from "@mui/icons-material/Settings";
+import UpgradeIcon from "@mui/icons-material/Upgrade";
 
 export const companyPages = [
   {
@@ -23,5 +24,10 @@ export const companyPages = [
     pageName: "Settings",
     link: "/company-settings",
     icon: <Settings sx={{ fontSize: "35px", marginRight: "5px" }} />,
+  },
+  {
+    pageName: "Upgrade Account",
+    link: "/company-pricing",
+    icon: <UpgradeIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
 ];

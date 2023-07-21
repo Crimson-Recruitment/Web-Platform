@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendEmailVerification
 } from "firebase/auth";
 import Cookies from "universal-cookie";
 import Firestore from "./Firestore";
@@ -110,4 +111,16 @@ export default class Auth {
       });
     return result;
   };
+
+  verifyEmail = async () => {
+    var result = {code:null, vall:null}
+    await sendEmailVerification(auth.currentUser)
+    .then(val => {
+      result = {code:0, val:val}
+    })
+    .catch(err => {
+      result = {code:1, val:err}
+    })
+    return result
+  }
 }

@@ -93,7 +93,11 @@ export default function Profile() {
                 <MDBCard className="mb-4">
                   <MDBCardBody className="text-center">
                     <div className="flex justify-center">
-                    <Avatar alt="Logo" sx={{height:"150px", width:"150px"}} src={userData.profileImage}/>
+                      <Avatar
+                        alt="Logo"
+                        sx={{ height: "150px", width: "150px" }}
+                        src={userData.profileImage}
+                      />
                     </div>
                     <br />
                     <p className="text-muted mb-1">

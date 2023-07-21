@@ -67,7 +67,6 @@ function a11yProps(index) {
   };
 }
 
-
 let initState = {
   requirements: [],
   benefits: [],
@@ -78,21 +77,20 @@ let initState = {
   open: false,
   value: 0,
   jobType: null,
-  jobLocationType:null,
+  jobLocationType: null,
   message: { type: null, message: null },
 };
 
 function CompanyJobs() {
   const [state, dispatch] = useReducer(companyJobsReducer, initState);
-  
-  const dateHandler = (date=expiryDate) => {
-    if(date.getTime() <= new Date().getTime()){
+
+  const dateHandler = (date = expiryDate) => {
+    if (date.getTime() <= new Date().getTime()) {
       throw Error("Invalid Date, please enter a date in the future!");
     } else {
-      setExpiryDate(date)
+      setExpiryDate(date);
     }
-  }
-
+  };
 
   const handleChange = (event, newValue) => {
     dispatch({ type: "SETVALUE", value: newValue });
@@ -305,7 +303,6 @@ function CompanyJobs() {
                     fullWidth
                     id="jobTitle"
                     label="Job Title"
-                
                     autoFocus
                   />
                 </Grid>
@@ -349,9 +346,9 @@ function CompanyJobs() {
                     required
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={[
-                      {value:"remote", label:"Remote"},
-                      {value:"on_site", label:"On-site"},
-                      {value:"hybrid", label:"Hybrid"}
+                      { value: "remote", label: "Remote" },
+                      { value: "on_site", label: "On-site" },
+                      { value: "hybrid", label: "Hybrid" },
                     ]}
                     placeholder="Select the type of job."
                     onChange={(val) => {
@@ -361,13 +358,11 @@ function CompanyJobs() {
                       });
                     }}
                     value={[
-                      {value:"remote", label:"Remote"},
-                      {value:"on_site", label:"On-site"},
-                      {value:"hybrid", label:"Hybrid"}
+                      { value: "remote", label: "Remote" },
+                      { value: "on_site", label: "On-site" },
+                      { value: "hybrid", label: "Hybrid" },
                     ].filter(function (option) {
-                     
-                        return option.label === state.jobLocationType;
-                      
+                      return option.label === state.jobLocationType;
                     })}
                   />
                 </Grid>
@@ -411,7 +406,6 @@ function CompanyJobs() {
                     id="jobDescription"
                     label="Job Description"
                     name="jobDescription"
-                  
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -508,12 +502,11 @@ function CompanyJobs() {
                     selected={expiryDate}
                     onChange={(date) => {
                       try {
-                        dateHandler(date)
+                        dateHandler(date);
                       } catch (error) {
-                        handleClick({type:"error", message:error.message})
+                        handleClick({ type: "error", message: error.message });
                       }
-                    
-                  }}
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -524,7 +517,6 @@ function CompanyJobs() {
                     Skills (Not needed for non-programming jobs)
                   </label>
                   <Select
-                
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={skills}
                     placeholder="Select skills,..."
@@ -562,7 +554,6 @@ function CompanyJobs() {
                     id="minSalary"
                     label="Min Salary"
                     autoFocus
-                  
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -579,7 +570,6 @@ function CompanyJobs() {
                     fullWidth
                     id="maxSalary"
                     label="Max Salary"
-              
                     autoFocus
                   />
                 </Grid>
@@ -667,18 +657,18 @@ function CompanyJobs() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <label
-            for="overview"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Incase of any other details.
-          </label>
-          <textarea
-            id="otherDetails"
-            name="otherDetails"
-            rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
-          ></textarea>
+                  <label
+                    for="overview"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Incase of any other details.
+                  </label>
+                  <textarea
+                    id="otherDetails"
+                    name="otherDetails"
+                    rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                  ></textarea>
                 </Grid>
               </Grid>
               <Button

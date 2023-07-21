@@ -16,6 +16,7 @@ function JobDescription({
   minSalary,
   maxSalary,
   hideSalary,
+  otherDetails,
 }) {
   return (
     <Card
@@ -131,6 +132,9 @@ function JobDescription({
                 </>
               ) : null
             ) : null}
+            <Typography sx={{ mb: 1.5 }} color="text.black">
+              {otherDetails}
+            </Typography>
           </CardContent>
         </>
       }

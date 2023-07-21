@@ -179,6 +179,7 @@ function Jobs() {
                 type={jobsList[current].jobType}
                 hideSalary={jobsList[current].hideSalary}
                 benefits={jobsList[current].benefits}
+                otherDetails={jobsList[current].otherDetails}
               />
 
               <CardActions>

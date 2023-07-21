@@ -15,9 +15,9 @@ import Auth from "../../Firebase/Authentication";
 import uniqid from "uniqid";
 import LocationSearchInput from "../../components/LocationInput";
 import Cookies from "universal-cookie";
-import { useForm} from 'react-hook-form';
-import { object, string} from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+import { object, string } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const defaultTheme = createTheme();
 
@@ -29,7 +29,10 @@ export default function Register() {
     firstName: string().nonempty("Field is required!"),
     lastName: string().nonempty("Field is required!"),
     email: string().email("Email is invalid").nonempty("Field is required!"),
-    password: string().min(5,"You must enter atleast 5 characters!").max(16,"You must enter at most 16 characters!").nonempty("Field is required!")
+    password: string()
+      .min(5, "You must enter atleast 5 characters!")
+      .max(16, "You must enter at most 16 characters!")
+      .nonempty("Field is required!"),
   });
 
   const {
@@ -46,14 +49,10 @@ export default function Register() {
     }
   }, [isSubmitSuccessful, reset]);
 
-
   const onSubmitHandler = async (values) => {
     setLoading(true);
     let auth = new Auth();
-    let id = uniqid(
-      `${values.firstName}_${values.lastName}-`,
-      "-user"
-    );
+    let id = uniqid(`${values.firstName}_${values.lastName}-`, "-user");
     await auth
       .signUserUp(
         id,
@@ -61,8 +60,8 @@ export default function Register() {
         values.password,
         values.firstName,
         values.lastName,
-      document.getElementsByName("phonenumber")[0].value,
-      document.getElementsByName("location")[0].values
+        document.getElementsByName("phonenumber")[0].value,
+        document.getElementsByName("location")[0].value
       )
       .then(async (val) => {
         if (val.code == 0) {
@@ -122,14 +121,17 @@ export default function Register() {
                   fullWidth
                   id="firstName"
                   label="First Name"
-                  error={errors['firstName'] !== null? errors["firstName"]:null}
-          helperText={errors['firstName'] ? errors['firstName'].message : ''}
-          {...register('firstName')}
+                  error={
+                    errors["firstName"] !== null ? errors["firstName"] : null
+                  }
+                  helperText={
+                    errors["firstName"] ? errors["firstName"].message : ""
+                  }
+                  {...register("firstName")}
                   autoFocus
                 />
-          
               </Grid>
-              
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -137,9 +139,13 @@ export default function Register() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  error={errors['lastName'] !== null? errors["lastName"]:null}
-          helperText={errors['lastName'] ? errors['lastName'].message : ''}
-          {...register('lastName')}
+                  error={
+                    errors["lastName"] !== null ? errors["lastName"] : null
+                  }
+                  helperText={
+                    errors["lastName"] ? errors["lastName"].message : ""
+                  }
+                  {...register("lastName")}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -152,11 +158,9 @@ export default function Register() {
                   fullWidth
                   defaultCountry={"ug"}
                 />
-          
               </Grid>
               <Grid item xs={12}>
-                <LocationSearchInput {...register('location')} />
-             
+                <LocationSearchInput {...register("location")} />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -167,11 +171,10 @@ export default function Register() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  error={errors['email'] !== null? errors["email"]:null}
-                  helperText={errors['email'] ? errors['email'].message : ''}
-                  {...register('email')}
+                  error={errors["email"] !== null ? errors["email"] : null}
+                  helperText={errors["email"] ? errors["email"].message : ""}
+                  {...register("email")}
                 />
-     
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -181,12 +184,15 @@ export default function Register() {
                   label="Password"
                   type="password"
                   id="password"
-                  error={errors['password'] !== null? errors["password"]:null}
-                  helperText={errors['password'] ? errors['password'].message : ''}
-                  {...register('password')}
+                  error={
+                    errors["password"] !== null ? errors["password"] : null
+                  }
+                  helperText={
+                    errors["password"] ? errors["password"].message : ""
+                  }
+                  {...register("password")}
                   autoComplete="new-password"
                 />
-           
               </Grid>
             </Grid>
             <Button

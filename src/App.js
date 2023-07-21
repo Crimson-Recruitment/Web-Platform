@@ -25,6 +25,10 @@ import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
 import UserView from "./pages/Platform/Users/UserView";
 import CompanyView from "./pages/Platform/Companies/CompanyView";
 import JobView from "./pages/Platform/Users/JobView";
+import UserPricing from "./pages/Platform/Users/UserPricing";
+import CompanyPricing from "./pages/Platform/Companies/CompanyPricing";
+import Pricing from "./pages/Pricing";
+import Messaging from "./components/Messaging";
 
 function App() {
   const cookie = new Cookies();
@@ -41,11 +45,13 @@ function App() {
         <Route path="/company-register" element={<CompanyRegister />} />
         <Route path="/user-view/:id" element={<UserView />} />
         <Route path="/company-view/:id" element={<CompanyView />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="/jobs/:id" element={<JobView />} />
+        <Route path="/test" element={<Messaging />} />
         {cookie.get("user-login") ? (
           <>
             <Route path="/skills" element={<Skills />} />
-
+            <Route path="/user-pricing" element={<UserPricing />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/for-you" element={<ForYou />} />
             <Route path="/profile" element={<Profile />} />
@@ -58,6 +64,7 @@ function App() {
             <Route exact path="/company-jobs" element={<CompanyJobs />} />
             <Route exact path="/company-details" element={<CompanyDetails />} />
             <Route exact path="/company-profile" element={<CompanyProfile />} />
+            <Route path="/company-pricing" element={<CompanyPricing />} />
             <Route
               exact
               path="/company-applications"

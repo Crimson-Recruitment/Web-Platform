@@ -71,8 +71,14 @@ export default function AboutUs() {
             xs={12}
             sm={6}
             sx={{
-              backgroundImage:
-                "url(https://source.unsplash.com/random?wallpapers)",
+              backgroundImage: "url(./images/frustration.png)",
+              backgroundRepeat: "no-repeat",
+              backgroundColor: (t) =>
+                t.palette.mode === "light"
+                  ? t.palette.grey[50]
+                  : t.palette.grey[900],
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               minHeight: "300px",
               width: { xs: "100vw" },
             }}
@@ -95,9 +101,15 @@ export default function AboutUs() {
           item
           xs={12}
           sx={{
-            backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
-            minHeight: "300px",
+            backgroundImage: "url(./images/help.png)",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            minHeight: "450px",
           }}
         />
         <Grid item xs={12} sm={6}>
@@ -121,8 +133,14 @@ export default function AboutUs() {
             xs={12}
             sm={6}
             sx={{
-              backgroundImage:
-                "url(https://source.unsplash.com/random?wallpapers)",
+              backgroundImage: "url(./images/success.png)",
+              backgroundRepeat: "no-repeat",
+              backgroundColor: (t) =>
+                t.palette.mode === "light"
+                  ? t.palette.grey[50]
+                  : t.palette.grey[900],
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               minHeight: "300px",
             }}
           />

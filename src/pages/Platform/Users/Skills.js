@@ -123,7 +123,11 @@ function Skills() {
         <div className="mb-6">
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-             <Avatar alt="Logo" sx={{height:"400px", width:"400px"}} src={URL.createObjectURL(state.image)}/>
+              <Avatar
+                alt="Logo"
+                sx={{ height: "400px", width: "400px" }}
+                src={URL.createObjectURL(state.image)}
+              />
             </div>
           ) : (
             <div class="flex items-center justify-center w-full">
@@ -159,7 +163,7 @@ function Skills() {
             </div>
           )}
           <input
-          required
+            required
             onChange={imageHandler}
             id="dropzone-file"
             type="file"
@@ -174,7 +178,7 @@ function Skills() {
             Profession
           </label>
           <Select
-          required
+            required
             className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
             options={professionList}
             placeholder="Medicine, technology,....."
@@ -196,7 +200,7 @@ function Skills() {
             About you
           </label>
           <textarea
-          required
+            required
             id="about"
             rows="4"
             name="about"
@@ -211,7 +215,7 @@ function Skills() {
           Select your prominent skills (6 max).
         </label>
         <Select
-        required
+          required
           className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
           options={skills}
           placeholder="Select skills,..."
@@ -234,7 +238,7 @@ function Skills() {
           Upload you Resume (max size 2mbs)
         </label>
         <input
-        required
+          required
           onChange={resumeHandler}
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="file_input"

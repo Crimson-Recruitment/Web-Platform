@@ -120,7 +120,11 @@ function CompanyDetails() {
           </label>
           {state.image != null ? (
             <div className="flex justify-center mb-5">
-              <Avatar alt="Logo" sx={{height:"400px", width:"400px"}} src={URL.createObjectURL(state.image)}/>
+              <Avatar
+                alt="Logo"
+                sx={{ height: "400px", width: "400px" }}
+                src={URL.createObjectURL(state.image)}
+              />
             </div>
           ) : (
             <div class="flex items-center justify-center w-full">
@@ -156,7 +160,7 @@ function CompanyDetails() {
             </div>
           )}
           <input
-          required
+            required
             onChange={imageHandler}
             id="dropzone-file"
             type="file"
@@ -171,7 +175,7 @@ function CompanyDetails() {
             Company Type
           </label>
           <Select
-          required
+            required
             className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
             options={industries}
             placeholder="Healthcare, technology,....."
@@ -180,8 +184,8 @@ function CompanyDetails() {
             }}
             isSearchable={true}
             value={industries.filter(function (option) {
-              if(state.selectedType !== null)
-              return option.value === state.selectedType.value;
+              if (state.selectedType !== null)
+                return option.value === state.selectedType.value;
             })}
           />
         </div>
@@ -193,7 +197,7 @@ function CompanyDetails() {
             Company Overview
           </label>
           <textarea
-          required
+            required
             id="overview"
             name="overview"
             rows="4"
@@ -206,7 +210,7 @@ function CompanyDetails() {
         </label>
         <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
           <input
-          required
+            required
             checked
             id="bordered-radio-1"
             type="radio"
@@ -223,7 +227,7 @@ function CompanyDetails() {
         </div>
         <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 mb-5">
           <input
-          required
+            required
             id="bordered-radio-2"
             type="radio"
             value={false}
@@ -245,7 +249,7 @@ function CompanyDetails() {
           Copy of Company License
         </label>
         <input
-        required
+          required
           onChange={licenseHandler}
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="file_input"

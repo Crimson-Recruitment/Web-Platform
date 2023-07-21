@@ -234,7 +234,7 @@ export default class Firestore {
       jobDescription: jobDescription,
       isVolunteer: isVolunteer,
       jobType: jobType,
-      jobLocationType:jobLocationType,
+      jobLocationType: jobLocationType,
       location: location,
       requirements: requirements,
       skills: skills,
@@ -245,7 +245,7 @@ export default class Firestore {
       requestCoverLetter: requestCoverLetter,
       expiryDate: expiryDate,
       timestamp: timestamp,
-      otherDetails:otherDetails
+      otherDetails: otherDetails,
     })
       .then((val) => {
         result = { code: 0, val: val };

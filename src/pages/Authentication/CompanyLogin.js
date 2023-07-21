@@ -17,9 +17,9 @@ import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
 import Firestore from "../../Firebase/Firestore";
 import { Alert, Snackbar } from "@mui/material";
-import { useForm} from 'react-hook-form';
-import { object, string} from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+import { object, string } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const defaultTheme = createTheme();
 export default function CompanyLogin() {
@@ -34,7 +34,7 @@ export default function CompanyLogin() {
 
   const validationSchema = object({
     email: string().nonempty("Field is required!"),
-    password: string().nonempty("Field is required!")
+    password: string().nonempty("Field is required!"),
   });
 
   const {
@@ -50,7 +50,6 @@ export default function CompanyLogin() {
     if (isSubmitSuccessful) {
     }
   }, [isSubmitSuccessful, reset]);
-
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -92,7 +91,7 @@ export default function CompanyLogin() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ minHeight: { lg: "100vh" } }}>
+      <Grid container component="main" sx={{ minHeight: { lg: "90vh" } }}>
         <CssBaseline />
         <Grid item md={4} component={Paper} elevation={6} square>
           <Box
@@ -124,9 +123,9 @@ export default function CompanyLogin() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                error={errors['email'] !== null? errors["email"]:null}
-              helperText={errors['email'] ? errors['email'].message : ''}
-              {...register('email')}
+                error={errors["email"] !== null ? errors["email"] : null}
+                helperText={errors["email"] ? errors["email"].message : ""}
+                {...register("email")}
                 autoFocus
               />
               <TextField
@@ -137,9 +136,11 @@ export default function CompanyLogin() {
                 label="Password"
                 type="password"
                 id="password"
-                error={errors['password'] !== null? errors["password"]:null}
-                helperText={errors['password'] ? errors['password'].message : ''}
-                {...register('password')}
+                error={errors["password"] !== null ? errors["password"] : null}
+                helperText={
+                  errors["password"] ? errors["password"].message : ""
+                }
+                {...register("password")}
                 autoComplete="current-password"
               />
               <FormControlLabel
@@ -196,8 +197,7 @@ export default function CompanyLogin() {
           sm={false}
           md={8}
           sx={{
-            backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
+            backgroundImage: "url(./images/login2.png)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

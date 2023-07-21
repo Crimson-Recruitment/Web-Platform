@@ -86,6 +86,11 @@ export default function Footer() {
                   Contact Us
                 </Link>
               </p>
+              <p>
+                <Link to="/pricing" className="text-reset">
+                  Pricing
+                </Link>
+              </p>
             </MDBCol>
 
             <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">

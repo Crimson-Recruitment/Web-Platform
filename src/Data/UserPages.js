@@ -3,6 +3,7 @@ import Favorite from "@mui/icons-material/Favorite";
 import Search from "@mui/icons-material/Search";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import Settings from "@mui/icons-material/Settings";
+import UpgradeIcon from "@mui/icons-material/Upgrade";
 
 export const userPages = [
   {
@@ -29,5 +30,10 @@ export const userPages = [
     pageName: "Settings",
     link: "/settings",
     icon: <Settings sx={{ fontSize: "35px", marginRight: "5px" }} />,
+  },
+  {
+    pageName: "Upgrade Account",
+    link: "/user-pricing",
+    icon: <UpgradeIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
 ];

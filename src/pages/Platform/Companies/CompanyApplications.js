@@ -4,34 +4,13 @@ import CompanyApplicationCard from "../../../components/Companies/CompanyApplica
 import "flowbite/dist/flowbite.min.js";
 import Firestore from "../../../Firebase/Firestore";
 import { Grid as GridLoader } from "react-loader-spinner";
-import PropTypes from "prop-types";
-import { Global } from "@emotion/react";
-import { styled } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { grey } from "@mui/material/colors";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-const drawerBleeding = 56;
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "light" ? "#fff" : grey[800],
-}));
-
-const Puller = styled(Box)(({ theme }) => ({
-  width: 30,
-  height: 6,
-  backgroundColor: theme.palette.mode === "light" ? grey[300] : grey[900],
-  borderRadius: 3,
-  position: "absolute",
-  top: 8,
-  left: "calc(50% - 15px)",
-}));
+import GoogleLogin from "react-google-login";
+import { clientId } from "../../../Functions/GoogleCalendar";
+import { gapi } from "gapi-script";
 
 function CompanyApplications() {
   const firestore = new Firestore();
@@ -39,9 +18,16 @@ function CompanyApplications() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
+  const [calendarAccess, setCalendarAccess] = useState(false);
   const navigate = useNavigate();
   const [message, setMessage] = useState({ message: "", severity: "" });
   const [open, setOpen] = React.useState();
+
+  gapi.load("client:auth2", () => gapi.client.init({
+    clientId: clientId,
+    scope: "openid email profile https://www.googleapis.com/auth/calendar",
+    plugin_name: "calendar",
+  }));
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -55,6 +41,14 @@ function CompanyApplications() {
       setExpanded(null);
     } else {
       setExpanded(index);
+    }
+  };
+
+  const handleGoogleAuth = (obj) => {
+    if (obj.code !== null) {
+      setCalendarAccess(true)
+    } else if (obj.error !== null) {
+      setMessage({ message: obj.error, severity: "error" });
     }
   };
 
@@ -230,6 +224,25 @@ function CompanyApplications() {
                         >
                           Recruit
                         </Button>
+                        {calendarAccess ?
+                        <Button
+                          onClick={() =>{}}
+                          variant="contained"
+                        >
+                          Schedule Meeting
+                        </Button>
+                          :
+                        <GoogleLogin
+                          clientId={clientId}
+                          buttonText="Sign to schedule meetings"
+                          cookiePolicy="single_host_origin"
+                          onSuccess={handleGoogleAuth}
+                          onFailure={handleGoogleAuth}
+                          responseType="code"
+                          accessType="offline"
+                          scope="openid email profile https://www.googleapis.com/auth/calendar"
+                        />}
+
                         <Button
                           onClick={() =>
                             updateHandler(application.id, "Rejected")
