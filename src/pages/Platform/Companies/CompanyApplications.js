@@ -8,8 +8,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import GoogleLogin from "react-google-login";
-import { gapi } from "gapi-script";
 
 function CompanyApplications() {
   const firestore = new Firestore();
@@ -218,23 +216,14 @@ function CompanyApplications() {
                         >
                           Recruit
                         </Button>
-                        {calendarAccess ?
+                       
                         <Button
                           onClick={() =>{}}
                           variant="contained"
                         >
                           Schedule Meeting
                         </Button>
-                          :
-                        <GoogleLogin
-                          buttonText="Sign to schedule meetings"
-                          cookiePolicy="single_host_origin"
-                          onSuccess={handleGoogleAuth}
-                          onFailure={handleGoogleAuth}
-                          responseType="code"
-                          accessType="offline"
-                          scope="openid email profile https://www.googleapis.com/auth/calendar"
-                        />}
+                      
 
                         <Button
                           onClick={() =>

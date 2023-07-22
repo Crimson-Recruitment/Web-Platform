@@ -41,6 +41,7 @@ export const industryProfessions = {
   Technology: [
     "Software Developer",
     "Software Engineer",
+    "Blockchain Engineer",
     "Web Developer",
     "Data Analyst",
     "Network Administrator",
@@ -57,6 +58,7 @@ export const industryProfessions = {
     "Physician Assistant",
     "Radiologist",
     "Physical Therapist",
+    "Public Health Officer",
     "Occupational Therapist",
   ],
   Finance: [

@@ -1,5 +1,6 @@
 export const professionList = [
   { value: "software_engineer", label: "Software Engineer" },
+  { value: "blockchain_engineer", label: "Blockchain Engineer" },
   { value: "web_developer", label: "Web Developer" },
   { value: "mobile_developer", label: "Mobile Developer" },
   { value: "data_scientist", label: "Data Scientist" },
@@ -92,6 +93,8 @@ export const professionList = [
   { value: "criminal_defense_lawyer", label: "Criminal Defense Lawyer" },
   { value: "civil_litigation_lawyer", label: "Civil Litigation Lawyer" },
   { value: "family_lawyer", label: "Family Lawyer" },
+  { value: "lawyer", label: "Lawyer" },
+  { value: "public_health_officer", label: "Public Health Officer" },
   { value: "immigration_lawyer", label: "Immigration Lawyer" },
   {
     value: "intellectual_property_lawyer",
