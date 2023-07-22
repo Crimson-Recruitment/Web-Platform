@@ -46,7 +46,8 @@ const tiers = [
     title: "Enterprise",
     price: "59.99",
     description: [
-      "$10 per job post",
+      <strike>$20 per job post</strike>,
+      "free per job post",
       "Promote job post",
       "View unlimited applications",
       "Screening of applications",

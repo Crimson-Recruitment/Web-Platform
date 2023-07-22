@@ -34,7 +34,9 @@ const tiers = [
   {
     title: "Free",
     price: "0",
-    description: ["$20 per job post", "View max of 10 applications"],
+    description: [ <strike>$20 per job post</strike>,
+    "free per job post",
+    "View max of 10 applications"],
     buttonText: "Sign up for free",
     buttonLink: "/company-register",
     buttonVariant: "outlined",
