@@ -72,24 +72,24 @@ export default function Footer() {
             <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
               <p>
-                <Link to="/" className="text-reset">
+                <a href="/" className="text-reset">
                   Home
-                </Link>
+                </a>
               </p>
               <p>
-                <Link to="/about" className="text-reset">
+                <a href="/about" className="text-reset">
                   About
-                </Link>
+                </a>
               </p>
               <p>
-                <Link to="/contact-us" className="text-reset">
+                <a href="/contact-us" className="text-reset">
                   Contact Us
-                </Link>
+                </a>
               </p>
               <p>
-                <Link to="/pricing" className="text-reset">
+                <a href="/pricing" className="text-reset">
                   Pricing
-                </Link>
+                </a>
               </p>
             </MDBCol>
 
@@ -101,10 +101,11 @@ export default function Footer() {
               </p>
               <p>
                 <MDBIcon icon="envelope" className="me-3" />
-                jaderecruit02@gmail.com
+                <a href="mailto:info@jaderecruitment.org">info@jaderecruitment.org</a> 
               </p>
               <p>
-                <MDBIcon icon="phone" className="me-3" /> + 256 773 457 817
+                <MDBIcon icon="phone" className="me-3" /> 
+                <a href="tel:+256773457817">+ 256 773 457 817</a>
               </p>
             </MDBCol>
           </MDBRow>
