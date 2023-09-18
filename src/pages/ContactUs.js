@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
 import { useState } from "react";
 import { TextField, Button, Typography, Grid, Box, Snackbar, Alert } from "@mui/material";
-import emailjs from "emailjs-com";
-import { API_KEY_EMAILJS, SERVICE_ID, TEMPLATE_ID } from "../credentials";
 import { useNavigate } from "react-router-dom";
 
 export default function ContactUs() {
@@ -27,21 +25,6 @@ const form = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true)
-    emailjs.sendForm(
-      SERVICE_ID, 
-      TEMPLATE_ID, 
-      form.current, API_KEY_EMAILJS)
-    .then(async () => {
-      setMessage({message:"You have successfully sent a message, we will be contacting you soon!", severity:"success"})
-      setOpen(true)
-      setLoading(false)
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      navigate('/')
-    }, (error) => {
-      setMessage({message:`Error: ${error.text}`, severity:"error"})
-      setOpen(true)
-      setLoading(false)
-    });
   };
 
   return (
