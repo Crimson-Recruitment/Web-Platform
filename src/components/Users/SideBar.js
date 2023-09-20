@@ -92,7 +92,7 @@ function SideBar({ children }) {
         {list()}
       </Drawer>
       <Grid container>
-        <Grid item md={0.7} lg={1.7} display={{ xs: "none", lg: "block" }}>
+        <Grid item md={2.5} display={{ xs: "none", lg: "block" }}>
           <Box style={{ display: "flex", height: "100vh" }}>
             <Sidebar>
               <Menu>
@@ -129,7 +129,7 @@ function SideBar({ children }) {
             </Sidebar>
           </Box>
         </Grid>
-        <Grid xs={12} lg={10.3}>
+        <Grid xs={12} lg={9.5}>
           {children}
         </Grid>
       </Grid>
