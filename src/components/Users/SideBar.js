@@ -14,11 +14,10 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import { GridView } from "@mui/icons-material";
 import Logout from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import Auth from "../../Firebase/Authentication";
 import { userPages } from "../../Data/UserPages";
-import Firestore from "../../Firebase/Firestore";
 
 function SideBar({ children }) {
   const [state, setState] = React.useState(false);
@@ -40,7 +39,6 @@ function SideBar({ children }) {
   };
   const list = () => (
     <Box
-      sx={{ width: 250 }}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
@@ -93,7 +91,7 @@ function SideBar({ children }) {
       </Drawer>
       <Grid container>
         <Grid item md={2.5} display={{ xs: "none", lg: "block" }}>
-          <Box style={{ display: "flex", height: "100vh" }}>
+          <Box style={{ display: "flex", height: "100%" }}>
             <Sidebar>
               <Menu>
                 {userPages.map((page) => (
@@ -129,7 +127,7 @@ function SideBar({ children }) {
             </Sidebar>
           </Box>
         </Grid>
-        <Grid xs={12} lg={9.5}>
+        <Grid xs={12} md={9.5}>
           {children}
         </Grid>
       </Grid>
