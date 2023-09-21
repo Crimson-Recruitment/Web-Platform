@@ -100,7 +100,7 @@ export default function Register() {
             minHeight: "80vh",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "red" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -203,8 +203,8 @@ export default function Register() {
               sx={{
                 mt: 3,
                 mb: 2,
-                backgroundColor: "green",
-                ":hover": { backgroundColor: "darkgreen" },
+                backgroundColor: "red",
+                ":hover": { backgroundColor: "red" },
               }}
             >
               {loading ? "Loading..." : "Sign Up"}
@@ -212,7 +212,7 @@ export default function Register() {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link
-                  className="text-green-600 hover:text-green-800"
+                  className="text-red-600 hover:text-red-800"
                   to="/login"
                   variant="body2"
                 >

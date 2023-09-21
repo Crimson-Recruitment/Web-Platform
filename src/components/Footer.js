@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <MDBFooter
-      style={{ backgroundColor: "darkgreen" }}
+      style={{ backgroundColor: "maroon" }}
       className="text-center text-lg-start text-white"
     >
       <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
@@ -64,7 +64,7 @@ export default function Footer() {
                     paddingBottom: "3px",
                   }}
                 />
-                Jade Recruitment
+                Crimson Recruitment
               </h5>
               <p>Creating Opportunities for Job Seekers.</p>
             </MDBCol>
@@ -101,7 +101,7 @@ export default function Footer() {
               </p>
               <p>
                 <MDBIcon icon="envelope" className="me-3" />
-                <a href="mailto:info@jaderecruitment.org">info@jaderecruitment.org</a> 
+                <a href="mailto:info@jaderecruitment.org">info@crimsonrecruitment.org</a> 
               </p>
               <p>
                 <MDBIcon icon="phone" className="me-3" /> 
@@ -118,7 +118,7 @@ export default function Footer() {
       >
         © 2023 Copyright:
         <a className="text-reset fw-bold" href="/">
-          Jade Recruitment
+          Crimson Recruitment
         </a>
       </div>
     </MDBFooter>

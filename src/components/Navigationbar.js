@@ -47,7 +47,7 @@ function NavigationBar() {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="sticky" sx={{ bgcolor: "#50C878" }}>
+    <AppBar position="sticky" sx={{ bgcolor: "#8B0000" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -60,9 +60,9 @@ function NavigationBar() {
             }}
           >
             <img
-              src="./images/logo.png"
+              src="./images/logo1.png"
               alt="logo"
-              style={{ width: "150px", marginRight: "2px" }}
+              style={{ width: "200px", marginRight: "2px" }}
             />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -117,7 +117,7 @@ function NavigationBar() {
             }}
           >
             <img
-              src="./images/logo.png"
+              src="./images/logo1.png"
               alt="logo"
               style={{ width: "150px", marginRight: "2px" }}
             />
@@ -205,8 +205,8 @@ function NavigationBar() {
                   <Link to="/login">
                     <Button
                       sx={{
-                        backgroundColor: "green",
-                        ":hover": { backgroundColor: "darkgreen" },
+                        backgroundColor: "red",
+                        ":hover": { backgroundColor: "darkred" },
                       }}
                       size="large"
                       variant="contained"
@@ -218,13 +218,13 @@ function NavigationBar() {
                   <Link to="/register">
                     <Button
                       sx={{
-                        borderColor: "green",
-                        color: "green",
+                        borderColor: "red",
+                        color: "red",
                         backgroundColor: "white",
                         ":hover": {
-                          backgroundColor: "darkgreen",
+                          backgroundColor: "darkred",
                           color: "white",
-                          borderColor: "green",
+                          borderColor: "red",
                         },
                       }}
                       size="large"

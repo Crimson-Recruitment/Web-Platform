@@ -102,7 +102,7 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "darkgreen" }}>
+          <Avatar sx={{ m: 1, bgcolor: "red" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -161,12 +161,12 @@ export default function Login() {
                 sx={{
                   mb: 2,
                   backgroundColor: "white",
-                  borderColor: "green",
-                  color: "green",
+                  borderColor: "red",
+                  color: "red",
                   ":hover": {
                     color: "white",
-                    backgroundColor: "darkgreen",
-                    borderColor: "darkgreen",
+                    backgroundColor: "red",
+                    borderColor: "red",
                   },
                 }}
               >

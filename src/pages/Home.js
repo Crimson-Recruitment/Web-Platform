@@ -38,7 +38,7 @@ export default function Home() {
           sm={false}
           md={5}
           sx={{
-            backgroundImage: "url(./images/home.png)",
+            backgroundImage: "url(./images/home1.png)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

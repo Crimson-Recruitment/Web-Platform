@@ -9,7 +9,7 @@ export default function AboutUs() {
     <main>
       <Box
         sx={{
-          bgcolor: "lightgreen",
+          bgcolor: "lightred",
           pt: 8,
           pb: 6,
         }}
@@ -37,17 +37,17 @@ export default function AboutUs() {
                   align: "center",
                 }}
               >
-                Ignite your Professional journey with
+                Ignite your Professional journey with 
                 <Typography
                   component="span"
                   sx={{
                     fontSize: "inherit",
-                    color: "green",
+                    color: "red",
                     fontWeight: "inherit",
                     position: "relative",
                   }}
                 >
-                  &nbsp;Jade.{" "}
+                  &nbsp;Crimson.{" "}
                 </Typography>
               </Typography>
             </Typography>
@@ -71,7 +71,7 @@ export default function AboutUs() {
             xs={12}
             sm={6}
             sx={{
-              backgroundImage: "url(./images/frustration.png)",
+              backgroundImage: "url(./images/frustration1.png)",
               backgroundRepeat: "no-repeat",
               backgroundColor: (t) =>
                 t.palette.mode === "light"
@@ -101,7 +101,7 @@ export default function AboutUs() {
           item
           xs={12}
           sx={{
-            backgroundImage: "url(./images/help.png)",
+            backgroundImage: "url(./images/help1.png)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -133,7 +133,7 @@ export default function AboutUs() {
             xs={12}
             sm={6}
             sx={{
-              backgroundImage: "url(./images/success.png)",
+              backgroundImage: "url(./images/success1.png)",
               backgroundRepeat: "no-repeat",
               backgroundColor: (t) =>
                 t.palette.mode === "light"
