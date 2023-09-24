@@ -7,6 +7,7 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 export default function Footer() {
   return (
@@ -57,9 +58,9 @@ export default function Footer() {
             <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
               <h5 className="text-uppercase fw-bold">
                 <img
-                  src="./images/logo-white.svg"
+                  src={logo}
                   style={{
-                    width: "25px",
+                    width: "250px",
                     marginRight: "5px",
                     paddingBottom: "3px",
                   }}
@@ -101,10 +102,10 @@ export default function Footer() {
               </p>
               <p>
                 <MDBIcon icon="envelope" className="me-3" />
-                <a href="mailto:info@jaderecruitment.org">info@crimsonrecruitment.org</a> 
+                <a href="mailto:info@jaderecruitment.org">info@crimsonrecruitment.org</a>
               </p>
               <p>
-                <MDBIcon icon="phone" className="me-3" /> 
+                <MDBIcon icon="phone" className="me-3" />
                 <a href="tel:+256773457817">+ 256 773 457 817</a>
               </p>
             </MDBCol>

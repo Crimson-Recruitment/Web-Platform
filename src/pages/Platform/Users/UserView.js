@@ -12,18 +12,7 @@ function UserView() {
   const { id } = useParams();
 
   useEffect(() => {
-    (async () => {
-      await firestore.getUserDetailsById(id).then((user) => {
-        if (user.code == 0) {
-          console.log(user.val);
-          setUserData({ ...user.val.data(), id: user.id });
-          setLoading(false);
-        } else {
-          alert(user.val);
-          setLoading(false);
-        }
-      });
-    })();
+    setLoading(false);
   }, []);
 
   return (
@@ -41,7 +30,7 @@ function UserView() {
             visible={true}
           />
         </div>
-      ) : userData != null ? (
+      ) : userData == null ? (
         <section class="pt-16 bg-blueGray-50">
           <div class="w-full lg:w-4/12 px-4 mx-auto">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
@@ -52,7 +41,7 @@ function UserView() {
                       <div
                         className="h-[150px] w-[150px] rounded-full mt-8"
                         style={{
-                          backgroundImage: `url(${userData.profileImage})`,
+                          backgroundImage: `url(./images/home.png)`,
                           backgroundSize: "contain",
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center center",
@@ -63,15 +52,15 @@ function UserView() {
                 </div>
                 <div class="text-center">
                   <h3 class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                    {userData.firstName + " " + userData.lastName}
+                    {"Ssali" + " " + "Benjamin"}
                   </h3>
                   <div class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-                    {userData.location}
+                    {"Location"}
                   </div>
                   <div class="mb-2 text-blueGray-600 mt-10">
                     <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                    {userData.profession.label}
+                    {"Kampala, Uganda"}
                   </div>
                 </div>
                 <div class="mt-10 py-10 border-t border-blueGray-200">
@@ -80,40 +69,32 @@ function UserView() {
                       <Grid item xs={12} md={5}>
                         <Typography variant="h6">Bio</Typography>
                         <Typography color="text.secondary">
-                          {userData.about}
+                          {"I am a great dev"}
                         </Typography>
                         <Typography sx={{ marginTop: "20px" }} variant="h6">
                           Skills
                         </Typography>
                         <Typography color="text.secondary">
                           <ul>
-                            {userData.skills.map((skill) => {
-                              return (
-                                <li
-                                  className="mb-3"
-                                  style={{ fontSize: "1rem" }}
-                                >
-                                  {skill.label}
-                                </li>
-                              );
-                            })}
+                            <li>C++</li>
+                            <li>Rust</li>
                           </ul>
                         </Typography>
                       </Grid>
                       <Grid item xs={12} md={5}>
                         <Typography variant="h6">Contacts</Typography>
                         <Typography color="text.secondary">
-                          <PhoneInTalk /> {userData.phoneNumber}
+                          <PhoneInTalk /> +256773457817
                         </Typography>
                         <Typography color="text.secondary">
-                          <Email /> {userData.emailAddress}
+                          <Email /> ssalibenjamin0402@gmail.com
                         </Typography>
                         <Typography sx={{ marginTop: "20px" }} variant="h6">
                           Download Resume
                         </Typography>
                         <Button
                           onClick={() => {
-                            window.open(`${userData.resume}.pdf`, "_blank");
+                            window.open(`book.pdf`, "_blank");
                           }}
                         >
                           Download Resume

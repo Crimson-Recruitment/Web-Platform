@@ -17,6 +17,7 @@ import Cookies from "universal-cookie";
 import { auth } from "../Firebase/FirebaseConfig";
 import { userPages } from "../Data/UserPages";
 import { companyPages } from "../Data/CompanyPages";
+import logo from "../assets/images/logo.png";
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -60,7 +61,7 @@ function NavigationBar() {
             }}
           >
             <img
-              src="./images/logo1.png"
+              src={logo}
               alt="logo"
               style={{ width: "200px", marginRight: "2px" }}
             />
@@ -117,7 +118,7 @@ function NavigationBar() {
             }}
           >
             <img
-              src="./images/logo1.png"
+              src={logo}
               alt="logo"
               style={{ width: "150px", marginRight: "2px" }}
             />
@@ -135,7 +136,7 @@ function NavigationBar() {
             ))}
           </Box>
           {cookie.get("user-login") == "true" ||
-          cookie.get("company-login") == "true" ? (
+            cookie.get("company-login") == "true" ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -144,14 +145,14 @@ function NavigationBar() {
                     src={
                       JSON.parse(sessionStorage.getItem("userDetails")) != null
                         ? JSON.parse(sessionStorage.getItem("userDetails"))
-                            .profileImage
+                          .profileImage
                         : null ||
                           JSON.parse(
                             sessionStorage.getItem("companyDetails")
                           ) != null
-                        ? JSON.parse(sessionStorage.getItem("companyDetails"))
+                          ? JSON.parse(sessionStorage.getItem("companyDetails"))
                             .logo
-                        : null
+                          : null
                     }
                   />
                 </IconButton>
@@ -174,27 +175,27 @@ function NavigationBar() {
               >
                 {cookie.get("user-login") == "true"
                   ? userPages.map((userpage) => (
-                      <MenuItem
-                        key={userpage.link}
-                        onClick={() => navigate(userpage.link)}
-                      >
-                        <Typography textAlign="center">
-                          {userpage.pageName}
-                        </Typography>
-                      </MenuItem>
-                    ))
+                    <MenuItem
+                      key={userpage.link}
+                      onClick={() => navigate(userpage.link)}
+                    >
+                      <Typography textAlign="center">
+                        {userpage.pageName}
+                      </Typography>
+                    </MenuItem>
+                  ))
                   : null}
                 {cookie.get("company-login") == "true"
                   ? companyPages.map((companypage) => (
-                      <MenuItem
-                        key={companypage.link}
-                        onClick={() => navigate(companypage.link)}
-                      >
-                        <Typography textAlign="center">
-                          {companypage.pageName}
-                        </Typography>
-                      </MenuItem>
-                    ))
+                    <MenuItem
+                      key={companypage.link}
+                      onClick={() => navigate(companypage.link)}
+                    >
+                      <Typography textAlign="center">
+                        {companypage.pageName}
+                      </Typography>
+                    </MenuItem>
+                  ))
                   : null}
               </Menu>
             </Box>
@@ -262,27 +263,27 @@ function NavigationBar() {
               >
                 {cookie.get("user-login") == "true"
                   ? userPages.map((userpage) => (
-                      <MenuItem
-                        key={userpage.link}
-                        onClick={() => navigate(userpage.link)}
-                      >
-                        <Typography textAlign="center">
-                          {userpage.pageName}
-                        </Typography>
-                      </MenuItem>
-                    ))
+                    <MenuItem
+                      key={userpage.link}
+                      onClick={() => navigate(userpage.link)}
+                    >
+                      <Typography textAlign="center">
+                        {userpage.pageName}
+                      </Typography>
+                    </MenuItem>
+                  ))
                   : null}
                 {cookie.get("company-login") == "true"
                   ? companyPages.map((companypage) => (
-                      <MenuItem
-                        key={companypage.link}
-                        onClick={() => navigate(companypage.link)}
-                      >
-                        <Typography textAlign="center">
-                          {companypage.pageName}
-                        </Typography>
-                      </MenuItem>
-                    ))
+                    <MenuItem
+                      key={companypage.link}
+                      onClick={() => navigate(companypage.link)}
+                    >
+                      <Typography textAlign="center">
+                        {companypage.pageName}
+                      </Typography>
+                    </MenuItem>
+                  ))
                   : null}
               </Menu>
             </Box>
