@@ -1,21 +1,11 @@
 {
-  "short_name": "Jade",
-  "name": "Jade Recruitment platform",
+  "short_name": "Crimson Recruitment",
+  "name": "Crimson Recruitment, The best job seeking and Recruitment platform worldwide!",
   "icons": [
     {
       "src": "favicon.ico",
-      "type": "image/x-icon",
-      "sizes": "192x192"
-    },
-    {
-      "src": "favicon.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "favicon.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     }
   ],
   "start_url": ".",

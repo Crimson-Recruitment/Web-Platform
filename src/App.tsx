@@ -61,23 +61,21 @@ function App() {
         ) : null}
         {cookie.get("company-login") ? (
           <>
-            <Route exact path="/company-jobs" element={<CompanyJobs />} />
-            <Route exact path="/company-details" element={<CompanyDetails />} />
-            <Route exact path="/company-profile" element={<CompanyProfile />} />
+            <Route path="/company-jobs" element={<CompanyJobs />} />
+            <Route path="/company-details" element={<CompanyDetails />} />
+            <Route path="/company-profile" element={<CompanyProfile />} />
             <Route path="/company-pricing" element={<CompanyPricing />} />
             <Route
-              exact
               path="/company-applications"
               element={<CompanyApplications />}
             />
             <Route
-              exact
               path="/company-settings"
               element={<CompanySettings />}
             />
           </>
         ) : null}
-        <Route exact path="*" element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
     </Router>
