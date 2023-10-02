@@ -13,9 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
-import Firestore from "../../Firebase/Firestore";
 import { Alert, Snackbar } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { object, string } from "zod";
@@ -25,7 +23,6 @@ const defaultTheme = createTheme();
 export default function CompanyLogin() {
   const [loading, setLoading] = React.useState(false);
   const cookie = new Cookies();
-  const firestore = new Firestore();
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const handleClick = () => {

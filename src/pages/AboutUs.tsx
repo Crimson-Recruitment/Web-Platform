@@ -145,7 +145,7 @@ export default function AboutUs() {
             }}
           />
 
-          <Grid item xs={12} sm={6} ustifyContent="flex-end">
+          <Grid item xs={12} sm={6} justifyContent="flex-end">
             <Typography
               variant="blockquote"
               align="center"
