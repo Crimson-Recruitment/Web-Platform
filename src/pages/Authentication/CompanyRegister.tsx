@@ -10,20 +10,16 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import MuiPhoneNumber from "material-ui-phone-number";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Cookies from "universal-cookie";
 import LocationSearchInput from "../../components/LocationInput";
-import Auth from "../../Firebase/Authentication";
-import uniqid from "uniqid";
-import { useForm } from "react-hook-form";
-import { object, string } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function CompanyRegister() {
   const cookie = new Cookies();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-  let auth = new Auth();
 
   const validationSchema = object({
     companyName: string().nonempty("Field is required!"),
@@ -34,55 +30,21 @@ export default function CompanyRegister() {
       .nonempty("Field is required!"),
   });
 
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
+
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
-    reset,
     handleSubmit,
-  } = useForm({
-    resolver: zodResolver(validationSchema),
-  });
+    formState: { errors, isSubmitSuccessful }
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful]);
 
-  const onSubmitHandler = async (values) => {
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    let id = uniqid(`${values.companyName}-`, "-company");
-    await auth
-      .signCompanyUp(
-        id,
-        values.companyName,
-        document.getElementsByName("phonenumber1")[0].value,
-        document.getElementsByName("phonenumber2")[0].value,
-        values.email,
-        values.password,
-        document.getElementsByName("location")[0].value
-      )
-      .then(async (val) => {
-        if (val.code == 0) {
-          cookie.set("company-login", true, { path: "/" });
-          localStorage.setItem("companyEmail", values.email);
-          sessionStorage.setItem(
-            "companyDetails",
-            JSON.stringify({
-              id: id,
-              companyName: values.companyName,
-              phoneNumber1: document.getElementsByName("phonenumber1")[0].value,
-              phoneNumber2: document.getElementsByName("phonenumber2")[0].value,
-              location: document.getElementsByName("location")[0].value,
-              emailAddress: values.email,
-            })
-          );
-          window.location.href = "/company-details";
-          setLoading(false);
-        } else {
-          alert(`${val.val}`);
-          setLoading(false);
-        }
-      });
     setLoading(false);
   };
 
@@ -117,9 +79,8 @@ export default function CompanyRegister() {
                 fullWidth
                 id="companyname"
                 label="Company Name"
-                name="companyName"
                 error={
-                  errors["companyName"] !== null ? errors["companyName"] : null
+                  !!errors["companyName"]
                 }
                 helperText={
                   errors["companyName"] ? errors["companyName"].message : ""
@@ -133,6 +94,7 @@ export default function CompanyRegister() {
             <Grid item xs={12}>
               <MuiPhoneNumber
                 required
+                onChange={()=> null}
                 variant="outlined"
                 id="phonenumber"
                 label="Phone Number 1"
@@ -144,6 +106,7 @@ export default function CompanyRegister() {
             <Grid item xs={12}>
               <MuiPhoneNumber
                 required
+                onChange={()=> null}
                 variant="outlined"
                 id="phonenumber"
                 label="Phone Number 2"
@@ -158,8 +121,7 @@ export default function CompanyRegister() {
                 fullWidth
                 id="email"
                 label="Email Address"
-                name="email"
-                error={errors["email"] !== null ? errors["email"] : null}
+                error={!!errors["email"]}
                 helperText={errors["email"] ? errors["email"].message : ""}
                 {...register("email")}
                 autoComplete="email"
@@ -169,10 +131,9 @@ export default function CompanyRegister() {
               <TextField
                 required
                 fullWidth
-                name="password"
                 label="Password"
                 type="password"
-                error={errors["password"] !== null ? errors["password"] : null}
+                error={!errors["password"]}
                 helperText={
                   errors["password"] ? errors["password"].message : ""
                 }
@@ -200,7 +161,6 @@ export default function CompanyRegister() {
               <Link
                 className="text-red-600 hover:text-red-800"
                 to="/company-login"
-                variant="body2"
               >
                 Already have an account? Sign in
               </Link>

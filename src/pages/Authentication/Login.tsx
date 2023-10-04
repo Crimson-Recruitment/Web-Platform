@@ -11,20 +11,17 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Auth from "../../Firebase/Authentication";
 import Cookies from "universal-cookie";
-import { firestore } from "../../Firebase/FirebaseConfig";
-import Firestore from "../../Firebase/Firestore";
 import { Alert, Snackbar } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { object, string } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+
   const handleClick = () => {
     setOpen(true);
   };
@@ -36,59 +33,33 @@ export default function Login() {
 
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
-    reset,
     handleSubmit,
-  } = useForm({
-    resolver: zodResolver(validationSchema),
-  });
+    formState: { errors, isSubmitSuccessful }
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
+  
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful]);
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
     setOpen(false);
   };
 
-  const cookie = new Cookies();
-  const firestore = new Firestore();
 
-  const onSubmitHandler = async (values) => {
+  const cookie = new Cookies();
+
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    const isCompany = await firestore.checkCompanyEmail(values.email);
-    if (isCompany.val == true) {
-      let auth = new Auth();
-      await auth
-        .signIn(values.email, values.password)
-        .then((val) => {
-          if (val.code == 0) {
-            cookie.set("user-login", true, { path: "/" });
-            localStorage.setItem("userEmail", values.email);
-            window.location.href = "/jobs";
-            setLoading(false);
-          } else {
-            setMessage(`${val.code} : ${val.val}`);
-            handleClick();
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          setMessage(err);
-          handleClick();
-          setLoading(false);
-        });
-    } else {
-      setMessage("Error on authentication!");
-      handleClick();
-      setLoading(false);
+    setLoading(false);
     }
-  };
+
   return (
     <Grid container component="main" sx={{ minHeight: { lg: "90vh" } }}>
       <CssBaseline />
@@ -120,9 +91,8 @@ export default function Login() {
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
-              error={errors["email"] !== null ? errors["email"] : null}
+              error={!!errors["email"]}
               helperText={errors["email"] ? errors["email"].message : ""}
               {...register("email")}
               autoFocus
@@ -131,11 +101,10 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              name="password"
               label="Password"
               type="password"
               id="password"
-              error={errors["password"] !== null ? errors["password"] : null}
+              error={!!errors["password"]}
               helperText={errors["password"] ? errors["password"].message : ""}
               {...register("password")}
               autoComplete="current-password"
@@ -175,12 +144,12 @@ export default function Login() {
             </Link>
             <Grid container>
               <Grid item xs>
-                <Link to="" variant="body2">
+                <Link to="*">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/register" variant="body2">
+                <Link to="/register">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

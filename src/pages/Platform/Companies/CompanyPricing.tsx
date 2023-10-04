@@ -36,7 +36,7 @@ const tiers = [
     subheader: "Most popular",
     price: "29.99",
     description: [
-       <strike>$15 per job post</strike>,
+       <s>$15 per job post</s>,
        "free per job post",
       "20 applications max per post",
       "Screening of applications",
@@ -51,7 +51,7 @@ const tiers = [
     title: "Enterprise",
     price: "59.99",
     description: [
-       <strike>$10 per job post</strike>,
+       <s>$10 per job post</s>,
       "free per job post",
       "Promote job post",
       "View unlimited applications",
@@ -158,7 +158,6 @@ export default function CompanyPricing() {
                         component="li"
                         variant="subtitle1"
                         align="center"
-                        key={line}
                       >
                         {line}
                       </Typography>
@@ -169,7 +168,7 @@ export default function CompanyPricing() {
                   <Button
                     fullWidth
                     onClick={() => navigate(tier.buttonLink)}
-                    variant={tier.buttonVariant}
+                    variant={"outlined"}
                   >
                     {tier.buttonText}
                   </Button>

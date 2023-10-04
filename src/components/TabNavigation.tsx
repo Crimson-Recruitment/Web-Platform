@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export default function ForYou({ tabs }) {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement>, newValue:number) => {
     setValue(newValue);
   };
 

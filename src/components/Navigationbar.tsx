@@ -14,7 +14,6 @@ import MenuItem from "@mui/material/MenuItem";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { auth } from "../Firebase/FirebaseConfig";
 import { userPages } from "../Data/UserPages";
 import { companyPages } from "../Data/CompanyPages";
 

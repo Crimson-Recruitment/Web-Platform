@@ -2,11 +2,11 @@ import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Button, { ButtonPropsVariantOverrides } from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
+import CardHeader, { OverridableCardHeader } from "@mui/material/CardHeader";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import StarIcon from "@mui/icons-material/StarBorder";
@@ -17,6 +17,8 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import { OverridableComponent, OverridableTypeMap } from "@mui/material/OverridableComponent";
+import { number } from "zod";
 
 const userTier = {
   title: "Premium",
@@ -27,7 +29,6 @@ const userTier = {
     "Priority email support",
   ],
   buttonText: "Purchase Premium",
-  buttonVariant: "contained",
 };
 
 const tiers = [
@@ -40,15 +41,14 @@ const tiers = [
     "Phone and email service",
   ],
     buttonText: "Sign up for free",
-    buttonLink: "/company-register",
-    buttonVariant: "outlined",
+    buttonLink: "/company-register"
   },
   {
     title: "Startup",
     subheader: "Most popular",
     price: "29.99",
     description: [
-       <strike>$15 per job post</strike>,
+       <s>$15 per job post</s>,
        "free per job post",
       "20 applications max per post",
       "Screening of applications",
@@ -57,13 +57,12 @@ const tiers = [
     ],
     buttonText: "Get started",
     buttonLink: "",
-    buttonVariant: "contained",
   },
   {
     title: "Enterprise",
     price: "59.99",
     description: [
-       <strike>$10 per job post</strike>,
+       <s>$10 per job post</s>,
       "free per job post",
       "Promote job post",
       "View unlimited applications",
@@ -73,7 +72,6 @@ const tiers = [
     ],
     buttonText: "Contact us",
     buttonLink: "",
-    buttonVariant: "outlined",
   },
 ];
 
@@ -110,7 +108,6 @@ export default function Pricing() {
             <Card>
               <CardHeader
                 title={userTier.title}
-                subheader={userTier.subheader}
                 titleTypographyProps={{ align: "center" }}
                 action={userTier.title === "Pro" ? <StarIcon /> : null}
                 subheaderTypographyProps={{
@@ -153,7 +150,7 @@ export default function Pricing() {
                 </ul>
               </CardContent>
               <CardActions>
-                <Button fullWidth variant={userTier.buttonVariant}>
+                <Button fullWidth variant={"contained"}>
                   {userTier.buttonText}
                 </Button>
               </CardActions>
@@ -236,7 +233,7 @@ export default function Pricing() {
                         component="li"
                         variant="subtitle1"
                         align="center"
-                        key={line}
+                        key={line.toString()}
                       >
                         {line}
                       </Typography>
@@ -247,7 +244,7 @@ export default function Pricing() {
                   <Button
                     fullWidth
                     onClick={() => navigate(tier.buttonLink)}
-                    variant={tier.buttonVariant}
+                    variant={"contained"}
                   >
                     {tier.buttonText}
                   </Button>

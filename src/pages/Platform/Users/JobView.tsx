@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Firestore from "../../../Firebase/Firestore";
 import JobDescription from "../../../components/Users/JobDescription";
 import { Grid as GridLoader } from "react-loader-spinner";
 import { Button, CardActions } from "@mui/material";
 import ApplicationBox from "../../../components/Users/ApplicationBox";
 import { ArrowBack } from "@mui/icons-material";
+import { JobsModel } from "../../../Models/JobsModel";
 
 function JobView() {
   const [loading, setLoading] = useState(true);
-  const [jobData, setJobData] = useState(null);
-  const firestore = new Firestore();
+  const [jobData, setJobData] = useState<JobsModel>();
   const { id } = useParams();
   const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,18 +23,8 @@ function JobView() {
   };
 
   useEffect(() => {
-    (async () => {
-      await firestore.getJobById(id).then((user) => {
-        if (user.code == 0) {
-          setJobData({ ...user.val.data(), id: user.id });
-          setLoading(false);
-        } else {
-          alert(user.val);
-          setLoading(false);
-        }
-      });
-    })();
   });
+  
   return (
     <div className="min-h-screen lg:mx-[300px]">
       {localStorage.getItem("userEmail") != null ? (
@@ -65,18 +54,18 @@ function JobView() {
       ) : jobData != null ? (
         <>
           <JobDescription
-            jobTitle={jobData.jobTitle}
-            overview={jobData.companyOverview}
-            description={jobData.jobDescription}
-            requirements={jobData.requirements}
-            skills={jobData.skills}
-            minSalary={jobData.minSalary}
-            maxSalary={jobData.maxSalary}
-            location={jobData.location}
-            type={jobData.jobType}
-            hideSalary={jobData.hideSalary}
-            benefits={jobData.benefits}
-          />
+              jobTitle={jobData.jobTitle}
+              overview={jobData.companyOverview}
+              description={jobData.jobDescription}
+              requirements={jobData.requirements}
+              skills={jobData.skills}
+              minSalary={jobData.minSalary}
+              maxSalary={jobData.maxSalary}
+              location={jobData.location}
+              type={jobData.jobType}
+              hideSalary={jobData.hideSalary}
+              benefits={jobData.benefits} 
+              otherDetails={jobData.otherDetails}/>
           <CardActions>
             <Button onClick={handleDialogOpen} variant="contained" size="small">
               Apply
@@ -85,10 +74,10 @@ function JobView() {
         </>
       ) : null}
       <ApplicationBox
-        jobId={jobData !== null ? jobData.id : null}
-        jobName={jobData !== null ? jobData.jobTitle : null}
-        companyId={jobData !== null ? jobData.companyId : null}
-        needCoverLetter={jobData !== null ? jobData.requestCoverLetter : null}
+        jobId={jobData?.id}
+        jobName={jobData?.jobTitle}
+        companyId={jobData?.companyId}
+        needCoverLetter={jobData?.requestCoverLetter}
         isOpen={dialogOpen}
         onClose={handleDialogClose}
       />

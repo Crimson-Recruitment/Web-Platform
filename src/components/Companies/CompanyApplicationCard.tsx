@@ -6,7 +6,7 @@ function CompanyApplicationCard({
   jobName,
   timeOfApplication,
   applicationStatus,
-}) {
+}:Date) {
   return (
     <MDBCard className="my-3 me-3 w-75">
       <MDBCardBody>

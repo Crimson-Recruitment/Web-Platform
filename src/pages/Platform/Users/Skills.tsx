@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useReducer } from "react";
-
 import Select from "react-select";
 import "flowbite/dist/flowbite.min.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import { professionList, skills } from "../../../Data/UserProfessions";
-import Firestore from "../../../Firebase/Firestore";
-import Storage from "../../../Firebase/Storage";
 import { Avatar, Button } from "@mui/material";
 import { skillsReducer } from "../../../Functions/Reducers";
 
@@ -21,7 +18,6 @@ function Skills() {
   const [state, dispatch] = useReducer(skillsReducer, initState);
   const [selectedSkills, setSelectedSkills] = useState(null);
   const navigate = useNavigate();
-  const firestore = new Firestore();
   const db = new Storage();
   const notify = useLocation().state;
 
@@ -34,54 +30,9 @@ function Skills() {
   }, []);
 
   const user = JSON.parse(sessionStorage.getItem("userDetails"));
+
   const submitHandler = async (event) => {
     event.preventDefault();
-    dispatch({ type: "SETLOADING", loading: true });
-    let imagelink = "";
-    if (state.imagePath != null) {
-      imagelink = await db.getFileUrl(`${user.id}-image`, state.imagePath);
-      if (imagelink.code === 1) {
-        alert(imagelink.val);
-        dispatch({ type: "SETLOADING", loading: false });
-        return;
-      }
-    }
-    let resumelink = "";
-    if (state.resume != null) {
-      resumelink = await db.getFileUrl(`${user.id}-resume`, state.resume);
-      if (resumelink.code === 1) {
-        alert(resumelink.val);
-        dispatch({ type: "SETLOADING", loading: false });
-        return;
-      }
-    }
-    await firestore
-      .createUserDetails(
-        imagelink.val,
-        selectedSkills,
-        resumelink.val,
-        event.target["about"].value,
-        state.selectedProfession
-      )
-      .then((res) => {
-        if (res.code === 0) {
-          sessionStorage.setItem(
-            "userDetails",
-            JSON.stringify({
-              ...JSON.parse(sessionStorage.getItem("userDetails")),
-              profileImage: imagelink.val,
-              skills: selectedSkills,
-              about: event.target["about"].value,
-              profession: state.selectedProfession,
-            })
-          );
-          navigate("/jobs");
-          dispatch({ type: "SETLOADING", loading: false });
-        } else {
-          alert(res.val);
-          dispatch({ type: "SETLOADING", loading: false });
-        }
-      });
   };
 
   const imageHandler = (e) => {

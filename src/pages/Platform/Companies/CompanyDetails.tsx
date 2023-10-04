@@ -1,12 +1,9 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Cookies from "universal-cookie";
 import Select from "react-select";
-import "flowbite/dist/flowbite.min.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Typography, TextareaAutosize, Avatar } from "@mui/material";
 import { industries } from "../../../Data/CompanyIndustries";
-import Storage from "../../../Firebase/Storage";
-import Firestore from "../../../Firebase/Firestore";
 import { companyDetailsReducer } from "../../../Functions/Reducers";
 
 let initState = {
@@ -20,9 +17,7 @@ let initState = {
 function CompanyDetails() {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(companyDetailsReducer, initState);
-  const company = JSON.parse(sessionStorage.getItem("companyDetails"));
   const db = new Storage();
-  const firestore = new Firestore();
   const notify = useLocation().state;
   useEffect(() => {
     if (notify != null) {

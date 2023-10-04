@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from "react";
 import CompanySideBar from "../../../components/Companies/CompanySideBar";
 import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
-import "flowbite/dist/flowbite.min.js";
-import Firestore from "../../../Firebase/Firestore";
 import { Grid as GridLoader } from "react-loader-spinner";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Alert, Grid, Snackbar } from "@mui/material";
+import { Alert, AlertColor, Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ApplicationsModel } from "../../../Models/ApplicationsModel";
 
 function CompanyApplications() {
-  const firestore = new Firestore();
-  var applicationList = [];
+  var applicationList:Array<ApplicationsModel> = [];
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(null);
+  const [expanded, setExpanded] = useState<number|null>(null);
   const [calendarAccess, setCalendarAccess] = useState(false);
   const navigate = useNavigate();
   const [message, setMessage] = useState({ message: "", severity: "" });
-  const [open, setOpen] = React.useState();
+  const [open, setOpen] = React.useState<boolean|undefined>();
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
     setOpen(false);
   };
 
-  const expandedHandler = (index) => {
+  const expandedHandler = (index:number) => {
     if (expanded == index) {
       setExpanded(null);
     } else {
@@ -36,66 +34,14 @@ function CompanyApplications() {
     }
   };
 
-  const handleGoogleAuth = (obj) => {
-    if (obj.code !== null) {
-      setCalendarAccess(true)
-    } else if (obj.error !== null) {
-      setMessage({ message: obj.error, severity: "error" });
-    }
-  };
-
-  const updateHandler = async (applicationId, status) => {
-    await firestore
-      .updateApplication(applicationId, status)
-      .then(async (val) => {
-        if (val.code == 0) {
-          setMessage({
-            message: "Successfully updated application status!",
-            severity: "success",
-          });
-          setOpen(true);
-          await new Promise((res) => setTimeout(res, 2000));
-          navigate(0);
-        } else {
-          console.log(val);
-          setMessage({ severity: "error", message: val.val });
-          setOpen(true);
-        }
-      });
+  const updateHandler = async (applicationId:number, status:string) => {
+   
   };
 
   useEffect(() => {
-    (async () => {
-      let hasDetails = await firestore.checkCompanyCompletedRegistration();
-      if (hasDetails.val == false) {
-        setMessage({
-          message: "Failed to load Applications!",
-          severity: "error",
-        });
-        setOpen(true);
-        await new Promise((res) => setTimeout(res, 2000));
-        navigate("/company-details", { state: { notify: true } });
-      } else {
-        await firestore.getCompanyApplications().then(async (val) => {
-          if (val.code == 0) {
-            val.val.forEach((application) => {
-              applicationList = [
-                ...applicationList,
-                { ...application.data(), id: application.id },
-              ];
-            });
-            setApplications(applicationList);
-            applicationList = [];
-            setLoading(false);
-          } else {
-            setMessage({ message: val.val, severity: "error" });
-            setOpen(true);
-            setLoading(false);
-          }
-        });
-      }
-    })();
+  
   }, []);
+  
   return (
     <CompanySideBar>
       <div className="xs:min-h-[120vh]  min-h-[120vh] ms-2">
@@ -114,11 +60,11 @@ function CompanyApplications() {
           </div>
         ) : applicationList !== null ? (
           <>
-            {applications.map((application, index) => {
+            {applications.map((application:ApplicationsModel, index:number) => {
               return (
                 <div role="button" onClick={() => expandedHandler(index)}>
                   <CompanyApplicationCard
-                    applicant={application.fullNames}
+                    applicant={application.firstName}
                     timeOfApplication={application.timeOfApplication}
                     jobName={application.jobName}
                     applicationStatus={application.applicationStatus}
@@ -154,10 +100,10 @@ function CompanyApplications() {
                         gap={2}
                         sx={{ padding: "10px", overflow: "hidden" }}
                       >
-                        <Grid item xs={12} md={4} fullwidth>
+                        <Grid item xs={12} md={4}>
                           <Typography variant="h6">Full Name:</Typography>
                           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            {application.fullNames}
+                            {application.firstName}
                           </Typography>
                           <Typography variant="h6">Job Title:</Typography>
                           <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -176,7 +122,7 @@ function CompanyApplications() {
                             Check out Profile
                           </Button>
                         </Grid>
-                        <Grid item xs={12} md={7} fullwidth>
+                        <Grid item xs={12} md={7}>
                           <Typography variant="h6">
                             Download Resume:{" "}
                             <small>
@@ -245,7 +191,7 @@ function CompanyApplications() {
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
-          severity={message.severity}
+          severity={message.severity as AlertColor}
           sx={{ width: "100%" }}
         >
           {message.message}

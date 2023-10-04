@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "../../../components/Users/SideBar";
-import Firestore from "../../../Firebase/Firestore";
 import ApplicationsCard from "../../../components/Users/ApplicationsCard";
 import { Grid as GridLoader } from "react-loader-spinner";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ApplicationsModel } from "../../../Models/ApplicationsModel";
 
 function Applications() {
-  const firestore = new Firestore();
-  var applicationList = [];
+  var applicationList:Array<ApplicationsModel> = [];
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+ 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -23,33 +23,7 @@ function Applications() {
   };
 
   useEffect(() => {
-    (async () => {
-      let hasDetails = await firestore.checkUserCompletedRegistration();
-      if (hasDetails.val == false) {
-        setMessage("Failed to load Applications!");
-        setOpen(true);
-        await new Promise((res) => setTimeout(res, 2000));
-        navigate("/skills", { state: { notify: true } });
-      } else {
-        await firestore.getUserApplications().then((val) => {
-          if (val.code == 0) {
-            val.val.forEach((application) => {
-              applicationList = [
-                ...applicationList,
-                { ...application.data(), id: application.id },
-              ];
-            });
-            setApplications(applicationList);
-            applicationList = [];
-            setLoading(false);
-          } else {
-            setMessage(val.val);
-            setOpen(true);
-            setLoading(false);
-          }
-        });
-      }
-    })();
+    
   }, []);
   return (
     <SideBar>
@@ -68,10 +42,10 @@ function Applications() {
         </div>
       ) : applicationList !== null ? (
         <>
-          {applications.map((application) => {
+          {applications.map((application:ApplicationsModel) => {
             return (
               <ApplicationsCard
-                applicant={application.fullNames}
+                applicant={application.firstName}
                 jobName={application.jobName}
                 timeOfApplication={application.timeOfApplication}
                 applicationStatus={application.applicationStatus}

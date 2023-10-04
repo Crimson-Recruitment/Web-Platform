@@ -2,43 +2,33 @@ import * as React from "react";
 import SideBar from "../../../components/Users/SideBar";
 import "../../../Styles/jobs.css";
 import { Alert, Box, Button, Grid, Snackbar } from "@mui/material";
-import Firestore from "../../../Firebase/Firestore";
 import UserJobCard from "../../../components/Users/UserJobCard";
 import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
 import CardActions from "@mui/material/CardActions";
 import JobDescription from "../../../components/Users/JobDescription";
 import ApplicationBox from "../../../components/Users/ApplicationBox";
+import { JobsModel } from "../../../Models/JobsModel";
 
-function containsObject(obj, list) {
-  var i;
-  for (i = 0; i < list.length; i++) {
-    if (list[i] === obj) {
-      return true;
-    }
-  }
-
-  return false;
-}
 
 function Jobs() {
-  const firestore = new Firestore();
-  const [jobsList, setJobsList] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [current, setCurrent] = React.useState(null);
+  const [jobsList, setJobsList] = React.useState<Array<JobsModel>>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [current, setCurrent] = React.useState<number>(-1);
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState();
+  const [open, setOpen] = React.useState<boolean|undefined>();
 
-  var viewList = [];
+  var viewList:Array<JobsModel> = [];
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
+
     setOpen(false);
   };
 
-  const jobHandler = (jobId, index) => {
+  const jobHandler = (jobId:number, index:number) => {
     if (window.innerWidth <= 1080) {
       navigate(`/jobs/${jobId}`);
     } else {
@@ -56,53 +46,7 @@ function Jobs() {
   };
 
   React.useEffect(() => {
-    (async () => {
-      let email = localStorage.getItem("userEmail");
-      await firestore.getUserDetails(email).then(async (user) => {
-        if (user.code == 0) {
-          if (sessionStorage.getItem("userDetails") != null) {
-            let hasDetails = await firestore.checkUserCompletedRegistration();
-            if (hasDetails.val == false) {
-              setOpen(true);
-              await new Promise((res) => setTimeout(res, 2000));
-              navigate("/skills", { state: { notify: true } });
-            }
-            setLoading(false);
-            return;
-          }
-          sessionStorage.setItem(
-            "userDetails",
-            JSON.stringify(user.val.data())
-          );
-          sessionStorage.setItem("userId", user.val.id);
-          let hasDetails = await firestore.checkUserCompletedRegistration();
-          if (hasDetails.val == false) {
-            setOpen(true);
-            await new Promise((res) => setTimeout(res, 2000));
-            navigate("/skills", { state: { notify: true } });
-          }
-          setLoading(false);
-        } else {
-          alert(user.val);
-          setLoading(false);
-        }
-      });
-      await firestore.getJobs().then((val) => {
-        if (val.code == 0) {
-          val.val.forEach((job) => {
-            if (containsObject(job.data(), jobsList) == false) {
-              viewList = [...viewList, { ...job.data(), id: job.id }];
-            }
-          });
-          setJobsList(viewList);
-          viewList = [];
-          setLoading(false);
-        } else {
-          alert(val.val);
-          setLoading(false);
-        }
-      });
-    })();
+  
   }, []);
   return (
     <SideBar>
@@ -130,7 +74,7 @@ function Jobs() {
           ) : (
             jobsList &&
             jobsList
-              .sort((a, b) => a.timestamp < b.timestamp)
+              .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
               .map((job, index) => {
                 return (
                   <a onClick={() => jobHandler(job.id, index)}>

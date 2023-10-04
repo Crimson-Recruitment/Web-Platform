@@ -27,14 +27,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { skills } from "../../../Data/UserProfessions";
 import Select from "react-select";
 import { industries, jobType } from "../../../Data/CompanyIndustries";
-import Firestore from "../../../Firebase/Firestore";
 import JobCard from "../../../components/Companies/JobCard";
 import { companyJobsReducer } from "../../../Functions/Reducers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Grid as GridLoader } from "react-loader-spinner";
 
-function CustomTabPanel(props) {
+function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -60,7 +59,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
+function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
@@ -92,20 +91,20 @@ function CompanyJobs() {
     }
   };
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: any, newValue: any) => {
     dispatch({ type: "SETVALUE", value: newValue });
   };
   const navigate = useNavigate();
 
-  const removeRequirementsHandler = (res) => {
-    const newList = state.requirements.filter((item) => item !== res);
+  const removeRequirementsHandler = (res: any) => {
+    const newList = state.requirements.filter((item: any) => item !== res);
     dispatch({ type: "SETREQUIREMENTS", requirements: newList });
   };
-  const removeBenefitsHandler = (res) => {
-    const newList = state.benefits.filter((item) => item !== res);
+  const removeBenefitsHandler = (res: any) => {
+    const newList = state.benefits.filter((item: any) => item !== res);
     dispatch({ type: "SETBENEFITS", benefits: newList });
   };
-  const handleClick = (message) => {
+  const handleClick = (message: { type: any; message: any; }) => {
     dispatch({
       type: "SETMESSAGE",
       message: { type: message.type, message: message.message },
@@ -113,123 +112,23 @@ function CompanyJobs() {
     dispatch({ type: "SETOPEN", open: true });
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
-    dispatch({ type: "SETOPEN", open: false });
+    setOpen(false);
   };
 
-  const firestore = new Firestore();
   const [expiryDate, setExpiryDate] = useState(new Date());
-  var viewList = [];
+  var viewList: any[] = [];
 
   useEffect(() => {
-    (async () => {
-      let email = localStorage.getItem("companyEmail");
-      if (sessionStorage.getItem("companyDetails") === null) {
-        await firestore.getCompanyDetails(email).then(async (user) => {
-          if (user.code == 0) {
-            sessionStorage.setItem(
-              "companyDetails",
-              JSON.stringify(user.val.data())
-            );
-            sessionStorage.setItem("companyId", user.val.id);
-            let hasDetails =
-              await firestore.checkCompanyCompletedRegistration();
-            if (hasDetails.val == false) {
-              handleClick({ type: "error", message: "Failed to load jobs!" });
-              await new Promise((res) => setTimeout(res, 2000));
-              navigate("/company-details", { state: { notify: true } });
-            } else {
-              await firestore
-                .getCompanyJobPosts(sessionStorage.getItem("companyId"))
-                .then((val) => {
-                  if (val.code == 0) {
-                    val.val.forEach((job) => {
-                      viewList = [...viewList, job.data()];
-                    });
-                    console.log(viewList);
-                    dispatch({ type: "SETJOBSLIST", jobsList: viewList });
-                    viewList = [];
-                    dispatch({ type: "SETLOADING", loading: false });
-                  } else {
-                    handleClick({ type: "error", message: val.val });
-                    dispatch({ type: "SETLOADING", loading: false });
-                  }
-                });
-            }
-          } else {
-            handleClick({ type: "error", message: user.val });
-          }
-        });
-      } else {
-        let hasDetails = await firestore.checkCompanyCompletedRegistration();
-        if (hasDetails.val == false) {
-          handleClick({ type: "error", message: "Failed to load jobs!" });
-          await new Promise((res) => setTimeout(res, 2000));
-          navigate("/company-details", { state: { notify: true } });
-        } else {
-          await firestore
-            .getCompanyJobPosts(sessionStorage.getItem("companyId"))
-            .then((val) => {
-              if (val.code == 0) {
-                val.val.forEach((job) => {
-                  viewList = [...viewList, job.data()];
-                });
-                console.log(viewList);
-                dispatch({ type: "SETJOBSLIST", jobsList: viewList });
-                viewList = [];
-                dispatch({ type: "SETLOADING", loading: false });
-              } else {
-                handleClick({ type: "error", message: val.val });
-                dispatch({ type: "SETLOADING", loading: false });
-              }
-            });
-        }
-      }
-    })();
   }, []);
 
-  const onSubmitHandler = async (event) => {
+  const onSubmitHandler = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.target);
-    dispatch({ type: "SETLOADING", loading: true });
-    await firestore
-      .createJobPost(
-        data.get("jobTitle"),
-        state.selectedType,
-        data.get("jobDescription"),
-        data.get("isVolunteer"),
-        state.jobType,
-        state.jobLocationType,
-        data.get("location"),
-        state.requirements,
-        state.selectedSkills,
-        data.get("minSalary"),
-        data.get("maxSalary"),
-        state.benefits,
-        data.get("hideSalary"),
-        data.get("requestCoverLetter"),
-        expiryDate,
-        new Date().getTime(),
-        data.get("otherDetails")
-      )
-      .then(async (val) => {
-        if (val.code == 0) {
-          handleClick({
-            type: "success",
-            message: "Successfully added Job Post!",
-          });
-          await new Promise((res) => setTimeout(res, 2000));
-          dispatch({ type: "SETLOADING", loading: false });
-          navigate(0);
-        } else {
-          handleClick({ type: "error", message: val.val });
-          dispatch({ type: "SETLOADING", loading: false });
-        }
-      });
+    
   };
 
   return (
@@ -260,14 +159,17 @@ function CompanyJobs() {
           </div>
         ) : state.jobsList ? (
           state.jobsList
-            .sort((a, b) => a.timestamp < b.timestamp)
-            .map((job) => {
+            .sort((a: { timestamp: number; }, b: { timestamp: number; }) => a.timestamp < b.timestamp)
+            .map((job: {
+              id: any; jobTitle: any; jobDescription: any; timestamp: any; 
+}) => {
               return (
                 <JobCard
                   title={job.jobTitle}
                   description={job.jobDescription}
-                  timestamp={job.timestamp}
-                />
+                  timestamp={job.timestamp} 
+                  id={job.id}               
+                   />
               );
             })
         ) : null}
@@ -292,7 +194,7 @@ function CompanyJobs() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <label
-                    for="jobTitle"
+                    htmlFor="jobTitle"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Job Title
@@ -308,7 +210,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="type"
+                    htmlFor="type"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Job Type
@@ -318,7 +220,7 @@ function CompanyJobs() {
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={jobType}
                     placeholder="Select the type of job."
-                    onChange={(val) => {
+                    onChange={(val: { label: any; }) => {
                       dispatch({
                         type: "SETJOBTYPE",
                         jobType: val.label,
@@ -337,7 +239,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="type"
+                    htmlFor="type"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Job location Type
@@ -351,7 +253,7 @@ function CompanyJobs() {
                       { value: "hybrid", label: "Hybrid" },
                     ]}
                     placeholder="Select the type of job."
-                    onChange={(val) => {
+                    onChange={(val: { label: any; }) => {
                       dispatch({
                         type: "SETJOBLOCATIONTYPE",
                         jobLocationType: val.label,
@@ -368,7 +270,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="field"
+                    htmlFor="field"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Job Field
@@ -379,7 +281,7 @@ function CompanyJobs() {
                     options={industries}
                     name="field"
                     placeholder="Healthcare, technology,....."
-                    onChange={(val) => {
+                    onChange={(val: { label: any; }) => {
                       dispatch({
                         type: "SETSELECTEDTYPE",
                         selectedType: val.label,
@@ -392,7 +294,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="jobDescription"
+                    htmlFor="jobDescription"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Job Description
@@ -410,7 +312,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="location"
+                    htmlFor="location"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Location
@@ -419,7 +321,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="requirements"
+                    htmlFor="requirements"
                     className="block mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Requirements
@@ -444,17 +346,17 @@ function CompanyJobs() {
                     }}
                     onClick={() => {
                       if (
-                        document.getElementsByName("requirements")[0].value !=
+                        document.getElementsByName("requirements")[0].innerHTML !=
                         ""
                       ) {
                         dispatch({
                           type: "SETREQUIREMENTS",
                           requirements: [
                             ...state.requirements,
-                            document.getElementsByName("requirements")[0].value,
+                            document.getElementsByName("requirements")[0].innerHTML,
                           ],
                         });
-                        document.getElementsByName("requirements")[0].value =
+                        document.getElementsByName("requirements")[0].innerHTML =
                           "";
                       }
                     }}
@@ -464,8 +366,8 @@ function CompanyJobs() {
                 </Grid>
                 <Grid xs={12}>
                   <List>
-                    {state.requirements != []
-                      ? state.requirements.map((req, index) => {
+                    {state.requirements &&
+                       state.requirements.map((req: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => {
                           return (
                             <ListItem
                               key={index}
@@ -486,12 +388,12 @@ function CompanyJobs() {
                             </ListItem>
                           );
                         })
-                      : null}
+                    }
                   </List>
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="expirydate"
+                    htmlFor="expirydate"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Expiry Date
@@ -500,10 +402,10 @@ function CompanyJobs() {
                     required
                     className="border mb-4 border-blue-300"
                     selected={expiryDate}
-                    onChange={(date) => {
+                    onChange={(date: Date | undefined) => {
                       try {
                         dateHandler(date);
-                      } catch (error) {
+                      } catch (error: Error) {
                         handleClick({ type: "error", message: error.message });
                       }
                     }}
@@ -511,17 +413,17 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="skills"
+                    htmlFor="skills"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Skills (Not needed for non-programming jobs)
+                    Skills (Not needed htmlFor non-programming jobs)
                   </label>
                   <Select
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={skills}
                     placeholder="Select skills,..."
                     name="skills"
-                    onChange={(val) => {
+                    onChange={(val: string | any[]) => {
                       if (val.length <= 6) {
                         dispatch({
                           type: "SETSELECTEDSKILLS",
@@ -541,7 +443,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <label
-                    for="minSalary"
+                    htmlFor="minSalary"
                     className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Min Salary in USD (Annual)
@@ -558,7 +460,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <label
-                    for="maxSalary"
+                    htmlFor="maxSalary"
                     className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Max Salary in USD (Annual)
@@ -581,7 +483,7 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="benefits"
+                    htmlFor="benefits"
                     className="block mt-4 mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Benefits
@@ -606,18 +508,7 @@ function CompanyJobs() {
                       ":hover": { backgroundColor: "darkgreen" },
                     }}
                     onClick={() => {
-                      if (
-                        document.getElementsByName("benefits")[0].value != ""
-                      ) {
-                        dispatch({
-                          type: "SETBENEFITS",
-                          benefits: [
-                            ...state.benefits,
-                            document.getElementsByName("benefits")[0].value,
-                          ],
-                        });
-                        document.getElementsByName("benefits")[0].value = "";
-                      }
+                    
                     }}
                   >
                     Add
@@ -625,8 +516,8 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <List>
-                    {state.benefits != []
-                      ? state.benefits.map((req, index) => {
+                    {state.benefits &&
+                       state.benefits.map((req: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => {
                           return (
                             <ListItem
                               key={index}
@@ -647,27 +538,27 @@ function CompanyJobs() {
                             </ListItem>
                           );
                         })
-                      : null}
+                      }
                   </List>
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
                     control={<Switch name="requestCoverLetter" />}
-                    label="Request for a cover letter ?"
+                    label="Request htmlFor a cover letter ?"
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <label
-                    for="overview"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="overview"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Incase of any other details.
                   </label>
                   <textarea
                     id="otherDetails"
                     name="otherDetails"
-                    rows="4"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    rows={4}
+                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                   ></textarea>
                 </Grid>
               </Grid>

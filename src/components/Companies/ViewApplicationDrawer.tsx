@@ -34,7 +34,7 @@ const Puller = styled(Box)(({ theme }) => ({
   left: "calc(50% - 15px)",
 }));
 
-function ViewApplicationDrawer(props) {
+function ViewApplicationDrawer(props: { window: any; open: any; toggleDrawer: any; }) {
   const { window, open, toggleDrawer } = props;
 
   const container =

@@ -1,28 +1,30 @@
-import React, { useRef } from "react";
+import React, { FormEventHandler, useRef } from "react";
 import { useState } from "react";
-import { TextField, Button, Typography, Grid, Box, Snackbar, Alert } from "@mui/material";
+import { TextField, Button, Typography, Grid, Box, Snackbar, Alert, AlertColor, SnackbarCloseReason } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function ContactUs() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState({message:"", severity:""});
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
     setOpen(false);
   };
 
-const form = useRef();
+
+const form = useRef<HTMLFormElement>(null);
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true)
   };
@@ -89,7 +91,7 @@ const form = useRef();
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
-          severity={message.severity}
+          severity={message.severity as AlertColor}
           sx={{ width: "100%" }}
         >
           {message.message}

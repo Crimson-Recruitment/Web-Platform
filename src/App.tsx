@@ -50,7 +50,6 @@ function App() {
         <Route path="/test" element={<Messaging />} />
         {cookie.get("user-login") ? (
           <>
-            <Route path="/skills" element={<Skills />} />
             <Route path="/user-pricing" element={<UserPricing />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/for-you" element={<ForYou />} />
@@ -62,7 +61,6 @@ function App() {
         {cookie.get("company-login") ? (
           <>
             <Route path="/company-jobs" element={<CompanyJobs />} />
-            <Route path="/company-details" element={<CompanyDetails />} />
             <Route path="/company-profile" element={<CompanyProfile />} />
             <Route path="/company-pricing" element={<CompanyPricing />} />
             <Route

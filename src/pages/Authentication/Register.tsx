@@ -11,12 +11,10 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import MuiPhoneNumber from "material-ui-phone-number";
-import Auth from "../../Firebase/Authentication";
-import uniqid from "uniqid";
 import LocationSearchInput from "../../components/LocationInput";
 import Cookies from "universal-cookie";
-import { useForm } from "react-hook-form";
-import { object, string } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const defaultTheme = createTheme();
@@ -37,54 +35,19 @@ export default function Register() {
 
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
-    reset,
     handleSubmit,
-  } = useForm({
-    resolver: zodResolver(validationSchema),
-  });
+    formState: { errors, isSubmitSuccessful }
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
+  
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful]);
 
-  const onSubmitHandler = async (values) => {
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    let auth = new Auth();
-    let id = uniqid(`${values.firstName}_${values.lastName}-`, "-user");
-    await auth
-      .signUserUp(
-        id,
-        values.email,
-        values.password,
-        values.firstName,
-        values.lastName,
-        document.getElementsByName("phonenumber")[0].value,
-        document.getElementsByName("location")[0].value
-      )
-      .then(async (val) => {
-        if (val.code == 0) {
-          cookie.set("user-login", true, { path: "/" });
-          localStorage.setItem("userEmail", values.email);
-          sessionStorage.setItem(
-            "userDetails",
-            JSON.stringify({
-              id: id,
-              firstName: values.firstName,
-              lastName: values.lastName,
-              phoneNumber: document.getElementsByName("phonenumber")[0].value,
-              emailAddress: values.email,
-              location: document.getElementsByName("location")[0].value,
-            })
-          );
-          window.location.href = "/skills";
-          setLoading(false);
-        } else {
-          alert(`${val.val}`);
-          setLoading(false);
-        }
-      });
     setLoading(false);
   };
   return (
@@ -116,13 +79,12 @@ export default function Register() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   error={
-                    errors["firstName"] !== null ? errors["firstName"] : null
+                    !!errors["firstName"]
                   }
                   helperText={
                     errors["firstName"] ? errors["firstName"].message : ""
@@ -138,9 +100,8 @@ export default function Register() {
                   fullWidth
                   id="lastName"
                   label="Last Name"
-                  name="lastName"
                   error={
-                    errors["lastName"] !== null ? errors["lastName"] : null
+                    !!errors["lastName"]
                   }
                   helperText={
                     errors["lastName"] ? errors["lastName"].message : ""
@@ -150,6 +111,7 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <MuiPhoneNumber
+                  onChange={() => null}
                   required={true}
                   variant="outlined"
                   id="phonenumber"
@@ -160,7 +122,7 @@ export default function Register() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <LocationSearchInput {...register("location")} />
+                <LocationSearchInput />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -169,9 +131,8 @@ export default function Register() {
                   type="email"
                   id="email"
                   label="Email Address"
-                  name="email"
                   autoComplete="email"
-                  error={errors["email"] !== null ? errors["email"] : null}
+                  error={!!errors["email"]}
                   helperText={errors["email"] ? errors["email"].message : ""}
                   {...register("email")}
                 />
@@ -180,12 +141,11 @@ export default function Register() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
                   label="Password"
                   type="password"
                   id="password"
                   error={
-                    errors["password"] !== null ? errors["password"] : null
+                    !errors["password"]
                   }
                   helperText={
                     errors["password"] ? errors["password"].message : ""
@@ -214,7 +174,6 @@ export default function Register() {
                 <Link
                   className="text-red-600 hover:text-red-800"
                   to="/login"
-                  variant="body2"
                 >
                   Already have an account? Sign in
                 </Link>

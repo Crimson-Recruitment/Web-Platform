@@ -70,7 +70,6 @@ export default function UserPricing() {
             <Card>
               <CardHeader
                 title={userTier.title}
-                subheader={userTier.subheader}
                 titleTypographyProps={{ align: "center" }}
                 action={userTier.title === "Pro" ? <StarIcon /> : null}
                 subheaderTypographyProps={{
@@ -113,7 +112,7 @@ export default function UserPricing() {
                 </ul>
               </CardContent>
               <CardActions>
-                <Button fullWidth variant={userTier.buttonVariant}>
+                <Button fullWidth variant={"contained"}>
                   {userTier.buttonText}
                 </Button>
               </CardActions>

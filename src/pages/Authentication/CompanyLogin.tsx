@@ -15,8 +15,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Alert, Snackbar } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { object, string } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const defaultTheme = createTheme();
@@ -34,56 +34,31 @@ export default function CompanyLogin() {
     password: string().nonempty("Field is required!"),
   });
 
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
+
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
-    reset,
     handleSubmit,
-  } = useForm({
-    resolver: zodResolver(validationSchema),
-  });
+    formState: { errors, isSubmitSuccessful }
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
+
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful]);
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
     setOpen(false);
   };
-  const onSubmitHandler = async (values) => {
+  
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    let isUser = await firestore.checkUserEmail(values.email);
-    if (isUser.val == true) {
-      let auth = new Auth();
-      await auth
-        .signIn(values.email, values.password)
-        .then((val) => {
-          if (val.code == 0) {
-            cookie.set("company-login", true, { path: "/" });
-            localStorage.setItem("companyEmail", values.email);
-            window.location.href = "/company-jobs";
-            setLoading(false);
-          } else {
-            setMessage(`${val.code} : ${val.val}`);
-            handleClick();
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          setMessage(err);
-          handleClick();
-          setLoading(false);
-        });
-    } else {
-      setMessage("Error on authentication!");
-      handleClick();
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   return (
@@ -118,9 +93,8 @@ export default function CompanyLogin() {
                 fullWidth
                 id="email"
                 label="Email Address"
-                name="email"
                 autoComplete="email"
-                error={errors["email"] !== null ? errors["email"] : null}
+                error={!!errors["email"]}
                 helperText={errors["email"] ? errors["email"].message : ""}
                 {...register("email")}
                 autoFocus
@@ -129,11 +103,10 @@ export default function CompanyLogin() {
                 margin="normal"
                 required
                 fullWidth
-                name="password"
                 label="Password"
                 type="password"
                 id="password"
-                error={errors["password"] !== null ? errors["password"] : null}
+                error={!!errors["password"]}
                 helperText={
                   errors["password"] ? errors["password"].message : ""
                 }
@@ -180,7 +153,7 @@ export default function CompanyLogin() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <RouterLink to="/company-register" variant="body2">
+                  <RouterLink to="/company-register">
                     {"Don't have an account? Sign Up"}
                   </RouterLink>
                 </Grid>
