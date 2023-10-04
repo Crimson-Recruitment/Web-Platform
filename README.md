@@ -1,55 +1,46 @@
-# Jade Recruitment Web Platform
+# Getting Started with Create React App
 
-Welcome to the Jade Recruitment GitHub repository! This repository contains the source code for the Jade Recruitment web platform, an innovative platform for job seekers and employers to connect and streamline the recruitment process.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Table of Contents
+## Available Scripts
 
-- [About Jade Recruitment](#about-jade-recruitment)
-- [Getting Started](#getting-started)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+In the project directory, you can run:
 
-## About Jade Recruitment
+### `yarn start`
 
-Jade Recruitment is a company dedicated to revolutionizing the recruitment industry. Our web platform serves as a centralized hub for job seekers and employers to find each other, making the process faster, easier, and more efficient.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Key features of the Jade Recruitment web platform include:
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-- User registration and authentication
-- Job search and filtering capabilities
-- Job application submission and tracking
-- Employer posting and management of job listings
-- Resume upload and profile creation for job seekers
-- Messaging system for communication between job seekers and employers
+### `yarn test`
 
-## Getting Started
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-To get started with the Jade Recruitment web platform, follow the instructions below.
+### `yarn build`
 
-### Prerequisites
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-- Node.js
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-### Installation
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-1. Clone this repository to your local machine using the following command:
+### `yarn eject`
 
-git clone https://github.com/jaderecruitment/web-platform.git
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-2. Change to the project's directory:
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-3. Install the required dependencies:
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-npm install
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-4. Start the application:
+## Learn More
 
-npm start
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-5. Access the Jade Recruitment web platform at `http://localhost:3000` in your browser.
-
-## Usage
-
-To use the Jade Recruitment web platform, follow the steps outlined below.
+To learn React, check out the [React documentation](https://reactjs.org/).
