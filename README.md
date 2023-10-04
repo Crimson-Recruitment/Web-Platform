@@ -1,4 +1,3 @@
-```markdown
 # Crimson Recruitment Platform - Installation
 
 To set up the Crimson Recruitment Platform on your local machine, follow these detailed steps:
