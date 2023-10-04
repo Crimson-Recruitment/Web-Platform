@@ -12,19 +12,6 @@ export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  React.useEffect(() => {
-    (async () => {
-      const doesAnyHistoryEntryExist = location.key !== "default";
-      if (doesAnyHistoryEntryExist == false) {
-        if (localStorage.getItem("userEmail") != null) {
-          navigate("/jobs");
-        } else if (localStorage.getItem("companyEmail") != null) {
-          navigate("/company-jobs");
-        }
-      }
-    })();
-  });
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main">
