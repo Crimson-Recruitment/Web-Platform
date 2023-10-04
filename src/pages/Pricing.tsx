@@ -132,6 +132,7 @@ export default function Pricing() {
                       component="li"
                       variant="subtitle1"
                       align="center"
+                      className="list-none"
                       key={line}
                     >
                       {line}
@@ -223,6 +224,7 @@ export default function Pricing() {
                         component="li"
                         variant="subtitle1"
                         align="center"
+                        className="list-none"
                         key={line.toString()}
                       >
                         {line}
