@@ -117,7 +117,7 @@ function CompanyJobs() {
       return;
     }
 
-    setOpen(false);
+    dispatch({ type: "SETOPEN", open: false });
   };
 
   const [expiryDate, setExpiryDate] = useState(new Date());
@@ -220,10 +220,10 @@ function CompanyJobs() {
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                     options={jobType}
                     placeholder="Select the type of job."
-                    onChange={(val: { label: any; }) => {
+                    onChange={(val: { label: any; }|null) => {
                       dispatch({
                         type: "SETJOBTYPE",
-                        jobType: val.label,
+                        jobType: val?.label,
                       });
                     }}
                     value={jobType.filter(function (option) {
@@ -253,10 +253,10 @@ function CompanyJobs() {
                       { value: "hybrid", label: "Hybrid" },
                     ]}
                     placeholder="Select the type of job."
-                    onChange={(val: { label: any; }) => {
+                    onChange={(val: { label: string, value:string }|null) => {
                       dispatch({
                         type: "SETJOBLOCATIONTYPE",
-                        jobLocationType: val.label,
+                        jobLocationType: val?.label,
                       });
                     }}
                     value={[
@@ -281,10 +281,10 @@ function CompanyJobs() {
                     options={industries}
                     name="field"
                     placeholder="Healthcare, technology,....."
-                    onChange={(val: { label: any; }) => {
+                    onChange={(val: { label: any; }|null) => {
                       dispatch({
                         type: "SETSELECTEDTYPE",
-                        selectedType: val.label,
+                        selectedType: val?.label,
                       });
                     }}
                     value={industries.filter(function (option) {
@@ -402,10 +402,10 @@ function CompanyJobs() {
                     required
                     className="border mb-4 border-blue-300"
                     selected={expiryDate}
-                    onChange={(date: Date | undefined) => {
+                    onChange={(date: Date | undefined|null) => {
                       try {
-                        dateHandler(date);
-                      } catch (error: Error) {
+                        dateHandler(date!);
+                      } catch (error: any) {
                         handleClick({ type: "error", message: error.message });
                       }
                     }}
@@ -423,8 +423,8 @@ function CompanyJobs() {
                     options={skills}
                     placeholder="Select skills,..."
                     name="skills"
-                    onChange={(val: string | any[]) => {
-                      if (val.length <= 6) {
+                    onChange={(val: string | any |null) => {
+                      if (val?.length <= 6) {
                         dispatch({
                           type: "SETSELECTEDSKILLS",
                           selectedSkills: val,

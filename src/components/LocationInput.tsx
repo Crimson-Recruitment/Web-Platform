@@ -6,22 +6,21 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 
 export default function LocationSearchInput() {
-  const [address, setAddress] = useState("");
-  const handleChange = (address) => {
+  const [address, setAddress] = useState<string>("");
+  const handleChange = (address:string) => {
     setAddress(address);
   };
 
-  const handleSelect = (address) => {
+  const handleSelect = (address:string) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .catch((error) => alert("Error", error));
+      .catch((error:Error) => alert(error));
   };
   return (
     <PlacesAutocomplete
       value={address}
       onChange={handleChange}
       onSelect={handleSelect}
-      className="p-5"
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
@@ -52,7 +51,6 @@ export default function LocationSearchInput() {
                   : { backgroundColor: "#f1f6ec", cursor: "pointer" };
                 return (
                   <div
-                    key={index}
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,

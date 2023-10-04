@@ -6,27 +6,27 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Firestore from "../../Firebase/Firestore";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from "@mui/material";
 
-export default function ApplicationBox({
-  needCoverLetter,
-  onClose,
-  isOpen,
-  jobId,
-  jobName,
-  companyId,
-}) {
+export default function ApplicationBox(props: { needCoverLetter: any; onClose: any; isOpen: any; jobId: any; jobName: any; companyId: any; }) {
+  const {
+    needCoverLetter,
+    onClose,
+    isOpen,
+    jobId,
+    jobName,
+    companyId,
+  } = props;
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [message, setMessage] = React.useState({ message: null, type: null });
-  const handleClick = (val) => {
+  const [message, setMessage] = React.useState<{message:string|null, type:string|null}>({ message: null, type: null });
+  const handleClick = (val:{message:string, type:string}) => {
     setMessage(val);
     setOpen(true);
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -35,31 +35,7 @@ export default function ApplicationBox({
 
   const submitHandler = async () => {
     setLoading(true);
-    await new Firestore()
-      .createApplication(
-        jobId,
-        jobName,
-        companyId,
-        document.getElementsByName("coverLetter")[0].value
-      )
-      .then(async (val) => {
-        if (val.code == 0) {
-          handleClick({
-            message: "Successfully applied for job!",
-            type: "success",
-          });
-          await new Promise((res) => setTimeout(res, 2000));
-          setLoading(false);
-          onClose();
-        } else {
-          handleClick({
-            message: "Already submitted an application!",
-            type: "error",
-          });
-          setLoading(false);
-          await new Promise((res) => setTimeout(res, 2000));
-        }
-      });
+    setLoading(false);
   };
 
   return (
@@ -81,8 +57,8 @@ export default function ApplicationBox({
                 required
                 id="coverletter"
                 name="coverLetter"
-                rows="4"
-                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                rows={4}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                 placeholder="Describe yourself,..."
               ></textarea>
             </>
@@ -100,7 +76,7 @@ export default function ApplicationBox({
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
-          severity={message.type}
+          severity={message.type as AlertColor}
           sx={{ width: "100%" }}
         >
           {message.message}

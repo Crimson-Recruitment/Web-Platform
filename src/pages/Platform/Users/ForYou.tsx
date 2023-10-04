@@ -42,7 +42,7 @@ CustomTabPanel.propTypes = {
 function ForYou() {
   const [jobsList, setJobsList] = React.useState<Array<JobsModel>>([]);
   const [loading, setLoading] = React.useState(true);
-  const [current, setCurrent] = React.useState<number|null>(-1);
+  const [current, setCurrent] = React.useState<number>(-1);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState<boolean>();
   const [dialogOpen, setDialogOpen] = React.useState(false);

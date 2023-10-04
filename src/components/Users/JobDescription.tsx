@@ -2,22 +2,22 @@ import React from "react";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import currencyFormatter from "currency-formatter";
 
-function JobDescription({
-  jobTitle,
-  type,
-  overview,
-  description,
-  requirements,
-  skills,
-  benefits,
-  location,
-  minSalary,
-  maxSalary,
-  hideSalary,
-  otherDetails,
-}) {
+function JobDescription(props: { jobTitle: any; type: any; overview: any; description: any; requirements: any; skills: any; benefits: any; location: any; minSalary: any; maxSalary: any; hideSalary: any; otherDetails: any; }) {
+  const {
+    jobTitle,
+    type,
+    overview,
+    description,
+    requirements,
+    skills,
+    benefits,
+    location,
+    minSalary,
+    maxSalary,
+    hideSalary,
+    otherDetails,
+  } = props;
   return (
     <Card
       sx={{
@@ -64,7 +64,7 @@ function JobDescription({
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               <ul>
-                {requirements.map((req) => {
+                {requirements.map((req:string) => {
                   return <li>{req}</li>;
                 })}
               </ul>
@@ -87,19 +87,7 @@ function JobDescription({
                   </span>
                 </div>
               ) : (
-                `${currencyFormatter.format(parseInt(minSalary), {
-                  symbol: "$",
-                  decimal: ".",
-                  thousand: ",",
-                  precision: 0,
-                  format: "%s%v",
-                })} to ${currencyFormatter.format(parseInt(maxSalary), {
-                  symbol: "$",
-                  decimal: ".",
-                  thousand: ",",
-                  precision: 0,
-                  format: "%s%v",
-                })}`
+                `${minSalary} to ${maxSalary}`
               )}
             </Typography>
             {skills.length != 0 ? (
@@ -109,7 +97,7 @@ function JobDescription({
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   <ul>
-                    {skills.map((skill) => {
+                    {skills.map((skill:{label:string}) => {
                       return <li>{skill.label}</li>;
                     })}
                   </ul>
@@ -124,7 +112,7 @@ function JobDescription({
                   </Typography>
                   <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     <ul>
-                      {benefits.map((benefit) => {
+                      {benefits.map((benefit:string) => {
                         return <li>{benefit}</li>;
                       })}
                     </ul>

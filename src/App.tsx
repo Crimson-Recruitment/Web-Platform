@@ -15,20 +15,17 @@ import CompanyJobs from "./pages/Platform/Companies/CompanyJobs";
 import CompanyProfile from "./pages/Platform/Companies/CompanyProfile";
 import CompanyApplications from "./pages/Platform/Companies/CompanyApplications";
 import CompanySettings from "./pages/Platform/Companies/CompanySettings";
-import Skills from "./pages/Platform/Users/Skills";
 import Jobs from "./pages/Platform/Users/Jobs";
 import ForYou from "./pages/Platform/Users/ForYou";
 import Profile from "./pages/Platform/Users/Profile";
 import Settings from "./pages/Platform/Users/Settings";
 import Applications from "./pages/Platform/Users/Applications";
-import CompanyDetails from "./pages/Platform/Companies/CompanyDetails";
 import UserView from "./pages/Platform/Users/UserView";
 import CompanyView from "./pages/Platform/Companies/CompanyView";
 import JobView from "./pages/Platform/Users/JobView";
 import UserPricing from "./pages/Platform/Users/UserPricing";
 import CompanyPricing from "./pages/Platform/Companies/CompanyPricing";
 import Pricing from "./pages/Pricing";
-import Messaging from "./components/Messaging";
 
 function App() {
   const cookie = new Cookies();
@@ -47,7 +44,6 @@ function App() {
         <Route path="/company-view/:id" element={<CompanyView />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/jobs/:id" element={<JobView />} />
-        <Route path="/test" element={<Messaging />} />
         {cookie.get("user-login") ? (
           <>
             <Route path="/user-pricing" element={<UserPricing />} />

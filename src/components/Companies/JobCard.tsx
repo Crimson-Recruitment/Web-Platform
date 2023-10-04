@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MDBCardBody, MDBCardTitle, MDBCardText, MDBCard } from "mdbreact";
 
-function JobCard({ title, id, description, timestamp }) {
+
+function JobCard(props: { title: any; id: any; description: any; timestamp: any; }) {
+  const { title, id, description, timestamp } = props;
   const time = (new Date().getTime() - timestamp) / 1000;
   const [def, setDef] = useState("");
 
@@ -9,28 +10,22 @@ function JobCard({ title, id, description, timestamp }) {
     if (time < 0) {
       setDef("less than 1 second");
     } else if (time < 60) {
-      setDef(`${parseInt(time)} seconds`);
+      setDef(`${time} seconds`);
     } else if (time < 3600) {
-      setDef(`${parseInt(time / 60)} mins`);
+      setDef(`${time / 60} mins`);
     } else if (time < 86400) {
-      setDef(`${parseInt(time / 3600)} hrs`);
+      setDef(`${time / 3600} hrs`);
     } else if (time >= 86400) {
-      setDef(`${parseInt(time / 86400)} days`);
+      setDef(`${time / 86400} days`);
     }
   };
   useEffect(() => {
     timeHandler();
   }, [new Date().getTime(), def]);
   return (
-    <MDBCard className="my-3 me-3 h-[300px] w-75">
-      <MDBCardBody>
-        <MDBCardTitle>{title}</MDBCardTitle>
-        <MDBCardText>{description}</MDBCardText>
-        <MDBCardText>
-          <small className="text-muted">Last updated {def} ago</small>
-        </MDBCardText>
-      </MDBCardBody>
-    </MDBCard>
+    <div>
+      Job Card
+    </div>
   );
 }
 

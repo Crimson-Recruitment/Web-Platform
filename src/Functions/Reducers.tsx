@@ -1,4 +1,21 @@
-export const companyDetailsReducer = (state, action) => {
+export const companyDetailsReducer = (state: any, action: { type?: any; selectedType?: any; loading?: any; image?: any; imagePath?: any; license?: any; } ) => {
+  switch (action.type) {
+    case "SETSELECTEDTYPE":
+      return { ...state, selectedType: action?.selectedType };
+    case "SETLOADING":
+      return { ...state, loading: action?.loading };
+    case "SETIMAGE":
+      return { ...state, image: action?.image };
+    case "SETIMAGEPATH":
+      return { ...state, imagePath: action?.imagePath };
+    case "SETLICENSE":
+      return { ...state, license: action?.license };
+    default:
+      return state;
+  }
+};
+
+export const updateCompanyProfileReducer = (state: any, action: { type: any; selectedType: any; loading: any; image: any; imagePath: any; license: any; }) => {
   switch (action.type) {
     case "SETSELECTEDTYPE":
       return { ...state, selectedType: action.selectedType };
@@ -15,24 +32,7 @@ export const companyDetailsReducer = (state, action) => {
   }
 };
 
-export const updateCompanyProfileReducer = (state, action) => {
-  switch (action.type) {
-    case "SETSELECTEDTYPE":
-      return { ...state, selectedType: action.selectedType };
-    case "SETLOADING":
-      return { ...state, loading: action.loading };
-    case "SETIMAGE":
-      return { ...state, image: action.image };
-    case "SETIMAGEPATH":
-      return { ...state, imagePath: action.imagePath };
-    case "SETLICENSE":
-      return { ...state, license: action.license };
-    default:
-      return state;
-  }
-};
-
-export const companyJobsReducer = (state, action) => {
+export const companyJobsReducer = (state: any, action: { type?: any; value?: any; requirements?: any; benefits?: any; loading?: any; selectedSkills?: any; selectedType?: any; jobsList?: any; open?: any; message?: any; jobType?: any; jobLocationType?: any; }) => {
   switch (action.type) {
     case "SETVALUE":
       return { ...state, value: action.value };
@@ -61,7 +61,7 @@ export const companyJobsReducer = (state, action) => {
   }
 };
 
-export const skillsReducer = (state, action) => {
+export const skillsReducer = (state: any, action: { type: any; loading: any; selectedProfession: any; jobsList: any; image: any; imagePath: any; resume: any; }) => {
   switch (action.type) {
     case "SETLOADING":
       return { ...state, loading: action.loading };
@@ -82,7 +82,7 @@ export const skillsReducer = (state, action) => {
   }
 };
 
-export const updateUserProfileReducer = (state, action) => {
+export const updateUserProfileReducer = (state: any, action: { type: any; loading: any; selectedProfession: any; jobsList: any; image: any; imagePath: any; resume: any; }) => {
   switch (action.type) {
     case "SETLOADING":
       return { ...state, loading: action.loading };

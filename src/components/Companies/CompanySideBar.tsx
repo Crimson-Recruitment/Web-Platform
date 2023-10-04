@@ -16,27 +16,14 @@ import { GridView } from "@mui/icons-material";
 import Logout from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
-import Auth from "../../Firebase/Authentication";
 import { companyPages } from "../../Data/CompanyPages";
-import Firestore from "../../Firebase/Firestore";
 
-function CompanySideBar({ children }) {
+function CompanySideBar(props: { children: any; }) {
+  const {children} = props;
   const [state, setState] = React.useState(false);
-  const firestore = new Firestore();
   const navigate = useNavigate();
-  const auth = new Auth();
-  const logoutHandler = async () => {
-    await auth.logout().then(() => {
-      window.location.href = "/";
-    });
-  };
-  const toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+
+  const toggleDrawer = (open:boolean) => (event:React.KeyboardEvent<HTMLDivElement>|React.MouseEvent) => {
 
     setState(open);
   };
@@ -61,8 +48,8 @@ function CompanySideBar({ children }) {
           </ListItem>
         ))}
         <ListItem sx={{ marginTop: "10px" }} disablePadding>
-          <Link style={{ textDecoration: "none", color: "black" }}>
-            <ListItemIcon onClick={logoutHandler}>
+          <Link to={""} style={{ textDecoration: "none", color: "black" }}>
+            <ListItemIcon>
               <Logout sx={{ fontSize: "35px", marginRight: "5px" }} />{" "}
               <ListItemText primary="Logout" />
             </ListItemIcon>
@@ -80,9 +67,9 @@ function CompanySideBar({ children }) {
       >
         <Toolbar variant="dense">
           <IconButton
+          href={""}
             edge="start"
             onClick={toggleDrawer(true)}
-            color="transparent"
             aria-label="menu"
             sx={{ mr: 2 }}
           >
@@ -116,7 +103,7 @@ function CompanySideBar({ children }) {
                     </Link>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={logoutHandler}>
+                <MenuItem>
                   <Typography
                     sx={{
                       fontSize: { md: "20px" },

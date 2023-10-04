@@ -11,7 +11,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { userPages } from "../Data/UserPages";
@@ -25,16 +24,16 @@ const pages = [
 ];
 
 function NavigationBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = React.useState<Element|null>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<Element|null>(null);
 
   const navigate = useNavigate();
   const cookie = new Cookies();
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu = (event:React.MouseEvent) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
+  const handleOpenUserMenu = (event:React.MouseEvent) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -136,22 +135,14 @@ function NavigationBar() {
           {cookie.get("user-login") == "true" ||
           cookie.get("company-login") == "true" ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip>
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Tooltip title="Icon">
+                <IconButton       
+                onClick={handleOpenUserMenu} 
+                color="inherit"
+                sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src={
-                      JSON.parse(sessionStorage.getItem("userDetails")) != null
-                        ? JSON.parse(sessionStorage.getItem("userDetails"))
-                            .profileImage
-                        : null ||
-                          JSON.parse(
-                            sessionStorage.getItem("companyDetails")
-                          ) != null
-                        ? JSON.parse(sessionStorage.getItem("companyDetails"))
-                            .logo
-                        : null
-                    }
+                  src={""}
                   />
                 </IconButton>
               </Tooltip>
