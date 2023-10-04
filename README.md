@@ -31,7 +31,3 @@ To set up the Crimson Recruitment Platform on your local machine, follow these d
    ```
 
    This will launch the platform on your local environment, and you can access it in your browser.
-
-## License
-
-The Crimson Recruitment Platform is open-source and available under the [MIT License](LICENSE). Feel free to use, modify, and distribute the code as needed.
