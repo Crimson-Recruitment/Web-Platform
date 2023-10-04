@@ -1,33 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
 export default function Footer() {
   return (
-    
 <footer className="bg-[#8B0000] shadow">
     <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div className="sm:flex sm:items-center sm:justify-between">
-            <div className="flex items-center mb-4 sm:mb-0">
-                <img src="" className="h-8 text-white mr-3" alt="Logo" />
+            <div className="items-center mb-4 sm:mb-0">
                 <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Crimson Recruitment</span>
             </div>
-            <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-white sm:mb-0">
+            <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-white sm:mb-0 list-none">
                 <li>
-                    <a href="#" className="mr-4 hover:underline md:mr-6 ">About</a>
+                    <a href="#" className="mr-4 hover:underline md:mr-6 ">Home</a>
                 </li>
                 <li>
-                    <a href="#" className="mr-4 hover:underline md:mr-6">Privacy Policy</a>
+                    <a href="#" className="mr-4 hover:underline md:mr-6">About</a>
                 </li>
                 <li>
-                    <a href="#" className="mr-4 hover:underline md:mr-6 ">Licensing</a>
+                    <a href="#" className="mr-4 hover:underline md:mr-6 ">Pricing</a>
                 </li>
                 <li>
-                    <a href="#" className="hover:underline">Contact</a>
+                    <a href="#" className="hover:underline  md:mr-6">Contact Us</a>
+                </li>
+                <li>
+                    <a href="#" className="hover:underline">Privacy Policy</a>
                 </li>
             </ul>
         </div>
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span className="block text-sm text-white sm:text-center ">© 2023 All Rights Reserved.</span>
+        <span className="block text-sm text-white sm:text-center ">© 2023 Crimson Recruitment. All Rights Reserved.</span>
     </div>
 </footer>
 

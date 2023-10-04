@@ -1,24 +1,17 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button, { ButtonPropsVariantOverrides } from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardHeader, { OverridableCardHeader } from "@mui/material/CardHeader";
+import CardHeader from "@mui/material/CardHeader";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import StarIcon from "@mui/icons-material/StarBorder";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
-import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-import { OverridableComponent, OverridableTypeMap } from "@mui/material/OverridableComponent";
-import { number } from "zod";
 
 const userTier = {
   title: "Premium",
@@ -81,10 +74,7 @@ const defaultTheme = createTheme();
 export default function Pricing() {
   const navigate = useNavigate();
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <GlobalStyles
-        styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}
-      />
+    <div>
       <CssBaseline />
       <Container
         disableGutters
@@ -254,6 +244,6 @@ export default function Pricing() {
           ))}
         </Grid>
       </Container>
-    </ThemeProvider>
+      </div>
   );
 }
