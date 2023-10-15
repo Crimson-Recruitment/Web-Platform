@@ -1,55 +1,33 @@
-# Jade Recruitment Web Platform
+# Crimson Recruitment Platform - Installation
 
-Welcome to the Jade Recruitment GitHub repository! This repository contains the source code for the Jade Recruitment web platform, an innovative platform for job seekers and employers to connect and streamline the recruitment process.
+To set up the Crimson Recruitment Platform on your local machine, follow these detailed steps:
 
-## Table of Contents
+1. **Node.js and Yarn**: Ensure you have [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com) installed on your system.
 
-- [About Jade Recruitment](#about-jade-recruitment)
-- [Getting Started](#getting-started)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+2. **Clone the Repository**: Clone the repository to your local machine using the following command:
 
-## About Jade Recruitment
+   ```bash
+   git clone https://github.com/Crimson-Recruitment/Web-Platform.git
+   ```
 
-Jade Recruitment is a company dedicated to revolutionizing the recruitment industry. Our web platform serves as a centralized hub for job seekers and employers to find each other, making the process faster, easier, and more efficient.
+3. **Navigate to Project Directory**: Go to the project directory:
 
-Key features of the Jade Recruitment web platform include:
+   ```bash
+   cd crimson-recruitment
+   ```
 
-- User registration and authentication
-- Job search and filtering capabilities
-- Job application submission and tracking
-- Employer posting and management of job listings
-- Resume upload and profile creation for job seekers
-- Messaging system for communication between job seekers and employers
+4. **Install Dependencies**: Install the necessary dependencies using Yarn:
 
-## Getting Started
+   ```bash
+   yarn install
+   ```
 
-To get started with the Jade Recruitment web platform, follow the instructions below.
+   This will fetch all the required packages and set up the project.
 
-### Prerequisites
+5. **Start the Development Server**: Start the development server and run the application using:
 
-- Node.js
+   ```bash
+   yarn start
+   ```
 
-### Installation
-
-1. Clone this repository to your local machine using the following command:
-
-git clone https://github.com/jaderecruitment/web-platform.git
-
-2. Change to the project's directory:
-
-3. Install the required dependencies:
-
-npm install
-
-4. Start the application:
-
-npm start
-
-5. Access the Jade Recruitment web platform at `http://localhost:3000` in your browser.
-
-## Usage
-
-To use the Jade Recruitment web platform, follow the steps outlined below.
+   This will launch the platform on your local environment, and you can access it in your browser.
