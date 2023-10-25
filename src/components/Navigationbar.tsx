@@ -20,6 +20,7 @@ import logo from "../assets/images/logo.png";
 const pages = [
   { pageName: "Home", link: "/" },
   { pageName: "About", link: "/about" },
+  { pageName: "Jobs", link: "/view-jobs" },
   { pageName: "Contact Us", link: "/contact-us" },
   { pageName: "Pricing", link: "/pricing" },
 ];

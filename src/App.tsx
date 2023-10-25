@@ -26,6 +26,7 @@ import JobView from "./pages/Platform/Users/JobView";
 import UserPricing from "./pages/Platform/Users/UserPricing";
 import CompanyPricing from "./pages/Platform/Companies/CompanyPricing";
 import Pricing from "./pages/Pricing";
+import ShowJobs from "./pages/ShowJobs";
 
 function App() {
   const cookie = new Cookies();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/company-login" element={<CompanyLogin />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/view-jobs" element={<ShowJobs/>}/>
         <Route path="/register" element={<Register />} />
         <Route path="/company-register" element={<CompanyRegister />} />
         <Route path="/user-view/:id" element={<UserView />} />
