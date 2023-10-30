@@ -15,6 +15,7 @@ import LocationSearchInput from "../../components/LocationInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import RegisterForm from '../../components/RegisterForm';
 
 export default function CompanyRegister() {
   const cookie = new Cookies();
@@ -47,6 +48,7 @@ export default function CompanyRegister() {
     setLoading(true);
     setLoading(false);
   };
+  //const steps = ['SIGN UP', 'CONTINUE', 'FINISH'];
 
   return (
     <Container component="main" maxWidth="xs">
@@ -166,6 +168,7 @@ export default function CompanyRegister() {
               </Link>
             </Grid>
           </Grid>
+          
         </Box>
       </Box>
     </Container>
