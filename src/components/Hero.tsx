@@ -50,7 +50,7 @@ const HomeHero = () => {
                     component="mark"
                     sx={{
                       position: "relative",
-                      color: "green",
+                      color: "red",
                       fontSize: "inherit",
                       fontWeight: "inherit",
                       backgroundColor: "unset",
@@ -110,8 +110,8 @@ const HomeHero = () => {
                 <Link to="/login">
                   <Button
                     sx={{
-                      backgroundColor: "green",
-                      ":hover": { backgroundColor: "darkgreen" },
+                      backgroundColor: "darkred",
+                      ":hover": { backgroundColor: "black" },
                     }}
                     size="large"
                     variant="contained"
@@ -124,13 +124,13 @@ const HomeHero = () => {
                 <Link to="/company-login">
                   <Button
                     sx={{
-                      borderColor: "green",
-                      color: "green",
+                      borderColor: "darkred",
+                      color: "darkred",
                       backgroundColor: "white",
                       ":hover": {
-                        backgroundColor: "darkgreen",
+                        backgroundColor: "black",
                         color: "white",
-                        borderColor: "green",
+                        borderColor: "black",
                       },
                     }}
                     size="large"

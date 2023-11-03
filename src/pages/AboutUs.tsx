@@ -3,13 +3,14 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { HelpImage } from "../Data/Images";
 
 export default function AboutUs() {
   return (
     <main>
       <Box
         sx={{
-          bgcolor: "lightred",
+          bgcolor: "#FFC0CB",
           pt: 8,
           pb: 6,
         }}
@@ -99,16 +100,12 @@ export default function AboutUs() {
         </Grid>
         <Grid
           item
+          component="img"
           xs={12}
+          src={HelpImage}
           sx={{
-            backgroundImage: "url(./images/help1.png)",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            objectFit: "cover",
+            objectPosition: "center",
             minHeight: "450px",
           }}
         />

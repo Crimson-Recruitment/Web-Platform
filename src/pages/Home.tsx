@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HomeHero from "../components/Hero";
 import { useLocation, useNavigate } from "react-router-dom";
+import { HomePage } from "../Data/Images";
 
 const defaultTheme = createTheme();
 
@@ -21,18 +22,14 @@ export default function Home() {
         </Grid>
         <Grid
           item
+          component="img"
           xs={false}
           sm={false}
           md={5}
+          src={HomePage}
           sx={{
-            backgroundImage: "url(./images/home1.png)",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            objectFit: "cover",
+            objectPosition: "center",
           }}
         />
       </Grid>
