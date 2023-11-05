@@ -1,21 +1,19 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Cookies from "universal-cookie";
-import { Alert, Snackbar } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, Snackbar } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import CssBaseline from "@mui/material/CssBaseline";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { object, string, z } from "zod";
 import { Bg1 } from "../../Data/Images";
 
 export default function Login() {
@@ -117,7 +115,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2,  backgroundColor: "darkred",
-              ":hover": { backgroundColor: "black" }, }}
+              ":hover": { backgroundColor: "black" } }}
             >
               {loading ? "Loading..." : "Sign In"}
             </Button>

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Grid as GridLoader } from "react-loader-spinner";
-import { Button, Grid, Typography } from "@mui/material";
 import { Email, PhoneInTalk } from "@mui/icons-material";
+import { Button, Grid, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Grid as GridLoader } from "react-loader-spinner";
+import { useParams } from "react-router-dom";
 import { UserModel } from "../../../Models/UserModel";
 
 function UserView() {

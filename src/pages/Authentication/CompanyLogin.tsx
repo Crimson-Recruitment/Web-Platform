@@ -1,23 +1,20 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
-import { Alert, Snackbar } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, Snackbar } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import CssBaseline from "@mui/material/CssBaseline";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { object, string, z } from "zod";
 import { Bg2 } from "../../Data/Images";
 
 const defaultTheme = createTheme();
@@ -76,9 +73,6 @@ export default function CompanyLogin() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "red" }}>
-              <LockOutlinedIcon />
-            </Avatar>
             <Typography component="h1" variant="h5">
               Company Sign in
             </Typography>
@@ -123,11 +117,12 @@ export default function CompanyLogin() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2,backgroundColor: "darkred",
+                ":hover": { backgroundColor: "black" } }}
               >
                 {loading ? "Loading..." : "Sign In"}
               </Button>
-              <RouterLink to="/login">
+              <Link to="/login">
                 <Button
                   type="submit"
                   fullWidth
@@ -135,28 +130,28 @@ export default function CompanyLogin() {
                   sx={{
                     mb: 2,
                     backgroundColor: "white",
-                    borderColor: "red",
-                    color: "red",
+                    borderColor: "darkred",
+                    color: "darkred",
                     ":hover": {
                       color: "white",
-                      backgroundColor: "red",
-                      borderColor: "red",
+                      backgroundColor: "black",
+                      borderColor: "black",
                     },
                   }}
                 >
                   I'm a Job Seeker
                 </Button>
-              </RouterLink>
+              </Link>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
+                <Link to="*">
+                  Forgot password?
+                </Link>
                 </Grid>
                 <Grid item>
-                  <RouterLink to="/company-register">
+                  <Link to="/company-register">
                     {"Don't have an account? Sign Up"}
-                  </RouterLink>
+                  </Link>
                 </Grid>
               </Grid>
             </Box>
