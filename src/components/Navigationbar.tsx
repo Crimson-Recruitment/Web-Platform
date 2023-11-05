@@ -99,7 +99,7 @@ function NavigationBar() {
                   to={page.link}
                   style={{ textDecoration: "none", color: "black" }}
                 >
-                  <MenuItem key={page.pageName}>
+                  <MenuItem key={page.link}>
                     <Typography textAlign="center">{page.pageName}</Typography>
                   </MenuItem>
                 </Link>

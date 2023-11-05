@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { HelpImage } from "../Data/Images";
+import { About1, HelpImage } from "../Data/Images";
 
 export default function AboutUs() {
   return (
@@ -125,23 +125,18 @@ export default function AboutUs() {
           </Typography>
         </Grid>
         <Grid container sx={{ marginTop: "100px" }}>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            sx={{
-              backgroundImage: "url(./images/success1.png)",
-              backgroundRepeat: "no-repeat",
-              backgroundColor: (t) =>
-                t.palette.mode === "light"
-                  ? t.palette.grey[50]
-                  : t.palette.grey[900],
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              minHeight: "300px",
-            }}
-          />
-
+        <Grid
+        item
+        component="img"
+        src={About1}
+        xs={12}
+        sm={6}
+        sx={{
+          objectFit: "cover",
+          objectPosition: "center",
+          height:"300px"
+        }}
+      />
           <Grid item xs={12} sm={6} justifyContent="flex-end">
             <Typography
               component="blockquote"

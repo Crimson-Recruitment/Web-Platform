@@ -18,6 +18,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Bg2 } from "../../Data/Images";
 
 const defaultTheme = createTheme();
 export default function CompanyLogin() {
@@ -162,21 +163,18 @@ export default function CompanyLogin() {
           </Box>
         </Grid>
         <Grid
-          item
-          xs={false}
-          sm={false}
-          md={8}
-          sx={{
-            backgroundImage: "url(./images/login2.png)",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+        item
+        component="img"
+        src={Bg2}
+        xs={false}
+        sm={false}
+        md={8}
+        sx={{
+          objectFit: "cover",
+          objectPosition: "center",
+          height:"90vh"
+        }}
+      />
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>

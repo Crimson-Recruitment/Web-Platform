@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavigationBar from "./components/Navigationbar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -27,6 +27,7 @@ import UserPricing from "./pages/Platform/Users/UserPricing";
 import CompanyPricing from "./pages/Platform/Companies/CompanyPricing";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
+import { BASEURL } from "./utils/env";
 
 function App() {
   const cookie = new Cookies();

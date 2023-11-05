@@ -16,6 +16,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Bg1 } from "../../Data/Images";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
@@ -159,18 +160,15 @@ export default function Login() {
       </Grid>
       <Grid
         item
+        component="img"
+        src={Bg1}
         xs={false}
         sm={false}
         md={8}
         sx={{
-          backgroundImage: "url(./images/login.png)",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          objectFit: "cover",
+          objectPosition: "center",
+          height:"90vh"
         }}
       />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
