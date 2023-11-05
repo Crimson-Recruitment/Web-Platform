@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { About1, HelpImage } from "../Data/Images";
+import { About1, Frustrated, HelpImage } from "../Data/Images";
 
 export default function AboutUs() {
   return (
@@ -68,22 +68,18 @@ export default function AboutUs() {
       <Container sx={{ py: 8 }} maxWidth="md">
         {/* End hero unit */}
         <Grid container spacing={5} sx={{ marginBottom: "100px" }}>
-          <Grid
-            xs={12}
-            sm={6}
-            sx={{
-              backgroundImage: "url(./images/frustration1.png)",
-              backgroundRepeat: "no-repeat",
-              backgroundColor: (t) =>
-                t.palette.mode === "light"
-                  ? t.palette.grey[50]
-                  : t.palette.grey[900],
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              minHeight: "300px",
-              width: { xs: "100vw" },
-            }}
-          />
+        <Grid
+          item
+          component="img"
+          xs={12}
+          sm={6}
+          src={Frustrated}
+          sx={{
+            marginTop:"-50px",
+            objectFit: "contain",
+            maxHeight: "400px",
+          }}
+        />
           <Grid xs={12} sm={6}>
             <Typography
               align="center"
@@ -106,7 +102,7 @@ export default function AboutUs() {
           sx={{
             objectFit: "cover",
             objectPosition: "center",
-            minHeight: "450px",
+            paddingX:{md:"100px"}
           }}
         />
         <Grid item xs={12} sm={6}>

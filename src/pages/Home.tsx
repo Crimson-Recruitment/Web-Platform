@@ -30,6 +30,7 @@ export default function Home() {
           sx={{
             objectFit: "cover",
             objectPosition: "center",
+            display: { xs: 'none', md: 'block' }
           }}
         />
       </Grid>

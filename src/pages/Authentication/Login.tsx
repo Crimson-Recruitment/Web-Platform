@@ -74,9 +74,6 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "red" }}>
-            <LockOutlinedIcon />
-          </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
@@ -119,7 +116,8 @@ export default function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2,  backgroundColor: "darkred",
+              ":hover": { backgroundColor: "black" }, }}
             >
               {loading ? "Loading..." : "Sign In"}
             </Button>
@@ -131,12 +129,12 @@ export default function Login() {
                 sx={{
                   mb: 2,
                   backgroundColor: "white",
-                  borderColor: "red",
-                  color: "red",
+                  borderColor: "darkred",
+                  color: "darkred",
                   ":hover": {
                     color: "white",
-                    backgroundColor: "red",
-                    borderColor: "red",
+                    backgroundColor: "black",
+                    borderColor: "black",
                   },
                 }}
               >
@@ -168,7 +166,8 @@ export default function Login() {
         sx={{
           objectFit: "cover",
           objectPosition: "center",
-          height:"90vh"
+          height:"90vh",
+          display: { xs: 'none', md: 'block' }
         }}
       />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

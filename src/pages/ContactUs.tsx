@@ -1,6 +1,6 @@
 import React, { FormEventHandler, useRef } from "react";
 import { useState } from "react";
-import { TextField, Button, Typography, Grid, Box, Snackbar, Alert, AlertColor, SnackbarCloseReason } from "@mui/material";
+import { TextField, Button, Typography, Grid, Box, Snackbar, Alert, AlertColor, SnackbarCloseReason, Card, CardContent, CardActions } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function ContactUs() {
@@ -30,7 +30,16 @@ const form = useRef<HTMLFormElement>(null);
   };
 
   return (
-    <Box sx={{ height: "100vh" }}>
+    <Box sx={{ height: "100vh",  }}>
+        <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ height: "100%" }}
+      >
+      <Card sx={{ maxWidth: "85vw", borderRadius:"20px" ,backgroundColor:"#FFC0CB" }}>
+      <CardContent>
       <Grid
         container
         direction="column"
@@ -42,6 +51,9 @@ const form = useRef<HTMLFormElement>(null);
           <Box sx={{ p: 2 }}>
             <Typography variant="h4" align="center" mb={2}>
               Contact Us
+            </Typography>
+            <Typography variant="h6" align="center" mb={2}>
+              We would love to hear from you!
             </Typography>
             <form
             ref={form}
@@ -58,6 +70,9 @@ const form = useRef<HTMLFormElement>(null);
                     onChange={(e) => setName(e.target.value)}
                     margin="normal"
                     name="from_name"
+                    variant="filled"
+                    color="error"
+                    sx={{background:"white"}}
                     required
                   />
                   <TextField
@@ -69,6 +84,9 @@ const form = useRef<HTMLFormElement>(null);
                     required
                     name="email"
                     type="email"
+                    variant="filled"
+                    color="error"
+                    sx={{background:"white"}}
                   />
                   <TextField
                     fullWidth
@@ -78,8 +96,12 @@ const form = useRef<HTMLFormElement>(null);
                     name="message"
                     multiline
                     rows={4}
+                    variant="filled"
+                    color="error"
+                    sx={{background:"white"}}
                   />
-                  <Button disabled={loading} variant="contained" type="submit" sx={{ mt: 2 }}>
+                  <Button disabled={loading} variant="contained" type="submit" sx={{ mt: 2,  backgroundColor: "darkred",
+                      ":hover": { backgroundColor: "black" }, }}>
                     {loading ? "Sending...": "Submit"}
                   </Button>
                 </Grid>
@@ -88,6 +110,10 @@ const form = useRef<HTMLFormElement>(null);
           </Box>
         </Grid>
       </Grid>
+      </CardContent>
+    </Card>
+    </Grid>
+     
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}

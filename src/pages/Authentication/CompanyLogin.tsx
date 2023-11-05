@@ -172,7 +172,8 @@ export default function CompanyLogin() {
         sx={{
           objectFit: "cover",
           objectPosition: "center",
-          height:"90vh"
+          height:"90vh",
+          display: { xs: 'none', md: 'block' }
         }}
       />
       </Grid>
