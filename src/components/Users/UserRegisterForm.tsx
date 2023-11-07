@@ -43,6 +43,9 @@ export default function UserRegisterForm() {
 
 
   const handleNext = () => {
+    if(activeStep  == steps.length-1) {
+      return;
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -81,17 +84,6 @@ export default function UserRegisterForm() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
         <React.Fragment>
         {activeStep == 0? 
            
@@ -333,7 +325,6 @@ export default function UserRegisterForm() {
           Already have an account? Sign in
         </Link>
       </React.Fragment>
-      )}
     </Box>
   );
 } 

@@ -52,6 +52,9 @@ export default function CompanyRegisterForm() {
 
 
   const handleNext = () => {
+    if(activeStep  == steps.length-1) {
+      return;
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -93,14 +96,7 @@ export default function CompanyRegisterForm() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
+  
         <React.Fragment>
           {activeStep == 0? 
              
@@ -341,7 +337,6 @@ export default function CompanyRegisterForm() {
             Already have an account? Sign in
           </Link>
         </React.Fragment>
-      )}
     </Box>
   );
 } 
