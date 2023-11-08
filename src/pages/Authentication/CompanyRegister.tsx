@@ -23,7 +23,7 @@ export default function CompanyRegister() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ minHeight: { lg: "90vh" }  }}>
+      <Grid container component="main" sx={{ maxHeight: { lg: "150vh" }  }}>
         <CssBaseline />
         <Grid
         item
@@ -35,7 +35,7 @@ export default function CompanyRegister() {
         sx={{
           objectFit: "cover",
           objectPosition: "center",
-          height:"100vh",
+          height:"120vh",
           display: { xs: 'none', md: 'block' }
         }}
       />

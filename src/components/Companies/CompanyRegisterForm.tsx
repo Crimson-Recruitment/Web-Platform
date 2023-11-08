@@ -8,13 +8,15 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
+import Select from "react-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Avatar, Grid, TextField } from '@mui/material';
 import LocationSearchInput from '../LocationInput';
 import MuiPhoneNumber from 'material-ui-phone-number';
+import { industries } from '../../Data/CompanyIndustries';
 
 
- const steps = ['Contact info', 'Company details', "Profile Image"];
+ const steps = ['Contact info', 'Company details', "Company Logo"];
 
 export default function CompanyRegisterForm() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -50,6 +52,9 @@ export default function CompanyRegisterForm() {
 
 
   const handleNext = () => {
+    if(activeStep  == steps.length-1) {
+      return;
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -91,14 +96,7 @@ export default function CompanyRegisterForm() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
+  
         <React.Fragment>
           {activeStep == 0? 
              
@@ -200,10 +198,22 @@ export default function CompanyRegisterForm() {
                </Box>
              : activeStep == 1 ? 
              <>
+              <label
+            htmlFor="profession"
+            className="block mb-2 mt-3 text-sm font-medium text-gray-900 w-full"
+          >
+            Company Type
+          </label>
+          <Select
+            required
+            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            options={industries}
+            placeholder="Healthcare, technology,....."
+          />
         <div className="mb-6">
           <label
             htmlFor="overview"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-gray-900"
           >
             Company Overview
           </label>
@@ -212,14 +222,14 @@ export default function CompanyRegisterForm() {
             id="overview"
             name="overview"
             rows={4}
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
             placeholder="About the company"
           ></textarea>
         </div>
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        <label className="block mb-2 text-sm font-medium text-gray-900">
           Is your company licensed?
         </label>
-        <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+        <div className="flex items-center pl-4 border border-gray-200 rounded">
           <input
             required
             checked
@@ -227,27 +237,27 @@ export default function CompanyRegisterForm() {
             type="radio"
             value={"true"}
             name="bordered-radio"
-            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500"
           />
           <label
             htmlFor="bordered-radio-1"
-            className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            className="w-full py-4 ml-2 text-sm font-medium text-gray-900"
           >
             Yes
           </label>
         </div>
-        <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 mb-5">
+        <div className="flex items-center pl-4 border border-gray-200 rounded">
           <input
             required
             id="bordered-radio-2"
             type="radio"
             value={"false"}
             name="bordered-radio"
-            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 "
           />
           <label
             htmlFor="bordered-radio-2"
-            className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            className="w-full py-4 ml-2 text-sm font-medium text-gray-900"
           >
             No
           </label>
@@ -257,7 +267,7 @@ export default function CompanyRegisterForm() {
           <>
             <label
             htmlFor="dropzone-file"
-            className="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white w-full"
+            className="block mb-2 mt-3 text-sm font-medium text-gray-900 w-full"
           >
             Company Logo
           </label>
@@ -269,14 +279,14 @@ export default function CompanyRegisterForm() {
               />
             </div>
           ) : (
-            <div className="flex items-center justify-center w-full">
+            <div className="flex mt-5 items-center justify-center w-full">
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <svg
-                    className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                    className="w-8 h-8 mb-4 text-gray-500"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -290,11 +300,11 @@ export default function CompanyRegisterForm() {
                       d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                     />
                   </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mb-2 text-sm text-gray-500">
                     <span className="font-semibold">Click to upload</span> or drag
                     and drop Company Logo.
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500">
                     JPEG, PNG, or JPG
                   </p>
                 </div>
@@ -306,7 +316,7 @@ export default function CompanyRegisterForm() {
             id="dropzone-file"
             type="file"
             accept=".jpeg, .png, .jpg"
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
           />
           </>}
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -327,7 +337,6 @@ export default function CompanyRegisterForm() {
             Already have an account? Sign in
           </Link>
         </React.Fragment>
-      )}
     </Box>
   );
 } 

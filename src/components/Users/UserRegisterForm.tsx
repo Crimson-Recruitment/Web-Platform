@@ -8,11 +8,12 @@ import Typography from '@mui/material/Typography';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Avatar, Grid, Select, TextField } from '@mui/material';
+import { Avatar, Grid, TextField } from '@mui/material';
+import Select from "react-select";
 import LocationSearchInput from '../LocationInput';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { Link } from 'react-router-dom';
-import { professionList } from '../../Data/UserProfessions';
+import { professionList, skills } from '../../Data/UserProfessions';
 
 
 const steps = ['Contact info', 'User details', "Profile Image"];
@@ -42,6 +43,9 @@ export default function UserRegisterForm() {
 
 
   const handleNext = () => {
+    if(activeStep  == steps.length-1) {
+      return;
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -80,17 +84,6 @@ export default function UserRegisterForm() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
         <React.Fragment>
         {activeStep == 0? 
            
@@ -206,15 +199,22 @@ export default function UserRegisterForm() {
            <div className="mb-6">
              <label
                htmlFor="profession"
-               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white w-full"
+               className="block mb-2 text-sm font-medium text-gray-900 w-full"
              >
                Profession
              </label>
+             <Select
+            required
+            className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            options={professionList}
+            placeholder="Medicine, technology,....."
+            isSearchable={true}
+          />
            </div>
            <div className="mb-6">
              <label
                htmlFor="about"
-               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+               className="block mb-2 text-sm font-medium text-gray-900"
              >
                About you
              </label>
@@ -223,26 +223,34 @@ export default function UserRegisterForm() {
                id="about"
                rows={4}
                name="about"
-               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
                placeholder="Describe yourself,..."
              ></textarea>
            </div>
            <label
              htmlFor="skills"
-             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+             className="block mb-2 text-sm font-medium text-gray-900"
            >
              Select your prominent skills (6 max).
            </label>
+           <Select
+          required
+          className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          options={skills}
+          placeholder="Select skills,..."
+          isSearchable={true}
+          isMulti
+        />
    
            <label
-             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+             className="block mb-2 text-sm font-medium text-gray-900"
              htmlFor="file_input"
            >
              Upload you Resume (max size 2mbs)
            </label>
            <input
              required
-             className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
              id="file_input"
              accept=".pdf,.doc,.docx"
              type="file"
@@ -258,14 +266,14 @@ export default function UserRegisterForm() {
               />
             </div>
           ) : (
-            <div className="flex items-center justify-center w-full">
+            <div className="flex mt-5 items-center justify-center w-full">
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <svg
-                    className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                    className="w-8 h-8 mb-4 text-gray-500"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -279,11 +287,11 @@ export default function UserRegisterForm() {
                       d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                     />
                   </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mb-2 text-sm text-gray-500">
                     <span className="font-semibold">Click to upload</span> or drag
                     and drop
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500">
                     JPEG, PNG, or JPG (3mbs max)
                   </p>
                 </div>
@@ -295,7 +303,7 @@ export default function UserRegisterForm() {
             id="dropzone-file"
             type="file"
             accept=".jpeg, .png, .jpg"
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
           />
 
         </>}
@@ -317,7 +325,6 @@ export default function UserRegisterForm() {
           Already have an account? Sign in
         </Link>
       </React.Fragment>
-      )}
     </Box>
   );
 } 
