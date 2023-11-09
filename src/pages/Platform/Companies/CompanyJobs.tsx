@@ -1,37 +1,36 @@
-import React, { useEffect, useReducer, useState } from "react";
-import CompanySideBar from "../../../components/Companies/CompanySideBar";
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Grid,
+  Alert,
   Button,
-  CssBaseline,
-  TextField,
   Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  IconButton,
   Snackbar,
-  Alert,
-  FormControlLabel,
   Switch,
+  TextField,
 } from "@mui/material";
-import LocationSearchInput from "../../../components/LocationInput";
-import { Link, useNavigate } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { skills } from "../../../Data/UserProfessions";
-import Select from "react-select";
-import { industries, jobType } from "../../../Data/CompanyIndustries";
-import JobCard from "../../../components/Companies/JobCard";
-import { companyJobsReducer } from "../../../Functions/Reducers";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import React, { useEffect, useReducer, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Grid as GridLoader } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+import { industries, jobType } from "../../../Data/CompanyIndustries";
+import { skills } from "../../../Data/UserProfessions";
+import { companyJobsReducer } from "../../../Functions/Reducers";
+import JobCard from "../../../components/Companies/JobCard";
+import LocationSearchInput from "../../../components/LocationInput";
 
 function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
   const { children, value, index, ...other } = props;
@@ -69,7 +68,7 @@ function a11yProps(index: number) {
 let initState = {
   requirements: [],
   benefits: [],
-  loading: true,
+  loading: false,
   selectedSkills: null,
   selectedType: null,
   jobsList: [],
@@ -132,7 +131,7 @@ function CompanyJobs() {
   };
 
   return (
-    <CompanySideBar>
+    <Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={state.value}
@@ -195,7 +194,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="jobTitle"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Job Title
                   </label>
@@ -211,13 +210,13 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="type"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Job Type
                   </label>
                   <Select
                     required
-                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                     options={jobType}
                     placeholder="Select the type of job."
                     onChange={(val: { label: any; }|null) => {
@@ -240,13 +239,13 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="type"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Job location Type
                   </label>
                   <Select
                     required
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                     options={[
                       { value: "remote", label: "Remote" },
                       { value: "on_site", label: "On-site" },
@@ -271,13 +270,13 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="field"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Job Field
                   </label>
                   <Select
                     required
-                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                     options={industries}
                     name="field"
                     placeholder="Healthcare, technology,....."
@@ -295,7 +294,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="jobDescription"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Job Description
                   </label>
@@ -313,7 +312,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="location"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Location
                   </label>
@@ -322,7 +321,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="requirements"
-                    className="block mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-[-5px] text-sm font-medium text-gray-900"
                   >
                     Requirements
                   </label>
@@ -394,7 +393,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="expirydate"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Expiry Date
                   </label>
@@ -414,12 +413,12 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="skills"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Skills (Not needed htmlFor non-programming jobs)
                   </label>
                   <Select
-                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                     options={skills}
                     placeholder="Select skills,..."
                     name="skills"
@@ -444,7 +443,7 @@ function CompanyJobs() {
                 <Grid item xs={12} sm={6}>
                   <label
                     htmlFor="minSalary"
-                    className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mt-4 text-sm font-medium text-gray-900"
                   >
                     Min Salary in USD (Annual)
                   </label>
@@ -461,7 +460,7 @@ function CompanyJobs() {
                 <Grid item xs={12} sm={6}>
                   <label
                     htmlFor="maxSalary"
-                    className="block mt-4 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mt-4 text-sm font-medium text-gray-900"
                   >
                     Max Salary in USD (Annual)
                   </label>
@@ -484,7 +483,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="benefits"
-                    className="block mt-4 mb-[-5px] text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mt-4 mb-[-5px] text-sm font-medium text-gray-900"
                   >
                     Benefits
                   </label>
@@ -550,7 +549,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <label
                     htmlFor="overview"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Incase of any other details.
                   </label>
@@ -558,7 +557,7 @@ function CompanyJobs() {
                     id="otherDetails"
                     name="otherDetails"
                     rows={4}
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
                   ></textarea>
                 </Grid>
               </Grid>
@@ -589,7 +588,7 @@ function CompanyJobs() {
           {state.message.message}
         </Alert>
       </Snackbar>
-    </CompanySideBar>
+    </Box>
   );
 }
 

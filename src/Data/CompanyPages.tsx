@@ -7,27 +7,27 @@ import UpgradeIcon from "@mui/icons-material/Upgrade";
 export const companyPages = [
   {
     pageName: "Company Profile",
-    link: "/company-profile",
+    section: "company-profile",
     icon: <BusinessIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "You Jobs",
-    link: "/company-jobs",
+    section: "company-jobs",
     icon: <WorkIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Applications",
-    link: "/company-applications",
+    section: "company-applications",
     icon: <ArticleIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Settings",
-    link: "/company-settings",
+    section: "company-settings",
     icon: <Settings sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Upgrade Account",
-    link: "/company-pricing",
+    section: "company-pricing",
     icon: <UpgradeIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
 ];

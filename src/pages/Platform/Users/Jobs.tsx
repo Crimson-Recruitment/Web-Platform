@@ -1,14 +1,13 @@
-import * as React from "react";
-import SideBar from "../../../components/Users/SideBar";
-import "../../../Styles/jobs.css";
 import { Alert, Box, Button, Grid, Snackbar } from "@mui/material";
-import UserJobCard from "../../../components/Users/UserJobCard";
-import { useNavigate } from "react-router-dom";
-import { Grid as GridLoader } from "react-loader-spinner";
 import CardActions from "@mui/material/CardActions";
-import JobDescription from "../../../components/Users/JobDescription";
-import ApplicationBox from "../../../components/Users/ApplicationBox";
+import * as React from "react";
+import { Grid as GridLoader } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 import { JobsModel } from "../../../Models/JobsModel";
+import "../../../Styles/jobs.css";
+import ApplicationBox from "../../../components/Users/ApplicationBox";
+import JobDescription from "../../../components/Users/JobDescription";
+import UserJobCard from "../../../components/Users/UserJobCard";
 
 
 function Jobs() {
@@ -49,7 +48,7 @@ function Jobs() {
   
   }, []);
   return (
-    <SideBar>
+    <Box>
       <Grid container padding="0px">
         <Grid className="min-h-[100vh]" item xs={12} lg={5}>
           <Box className="search-box">
@@ -72,7 +71,7 @@ function Jobs() {
               />
             </div>
           ) : (
-            jobsList &&
+            jobsList.length != 0 &&
             jobsList
               .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
               .map((job, index) => {
@@ -154,7 +153,7 @@ function Jobs() {
           Failed to load Jobs!
         </Alert>
       </Snackbar>
-    </SideBar>
+    </Box>
   );
 }
 

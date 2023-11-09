@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import CompanySideBar from "../../../components/Companies/CompanySideBar";
-import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
-import { Grid as GridLoader } from "react-loader-spinner";
+import { Alert, AlertColor, Box, Grid, Snackbar } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Alert, AlertColor, Grid, Snackbar } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Grid as GridLoader } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
+import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
 
 function CompanyApplications() {
   var applicationList:Array<ApplicationsModel> = [];
@@ -43,7 +42,7 @@ function CompanyApplications() {
   }, []);
   
   return (
-    <CompanySideBar>
+    <Box>
       <div className="xs:min-h-[120vh]  min-h-[120vh] ms-2">
         {loading ? (
           <div className="flex justify-center mt-12">
@@ -300,7 +299,7 @@ function CompanyApplications() {
           {message.message}
         </Alert>
       </Snackbar>
-    </CompanySideBar>
+    </Box>
   );
 }
 

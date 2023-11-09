@@ -1,8 +1,7 @@
+import { Alert, Box, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import SideBar from "../../../components/Users/SideBar";
-import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
-import { Alert, Avatar, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -22,7 +21,7 @@ export default function Profile() {
   
   }, []);
   return (
-    <SideBar>
+    <Box>
       {loading ? (
         <div className="flex justify-center mt-12">
           <GridLoader
@@ -44,6 +43,6 @@ export default function Profile() {
           Failed to load Profile!
         </Alert>
       </Snackbar>
-    </SideBar>
+    </Box>
   );
 }

@@ -1,8 +1,7 @@
+import { Alert, Box, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import CompanySideBar from "../../../components/Companies/CompanySideBar";
-import { useNavigate } from "react-router-dom";
 import { Grid as GridLoader } from "react-loader-spinner";
-import { Alert, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function CompanyProfile() {
   const [loading, setLoading] = useState(true);
@@ -22,7 +21,7 @@ function CompanyProfile() {
 
   }, []);
   return (
-    <CompanySideBar
+    <Box
     >
       {loading ? (
         <div className="flex justify-center align-center mt-12">
@@ -45,7 +44,7 @@ function CompanyProfile() {
           Failed to load Profile!
         </Alert>
       </Snackbar>
-    </CompanySideBar>
+    </Box>
   );
 }
 

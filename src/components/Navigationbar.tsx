@@ -164,30 +164,6 @@ function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {cookie.get("user-login") == "true"
-                  ? userPages.map((userpage) => (
-                    <MenuItem
-                      key={userpage.link}
-                      onClick={() => navigate(userpage.link)}
-                    >
-                      <Typography textAlign="center">
-                        {userpage.pageName}
-                      </Typography>
-                    </MenuItem>
-                  ))
-                  : null}
-                {cookie.get("company-login") == "true"
-                  ? companyPages.map((companypage) => (
-                    <MenuItem
-                      key={companypage.link}
-                      onClick={() => navigate(companypage.link)}
-                    >
-                      <Typography textAlign="center">
-                        {companypage.pageName}
-                      </Typography>
-                    </MenuItem>
-                  ))
-                  : null}
               </Menu>
             </Box>
           ) : (
@@ -252,30 +228,7 @@ function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {cookie.get("user-login") == "true"
-                  ? userPages.map((userpage) => (
-                    <MenuItem
-                      key={userpage.link}
-                      onClick={() => navigate(userpage.link)}
-                    >
-                      <Typography textAlign="center">
-                        {userpage.pageName}
-                      </Typography>
-                    </MenuItem>
-                  ))
-                  : null}
-                {cookie.get("company-login") == "true"
-                  ? companyPages.map((companypage) => (
-                    <MenuItem
-                      key={companypage.link}
-                      onClick={() => navigate(companypage.link)}
-                    >
-                      <Typography textAlign="center">
-                        {companypage.pageName}
-                      </Typography>
-                    </MenuItem>
-                  ))
-                  : null}
+          
               </Menu>
             </Box>
           )}

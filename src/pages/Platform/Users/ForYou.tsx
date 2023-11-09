@@ -1,17 +1,15 @@
-import * as React from "react";
+import { Alert, Button, Grid, Snackbar, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import SideBar from "../../../components/Users/SideBar";
-import "../../../Styles/jobs.css";
-import { Alert, Grid, Button, Snackbar, Typography } from "@mui/material";
-import PropTypes from "prop-types";
-import { industryProfessions } from "../../../Data/CompanyIndustries";
-import UserJobCard from "../../../components/Users/UserJobCard";
-import { useNavigate } from "react-router-dom";
-import { Grid as GridLoader } from "react-loader-spinner";
-import JobDescription from "../../../components/Users/JobDescription";
 import CardActions from "@mui/material/CardActions";
-import ApplicationBox from "../../../components/Users/ApplicationBox";
+import PropTypes from "prop-types";
+import * as React from "react";
+import { Grid as GridLoader } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 import { JobsModel } from "../../../Models/JobsModel";
+import "../../../Styles/jobs.css";
+import ApplicationBox from "../../../components/Users/ApplicationBox";
+import JobDescription from "../../../components/Users/JobDescription";
+import UserJobCard from "../../../components/Users/UserJobCard";
 
 function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
   const { children, value, index, ...other } = props;
@@ -75,7 +73,7 @@ function ForYou() {
   }, []);
 
   return (
-    <SideBar>
+    <Box>
       <Grid container>
         <Grid className="min-h-[100vh]" item xs={12} md={5}>
           {loading ? (
@@ -92,7 +90,7 @@ function ForYou() {
               />
             </div>
           ) : (
-            jobsList &&
+            jobsList.length != 0 &&
             jobsList
               .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
               .filter((val) => {
@@ -158,22 +156,23 @@ function ForYou() {
           ) : null}
         </Grid>
       </Grid>
-      <ApplicationBox
-        jobId={current !== null ? jobsList[current].id : null}
-        jobName={current !== null ? jobsList[current].jobTitle : null}
-        companyId={current !== null ? jobsList[current].companyId : null}
+      {jobsList.length != 0?<ApplicationBox
+        jobId={!!jobsList[current].id}
+        jobName={!!jobsList[current].jobTitle}
+        companyId={!!jobsList[current].companyId}
         needCoverLetter={
-          current !== null ? jobsList[current].requestCoverLetter : null
+          !!jobsList[current].requestCoverLetter
         }
         isOpen={dialogOpen}
         onClose={handleDialogClose}
-      />
+      />:null }
+      
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!
         </Alert>
       </Snackbar>
-    </SideBar>
+    </Box>
   );
 }
 

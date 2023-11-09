@@ -28,6 +28,8 @@ import CompanyPricing from "./pages/Platform/Companies/CompanyPricing";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
 import { BASEURL } from "./utils/env";
+import UserHome from "./pages/Platform/Users/UserHome";
+import CompanyHome from "./pages/Platform/Companies/CompanyHome";
 
 function App() {
   const cookie = new Cookies();
@@ -47,7 +49,7 @@ function App() {
         <Route path="/company-view/:id" element={<CompanyView />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/jobs/:id" element={<JobView />} />
-        {cookie.get("user-login") ? (
+        {!cookie.get("user-login") ? (
           <>
             <Route path="/user-pricing" element={<UserPricing />} />
             <Route path="/jobs" element={<Jobs />} />
@@ -55,13 +57,15 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/applications" element={<Applications />} />
+            <Route path="/user-home" element={<UserHome />} />
           </>
         ) : null}
-        {cookie.get("company-login") ? (
+        {!cookie.get("company-login") ? (
           <>
             <Route path="/company-jobs" element={<CompanyJobs />} />
             <Route path="/company-profile" element={<CompanyProfile />} />
             <Route path="/company-pricing" element={<CompanyPricing />} />
+            <Route path="/company-home" element={<CompanyHome/>}/>
             <Route
               path="/company-applications"
               element={<CompanyApplications />}

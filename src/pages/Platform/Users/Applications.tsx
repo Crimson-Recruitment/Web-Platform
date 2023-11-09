@@ -1,10 +1,9 @@
+import { Alert, Box, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import SideBar from "../../../components/Users/SideBar";
-import ApplicationsCard from "../../../components/Users/ApplicationsCard";
 import { Grid as GridLoader } from "react-loader-spinner";
-import { Alert, Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
+import ApplicationsCard from "../../../components/Users/ApplicationsCard";
 
 function Applications() {
   var applicationList:Array<ApplicationsModel> = [];
@@ -26,7 +25,7 @@ function Applications() {
     
   }, []);
   return (
-    <SideBar>
+    <Box>
       {loading ? (
         <div className="flex justify-center mt-12">
           <GridLoader
@@ -59,7 +58,7 @@ function Applications() {
           {message}
         </Alert>
       </Snackbar>
-    </SideBar>
+    </Box>
   );
 }
 

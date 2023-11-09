@@ -8,32 +8,32 @@ import UpgradeIcon from "@mui/icons-material/Upgrade";
 export const userPages = [
   {
     pageName: "My Profile",
-    link: "/profile",
+    section: "profile",
     icon: <Person2Icon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "For You",
-    link: "/for-you",
+    section: "for-you",
     icon: <Favorite sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Search Jobs",
-    link: "/jobs",
+    section: "jobs",
     icon: <Search sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "My Applications",
-    link: "/applications",
+    section: "applications",
     icon: <FilePresentIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Settings",
-    link: "/settings",
+    section: "settings",
     icon: <Settings sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Upgrade Account",
-    link: "/user-pricing",
+    section: "user-pricing",
     icon: <UpgradeIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
 ];

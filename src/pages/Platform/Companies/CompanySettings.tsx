@@ -1,7 +1,6 @@
+import { Alert, AlertColor, Box, Snackbar } from "@mui/material";
 import React, { useState } from "react";
-import { Alert, AlertColor, Snackbar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import CompanySideBar from "../../../components/Companies/CompanySideBar";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const Settings = () => {
   };
 
   return (
-    <CompanySideBar>
+    <Box>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
@@ -27,7 +26,7 @@ const Settings = () => {
           {message.message}
         </Alert>
       </Snackbar>
-    </CompanySideBar>
+    </Box>
   );
 };
 

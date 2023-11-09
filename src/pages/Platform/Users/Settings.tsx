@@ -1,6 +1,5 @@
+import { Alert, AlertColor, Box, Snackbar } from "@mui/material";
 import React, { useState } from "react";
-import SideBar from "../../../components/Users/SideBar";
-import { Alert, AlertColor, AlertProps, Snackbar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
@@ -17,7 +16,7 @@ const Settings = () => {
     setOpen(false);
   };
   return (
-    <SideBar>
+    <Box>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
@@ -28,7 +27,7 @@ const Settings = () => {
           {message.message}
         </Alert>
       </Snackbar>
-    </SideBar>
+    </Box>
   );
 };
 
