@@ -5,7 +5,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import Select from "react-select";
@@ -22,6 +22,7 @@ export default function CompanyRegisterForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
 
   const validationSchema = object({
     companyName: string().nonempty("Field is required!"),
@@ -53,7 +54,7 @@ export default function CompanyRegisterForm() {
 
   const handleNext = () => {
     if(activeStep  == steps.length-1) {
-      return;
+      navigate("/company-home");
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };

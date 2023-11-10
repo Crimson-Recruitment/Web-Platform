@@ -57,7 +57,7 @@ function Jobs() {
               <i className="fas fa-search"></i>
             </Button>
           </Box>
-          {loading ? (
+          {!loading ? (
             <div className="flex justify-center mt-12">
               <GridLoader
                 height="130"
@@ -108,7 +108,7 @@ function Jobs() {
           md={false}
           lg={6.9}
         >
-          {current !== null ? (
+          {jobsList.length != 0 && current !== null ? (
             <>
               <JobDescription
                 jobTitle={jobsList[current].jobTitle}
@@ -138,16 +138,16 @@ function Jobs() {
           ) : null}
         </Grid>
       </Grid>
-      <ApplicationBox
-        jobId={current !== null ? jobsList[current].id : null}
-        jobName={current !== null ? jobsList[current].jobTitle : null}
-        companyId={current !== null ? jobsList[current].companyId : null}
+      {jobsList.length != 0?<ApplicationBox
+        jobId={!!jobsList[current].id}
+        jobName={!!jobsList[current].jobTitle}
+        companyId={!!jobsList[current].companyId}
         needCoverLetter={
-          current !== null ? jobsList[current].requestCoverLetter : null
+          !!jobsList[current].requestCoverLetter
         }
         isOpen={dialogOpen}
         onClose={handleDialogClose}
-      />
+      />:null }
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

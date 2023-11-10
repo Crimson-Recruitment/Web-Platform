@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Button, IconButton, Toolbar } from '@mui/material';
+import { AppBar, IconButton, Toolbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -8,9 +8,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { userPages } from '../../../Data/UserPages';
-import ForYou from './ForYou';
-import Profile from './Profile';
 import Applications from './Applications';
+import ForYou from './ForYou';
+import Jobs from './Jobs';
+import Profile from './Profile';
+import Settings from './Settings';
 
 export default function UserHome() {
   const [state, setState] = React.useState(false);
@@ -56,6 +58,10 @@ export default function UserHome() {
         return <Profile/>
       case "applications":
         return <Applications/>
+      case "settings":
+        return <Settings/>
+      case "jobs":
+        return <Jobs/>
       default:
         throw new Error("Not a valid section!")
     }

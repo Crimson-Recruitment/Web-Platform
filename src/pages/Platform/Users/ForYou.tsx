@@ -76,7 +76,7 @@ function ForYou() {
     <Box>
       <Grid container>
         <Grid className="min-h-[100vh]" item xs={12} md={5}>
-          {loading ? (
+          {!loading ? (
             <div className="flex justify-center mt-12">
               <GridLoader
                 height="130"

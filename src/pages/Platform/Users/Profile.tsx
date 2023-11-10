@@ -22,7 +22,7 @@ export default function Profile() {
   }, []);
   return (
     <Box>
-      {loading ? (
+      {!loading ? (
         <div className="flex justify-center mt-12">
           <GridLoader
             height="130"

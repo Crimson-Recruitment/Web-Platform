@@ -12,7 +12,7 @@ import { Avatar, Grid, TextField } from '@mui/material';
 import Select from "react-select";
 import LocationSearchInput from '../LocationInput';
 import MuiPhoneNumber from 'material-ui-phone-number';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { professionList, skills } from '../../Data/UserProfessions';
 
 
@@ -22,6 +22,8 @@ export default function UserRegisterForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [loading, setLoading] = React.useState(false);
+
+  const navigate = useNavigate();
 
   const validationSchema = object({
     firstName: string().nonempty("Field is required!"),
@@ -44,7 +46,7 @@ export default function UserRegisterForm() {
 
   const handleNext = () => {
     if(activeStep  == steps.length-1) {
-      return;
+      navigate("/user-home");
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
