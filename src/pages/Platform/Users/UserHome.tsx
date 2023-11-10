@@ -68,7 +68,7 @@ export default function UserHome() {
   }
 
   return (
-    <div style={{height:"100vh"}}>
+    <div style={{minHeight:"100vh"}}>
          <AppBar color="transparent" position="static">
          <Toolbar>
           <IconButton

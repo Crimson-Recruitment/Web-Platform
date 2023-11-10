@@ -31,6 +31,8 @@ import { skills } from "../../../Data/UserProfessions";
 import { companyJobsReducer } from "../../../Functions/Reducers";
 import JobCard from "../../../components/Companies/JobCard";
 import LocationSearchInput from "../../../components/LocationInput";
+import { JobsModel } from "../../../Models/JobsModel";
+import { jobs } from "../../../Data/DummyData";
 
 function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
   const { children, value, index, ...other } = props;
@@ -71,7 +73,7 @@ let initState = {
   loading: false,
   selectedSkills: null,
   selectedType: null,
-  jobsList: [],
+  jobsList: jobs,
   open: false,
   value: 0,
   jobType: null,
@@ -123,12 +125,17 @@ function CompanyJobs() {
   var viewList: any[] = [];
 
   useEffect(() => {
+    dispatch({type:"SETJOBLIST", jobsList:jobs});
   }, []);
 
   const onSubmitHandler = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     
   };
+
+  const editJob = () => {
+
+  }
 
   return (
     <Box>
@@ -159,16 +166,19 @@ function CompanyJobs() {
         ) : state.jobsList ? (
           state.jobsList
             .sort((a: { timestamp: number; }, b: { timestamp: number; }) => a.timestamp < b.timestamp)
-            .map((job: {
-              id: any; jobTitle: any; jobDescription: any; timestamp: any; 
-}) => {
+            .map((job: JobsModel) => {
               return (
                 <JobCard
+                key={job.id}
                   title={job.jobTitle}
                   description={job.jobDescription}
-                  timestamp={job.timestamp} 
-                  id={job.id}               
-                   />
+                  timestamp={job.timestamp}
+                  benefits={job.benefits}
+                  minSalary={job.minSalary}
+                  maxSalary={job.maxSalary}
+                  location={job.location}
+                  edit={editJob}
+/>
               );
             })
         ) : null}

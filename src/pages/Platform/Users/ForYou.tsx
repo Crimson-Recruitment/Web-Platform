@@ -10,6 +10,7 @@ import "../../../Styles/jobs.css";
 import ApplicationBox from "../../../components/Users/ApplicationBox";
 import JobDescription from "../../../components/Users/JobDescription";
 import UserJobCard from "../../../components/Users/UserJobCard";
+import { jobs } from "../../../Data/DummyData";
 
 function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
   const { children, value, index, ...other } = props;
@@ -40,7 +41,7 @@ CustomTabPanel.propTypes = {
 function ForYou() {
   const [jobsList, setJobsList] = React.useState<Array<JobsModel>>([]);
   const [loading, setLoading] = React.useState(true);
-  const [current, setCurrent] = React.useState<number>(-1);
+  const [current, setCurrent] = React.useState<number>(0);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState<boolean>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -54,7 +55,7 @@ function ForYou() {
   };
 
   const jobHandler = (jobId:number, index:number) => {
-    if (window.innerWidth <= 1080) {
+    if (window.innerWidth < 900) {
       navigate(`/jobs/${jobId}`);
     } else {
       setCurrent(index);
@@ -68,14 +69,15 @@ function ForYou() {
 
     setOpen(false);
   };
-
   React.useEffect(() => {
+    setJobsList(jobs)
+  
   }, []);
 
   return (
     <Box>
       <Grid container>
-        <Grid className="min-h-[100vh]" item xs={12} md={5}>
+        <Grid className="min-h-[100vh]" item xs={12} md={6}>
           {!loading ? (
             <div className="flex justify-center mt-12">
               <GridLoader
@@ -93,19 +95,22 @@ function ForYou() {
             jobsList.length != 0 &&
             jobsList
               .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
-              .filter((val) => {
-                
-              })
               .map((job, index) => {
                 return (
-                  <a onClick={() => jobHandler(job.id, index)}>
+                  
                     <UserJobCard
-                      key={index}
-                      title={job.jobTitle}
-                      description={job.jobDescription}
-                      timestamp={job.timestamp}
+                       key={index}
+                       title={job.jobTitle}
+                       description={job.jobDescription}
+                       timestamp={job.timestamp}
+                       benefits={job.benefits}
+                       maxSalary={job.maxSalary}
+                       minSalary={job.minSalary}
+                       location={job.location}
+                       dialog={handleDialogOpen}
+                       more={() => jobHandler(job.id, index)}
                     />
-                  </a>
+              
                 );
               })
           )}
@@ -125,9 +130,9 @@ function ForYou() {
               "& h3": { fontWeight: "bolder" },
             },
           }}
-          md={6.9}
+          md={5.9}
         >
-          {current !== -1 ? (
+          {jobsList.length != 0 && current !== -1 ? (
             <>
               <JobDescription
                 jobTitle={jobsList[current].jobTitle}
@@ -142,16 +147,6 @@ function ForYou() {
                 hideSalary={jobsList[current].hideSalary}
                 benefits={jobsList[current].benefits} 
                 otherDetails={jobsList[current].otherDetails}              />
-
-              <CardActions>
-                <Button
-                  onClick={handleDialogOpen}
-                  variant="contained"
-                  size="small"
-                >
-                  Apply
-                </Button>
-              </CardActions>
             </>
           ) : null}
         </Grid>

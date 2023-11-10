@@ -4,17 +4,17 @@ export class JobsModel {
   jobField!: string;
   jobTitle!: string;
   jobDescription!: string;
-  companyOverview: any;
-  requirements: any;
-  skills: any;
-  minSalary: any;
-  maxSalary: any;
-  location: any;
-  jobType: any;
-  hideSalary: any;
-  benefits: any;
-  companyId: any;
-  requestCoverLetter: any;
-  otherDetails: any;
+  companyOverview!: string[];
+  requirements!: string[];
+  skills!: string[];
+  minSalary!: string;
+  maxSalary!: string;
+  location!: string;
+  jobType!: string;
+  hideSalary!: boolean;
+  benefits!: string[];
+  companyId!: number;
+  requestCoverLetter!: boolean;
+  otherDetails!: string;
 
 }
