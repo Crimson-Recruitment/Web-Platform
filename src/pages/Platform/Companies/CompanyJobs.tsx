@@ -241,12 +241,6 @@ function CompanyJobs() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Switch name="isVolunteer" />}
-                    label="Is this a volunteering job or a non-volunteering job?"
-                  />
-                </Grid>
-                <Grid item xs={12}>
                   <label
                     htmlFor="type"
                     className="block mb-2 text-sm font-medium text-gray-900"
@@ -350,8 +344,8 @@ function CompanyJobs() {
                   <Button
                     variant="contained"
                     sx={{
-                      backgroundColor: "green",
-                      ":hover": { backgroundColor: "darkgreen" },
+                      backgroundColor: "darkred",
+                      ":hover": { backgroundColor: "black" },
                     }}
                     onClick={() => {
                       if (
@@ -425,7 +419,7 @@ function CompanyJobs() {
                     htmlFor="skills"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Skills (Not needed htmlFor non-programming jobs)
+                    Skills (Not needed for non-programming jobs)
                   </label>
                   <Select
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
@@ -485,12 +479,6 @@ function CompanyJobs() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Switch name="hideSalary" />}
-                    label="Hide Salary on the job post?"
-                  />
-                </Grid>
-                <Grid item xs={12}>
                   <label
                     htmlFor="benefits"
                     className="block mt-4 mb-[-5px] text-sm font-medium text-gray-900"
@@ -513,8 +501,8 @@ function CompanyJobs() {
                   <Button
                     variant="contained"
                     sx={{
-                      backgroundColor: "green",
-                      ":hover": { backgroundColor: "darkgreen" },
+                      backgroundColor: "darkred",
+                      ":hover": { backgroundColor: "black" },
                     }}
                     onClick={() => {
                     
@@ -526,7 +514,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <List>
                     {state.benefits &&
-                       state.benefits.map((req: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => {
+                       state.benefits.map((req: string, index:number) => {
                           return (
                             <ListItem
                               key={index}
@@ -553,7 +541,7 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <FormControlLabel
                     control={<Switch name="requestCoverLetter" />}
-                    label="Request htmlFor a cover letter ?"
+                    label="Request for a cover letter ?"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -579,8 +567,8 @@ function CompanyJobs() {
                 sx={{
                   mt: 3,
                   mb: 2,
-                  backgroundColor: "green",
-                  ":hover": { backgroundColor: "darkgreen" },
+                  backgroundColor: "darkred",
+                  ":hover": { backgroundColor: "black" },
                 }}
               >
                 {state.loading ? "Loading..." : "Create Job"}

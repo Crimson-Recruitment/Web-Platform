@@ -62,6 +62,8 @@ export default function UserHome() {
         return <Settings/>
       case "jobs":
         return <Jobs/>
+      case "settings":
+        return <Settings/>
       default:
         throw new Error("Not a valid section!")
     }

@@ -48,9 +48,9 @@ function JobDescription(props: { jobTitle: any; type: any; overview: any; descri
       position: "fixed",
       top: isFixed ? `${initialOffset}px` : 'auto',
       bottom: isFixed ? 'auto' : 0,
-       maxHeight: '80vh', 
+       maxHeight: '75vh', 
        overflowY: 'auto', 
-       marginTop: '5px', 
+       marginTop: '10vh', 
        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
       <CardContent>
         <Typography variant="h4" color="text.primary" gutterBottom>

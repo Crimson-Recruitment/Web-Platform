@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Button, IconButton, Toolbar } from '@mui/material';
+import { AppBar, IconButton, Toolbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -8,9 +8,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { companyPages } from '../../../Data/CompanyPages';
+import CompanyApplications from './CompanyApplications';
 import CompanyJobs from './CompanyJobs';
 import CompanyProfile from './CompanyProfile';
-import CompanyApplications from './CompanyApplications';
+import CompanySettings from './CompanySettings';
 
 export default function CompanyHome() {
   const [state, setState] = React.useState(false);
@@ -56,6 +57,8 @@ export default function CompanyHome() {
         return <CompanyProfile/>
       case "company-applications":
         return <CompanyApplications/>
+      case "company-settings":
+        return <CompanySettings/>
       default:
         throw new Error("Not a valid section!")
     }

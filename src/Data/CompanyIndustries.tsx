@@ -35,6 +35,7 @@ export const jobType = [
   { value: "full_time", label: "Full Time" },
   { value: "part_time", label: "Part Time" },
   { value: "contract", label: "Contract" },
+  { value: "volunteering", label: "Volunteering" },
 ];
 
 export const industryProfessions = {
