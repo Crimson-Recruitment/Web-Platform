@@ -13,6 +13,7 @@ import ForYou from './ForYou';
 import Jobs from './Jobs';
 import Profile from './Profile';
 import Settings from './Settings';
+import UserPricing from './UserPricing';
 
 export default function UserHome() {
   const [state, setState] = React.useState(false);
@@ -64,6 +65,8 @@ export default function UserHome() {
         return <Jobs/>
       case "settings":
         return <Settings/>
+      case "user-pricing":
+        return <UserPricing/> 
       default:
         throw new Error("Not a valid section!")
     }

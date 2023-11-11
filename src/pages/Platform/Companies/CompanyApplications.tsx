@@ -67,7 +67,7 @@ function CompanyApplications() {
                   <ApplicationJobCard
                     title={application.jobTitle}
                     timestamp={application.timestamp}
-                    applications={() => navigate(`/applications/${application.id}`)}
+                    applications={() => navigate(`/company-applications/${application.id}`)}
                   />
                 </div>
               );

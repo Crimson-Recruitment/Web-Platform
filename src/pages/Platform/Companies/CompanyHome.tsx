@@ -12,6 +12,7 @@ import CompanyApplications from './CompanyApplications';
 import CompanyJobs from './CompanyJobs';
 import CompanyProfile from './CompanyProfile';
 import CompanySettings from './CompanySettings';
+import CompanyPricing from './CompanyPricing';
 
 export default function CompanyHome() {
   const [state, setState] = React.useState(false);
@@ -59,6 +60,8 @@ export default function CompanyHome() {
         return <CompanyApplications/>
       case "company-settings":
         return <CompanySettings/>
+      case "company-pricing":
+        return <CompanyPricing/>
       default:
         throw new Error("Not a valid section!")
     }
