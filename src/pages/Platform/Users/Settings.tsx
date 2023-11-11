@@ -12,17 +12,150 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { Typography } from '@mui/material';
+import { Avatar, TextField, Typography, Box } from '@mui/material';
+import MuiPhoneNumber from 'material-ui-phone-number';
+import LocationSearchInput from '../../../components/LocationInput';
+import { Link } from 'react-router-dom';
 
 const Settings = () => {
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = React.useState("account");
 
-  const handleTabChange = (event:any, newValue:number) => {
+  const handleTabChange = (event:any, newValue:string) => {
     setTabValue(newValue);
   };
 
+
+  const manageViews = (value:string) => {
+      switch (value) {
+        case "account":
+          return (
+            <Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
+                <CardHeader title="Public info" />
+                <CardContent>
+                  <form>
+                    <Grid container spacing={2}>
+                      <Grid item md={8}>
+                      <Grid container spacing={2}>
+                   <Grid item xs={12}>
+                     <TextField
+                       required
+                       fullWidth
+                       id="companyname"
+                       label="Company Name"
+                     />
+                   </Grid>
+                   <Grid item xs={12}>
+                     <LocationSearchInput />
+                   </Grid>
+                   <Grid item xs={12}>
+                     <MuiPhoneNumber
+                       required
+                       onChange={()=> null}
+                       variant="outlined"
+                       id="phonenumber"
+                       label="Phone Number 1"
+                       name="phonenumber1"
+                       fullWidth
+                       defaultCountry={"ug"}
+                     />
+                   </Grid>
+                   <Grid item xs={12}>
+                     <MuiPhoneNumber
+                       required
+                       onChange={()=> null}
+                       variant="outlined"
+                       id="phonenumber"
+                       label="Phone Number 2"
+                       name="phonenumber2"
+                       fullWidth
+                       defaultCountry={"ug"}
+                     />
+                   </Grid>
+                   <Grid item xs={12}>
+                     <TextField
+                       required
+                       fullWidth
+                       id="email"
+                       label="Email Address"
+                     />
+                   </Grid>
+                   <Grid item xs={12}>
+                     <TextField
+                       required
+                       fullWidth
+                       label="Password"
+                       type="password"
+                     />
+                   </Grid>
+                 </Grid>
+                      </Grid>
+                      <Grid item md={4}>
+                        <Box sx={{   
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",}}>
+                          <Avatar 
+                          src="https://bootdey.com/img/Content/avatar/avatar1.png" 
+                          sx={{ height: "150px", width: "150px" }}/>
+                          <div className="mt-2">
+                            <span className="btn btn-primary">
+                              <input type="file"  className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
+                            </span>
+                          </div>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Button type="submit" variant="contained" color="primary" style={{ marginTop: '0.5rem' }}>
+                      Save changes
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+          )
+          case "password":
+            return (<Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
+            <CardHeader title="Password" />
+            <CardContent>
+              <form>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel htmlFor="inputPasswordCurrent">Current password</InputLabel>
+                  <Input id="inputPasswordCurrent" type="password" />
+                  <Grid item xs>
+                <Link to="*">
+                  Forgot password?
+                </Link>
+                </Grid>
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel htmlFor="inputPasswordNew">New password</InputLabel>
+                  <Input id="inputPasswordNew" type="password" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel htmlFor="inputPasswordNew2">Verify password</InputLabel>
+                  <Input id="inputPasswordNew2" type="password" />
+                </FormControl>
+                <Button type="submit" variant="contained" color="primary" style={{ marginTop: '0.5rem' }}>
+                  Save changes
+                </Button>
+              </form>
+            </CardContent>
+          </Card>)
+          case "privacy":
+            return (
+              <Typography>
+                Privacy
+              </Typography>
+            )
+      }
+
+  }
+
   return (
-    <Container maxWidth="lg" style={{ marginTop: '20px', background: '#FFC0CB' }}>
+    <Container maxWidth="lg" style={{ 
+      marginTop: '20px', 
+      background: "#FAFAFA", 
+      minHeight:"70vh", 
+      boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)'  }}>
        <Typography variant="h4" gutterBottom style={{ marginBottom: '1.5rem' }}>
         Settings
       </Typography>
@@ -32,8 +165,9 @@ const Settings = () => {
             <CardHeader title="Profile Settings" />
             <div className="list-group list-group-flush" role="tablist">
               <Tabs value={tabValue} onChange={handleTabChange} orientation="vertical">
-                <Tab label="Account" />
-                <Tab label="Password" />
+                <Tab label="Account" value="account" />
+                <Tab label="Change Password" value="password"/>
+                <Tab label="Privacy Settings" value="privacy"/>
                 {/* ... Add other tabs as needed */}
               </Tabs>
             </div>
@@ -41,72 +175,7 @@ const Settings = () => {
         </Grid>
         <Grid item md={7} xl={8}>
           <div className="tab-content">
-            <div className={`tab-pane fade ${tabValue === 0 ? 'show active' : ''}`} id="account" role="tabpanel">
-              <Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
-                <CardHeader title="Public info" />
-                <CardContent>
-                  <form>
-                    <Grid container spacing={2}>
-                      <Grid item md={8}>
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel htmlFor="inputUsername">Username</InputLabel>
-                          <Input id="inputUsername" type="text" />
-                        </FormControl>
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel htmlFor="inputBio">Biography</InputLabel>
-                          <TextareaAutosize id="inputBio" minRows={2} placeholder="Tell something about yourself" />
-                        </FormControl>
-                      </Grid>
-                      <Grid item md={4}>
-                        <div className="text-center">
-                          <img
-                            alt="Profile"
-                            src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                            className="rounded-circle img-responsive mt-2"
-                            width="128"
-                            height="128"
-                          />
-                          <div className="mt-2">
-                            <span className="btn btn-primary">
-                              <input type="file" />
-                            </span>
-                          </div>
-                          <small>For best results, use an image at least 128px by 128px in .jpg format</small>
-                        </div>
-                      </Grid>
-                    </Grid>
-                    <Button type="submit" variant="contained" color="primary" style={{ marginTop: '0.5rem' }}>
-                      Save changes
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-            <div className={`tab-pane fade ${tabValue === 1 ? 'show active' : ''}`} id="password" role="tabpanel">
-              <Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
-                <CardHeader title="Password" />
-                <CardContent>
-                  <form>
-                    <FormControl fullWidth margin="normal">
-                      <InputLabel htmlFor="inputPasswordCurrent">Current password</InputLabel>
-                      <Input id="inputPasswordCurrent" type="password" />
-                      <small><a href="#">Forgot your password?</a></small>
-                    </FormControl>
-                    <FormControl fullWidth margin="normal">
-                      <InputLabel htmlFor="inputPasswordNew">New password</InputLabel>
-                      <Input id="inputPasswordNew" type="password" />
-                    </FormControl>
-                    <FormControl fullWidth margin="normal">
-                      <InputLabel htmlFor="inputPasswordNew2">Verify password</InputLabel>
-                      <Input id="inputPasswordNew2" type="password" />
-                    </FormControl>
-                    <Button type="submit" variant="contained" color="primary" style={{ marginTop: '0.5rem' }}>
-                      Save changes
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
+            {manageViews(tabValue)}
           </div>
         </Grid>
       </Grid>

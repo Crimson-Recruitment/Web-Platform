@@ -44,7 +44,7 @@ function CompanyApplicationDetails() {
   return (
     <Box>
       <div className="xs:min-h-[120vh]  min-h-[120vh] ms-2">
-        <Button onClick={() => navigate(-1)}>Go Back</Button>
+        <Button variant="contained" sx={{marginY:"10px"}} onClick={() => navigate(-1)}>Go Back</Button>
         {!loading ? (
           <div className="flex justify-center mt-12">
             <GridLoader
@@ -75,17 +75,19 @@ function CompanyApplicationDetails() {
                         ? {
                           minHeight: "30vh",
                           maxHeight: { xs: "70vh", md: "35vh" },
-                          width: "75%",
+                          width: "81%",
                           transition: "all 0.2s",
                           borderRadius: "5px",
                           border: "1px solid lightgray",
                           overflow: "scroll",
                           backgroundColor: "white",
+                          opacity:"100%"
                         }
                         : {
+                          opacity:"0%",
+                          width: "81%",
                           minHeight: "0vh",
                           maxHeight: { xs: "70vh", md: "35vh" },
-                          width: "75%",
                           transition: "all 0.2s",
                           borderRadius: "5px",
                           overflow: "scroll",
