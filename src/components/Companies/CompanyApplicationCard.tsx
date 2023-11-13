@@ -1,7 +1,7 @@
-import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
+import React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 interface CompanyApplicationCardProps {
   applicant: string;
@@ -11,27 +11,24 @@ interface CompanyApplicationCardProps {
 }
 
 const cardStyle: React.CSSProperties = {
-  marginBottom: '16px',
-  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  width:"80vw"
+  marginBottom: "16px",
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  width: "80vw",
 };
 
 const titleStyle: React.CSSProperties = {
-  fontSize: '18px',
-  fontWeight: 'bold',
+  fontSize: "18px",
+  fontWeight: "bold",
 };
 
 const secondaryTextStyle: React.CSSProperties = {
-  color: '#6c757d', // Bootstrap secondary text color
+  color: "#6c757d", // Bootstrap secondary text color
 };
 
-const CompanyApplicationCard: React.FC<CompanyApplicationCardProps> = (props) => {
-  const {
-    applicant,
-    jobName,
-    timeOfApplication,
-    applicationStatus,
-  } = props;
+const CompanyApplicationCard: React.FC<CompanyApplicationCardProps> = (
+  props,
+) => {
+  const { applicant, jobName, timeOfApplication, applicationStatus } = props;
 
   return (
     <Card style={cardStyle}>

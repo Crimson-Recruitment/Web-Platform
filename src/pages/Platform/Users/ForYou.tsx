@@ -12,7 +12,12 @@ import JobDescription from "../../../components/Users/JobDescription";
 import UserJobCard from "../../../components/Users/UserJobCard";
 import { jobs } from "../../../Data/DummyData";
 
-function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
+function CustomTabPanel(props: {
+  [x: string]: any;
+  children: any;
+  value: any;
+  index: any;
+}) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -45,7 +50,7 @@ function ForYou() {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState<boolean>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  var viewList:Array<JobsModel> = [];
+  var viewList: Array<JobsModel> = [];
   const handleDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -54,7 +59,7 @@ function ForYou() {
     setDialogOpen(false);
   };
 
-  const jobHandler = (jobId:number, index:number) => {
+  const jobHandler = (jobId: number, index: number) => {
     if (window.innerWidth < 900) {
       navigate(`/jobs/${jobId}`);
     } else {
@@ -62,16 +67,18 @@ function ForYou() {
     }
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
   React.useEffect(() => {
-    setJobsList(jobs)
-  
+    setJobsList(jobs);
   }, []);
 
   return (
@@ -97,20 +104,18 @@ function ForYou() {
               .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
               .map((job, index) => {
                 return (
-                  
-                    <UserJobCard
-                       key={index}
-                       title={job.jobTitle}
-                       description={job.jobDescription}
-                       timestamp={job.timestamp}
-                       benefits={job.benefits}
-                       maxSalary={job.maxSalary}
-                       minSalary={job.minSalary}
-                       location={job.location}
-                       dialog={handleDialogOpen}
-                       more={() => jobHandler(job.id, index)}
-                    />
-              
+                  <UserJobCard
+                    key={index}
+                    title={job.jobTitle}
+                    description={job.jobDescription}
+                    timestamp={job.timestamp}
+                    benefits={job.benefits}
+                    maxSalary={job.maxSalary}
+                    minSalary={job.minSalary}
+                    location={job.location}
+                    dialog={handleDialogOpen}
+                    more={() => jobHandler(job.id, index)}
+                  />
                 );
               })
           )}
@@ -145,23 +150,24 @@ function ForYou() {
                 location={jobsList[current].location}
                 type={jobsList[current].jobType}
                 hideSalary={jobsList[current].hideSalary}
-                benefits={jobsList[current].benefits} 
-                otherDetails={jobsList[current].otherDetails}              />
+                benefits={jobsList[current].benefits}
+                otherDetails={jobsList[current].otherDetails}
+              />
             </>
           ) : null}
         </Grid>
       </Grid>
-      {jobsList.length != 0?<ApplicationBox
-        jobId={!!jobsList[current].id}
-        jobName={!!jobsList[current].jobTitle}
-        companyId={!!jobsList[current].companyId}
-        needCoverLetter={
-          !!jobsList[current].requestCoverLetter
-        }
-        isOpen={dialogOpen}
-        onClose={handleDialogClose}
-      />:null }
-      
+      {jobsList.length != 0 ? (
+        <ApplicationBox
+          jobId={!!jobsList[current].id}
+          jobName={!!jobsList[current].jobTitle}
+          companyId={!!jobsList[current].companyId}
+          needCoverLetter={!!jobsList[current].requestCoverLetter}
+          isOpen={dialogOpen}
+          onClose={handleDialogClose}
+        />
+      ) : null}
+
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Failed to load Jobs!

@@ -7,9 +7,7 @@ function CompanyView() {
   const [companyData, setCompanyData] = useState(null);
   const { id } = useParams();
 
-  useEffect(() => {
- 
-  });
+  useEffect(() => {});
   return (
     <div className="min-h-screen">
       {loading ? (

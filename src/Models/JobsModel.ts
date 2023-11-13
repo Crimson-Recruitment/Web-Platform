@@ -1,5 +1,5 @@
 export class JobsModel {
-  id!:number;
+  id!: number;
   timestamp!: Date;
   jobField!: string;
   jobTitle!: string;
@@ -16,5 +16,4 @@ export class JobsModel {
   companyId!: number;
   requestCoverLetter!: boolean;
   otherDetails!: string;
-
 }

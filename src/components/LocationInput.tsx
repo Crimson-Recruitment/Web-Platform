@@ -7,14 +7,14 @@ import PlacesAutocomplete, {
 
 export default function LocationSearchInput() {
   const [address, setAddress] = useState<string>("");
-  const handleChange = (address:string) => {
+  const handleChange = (address: string) => {
     setAddress(address);
   };
 
-  const handleSelect = (address:string) => {
+  const handleSelect = (address: string) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .catch((error:Error) => alert(error));
+      .catch((error: Error) => alert(error));
   };
   return (
     <PlacesAutocomplete

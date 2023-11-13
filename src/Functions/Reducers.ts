@@ -1,4 +1,14 @@
-export const companyDetailsReducer = (state: any, action: { type?: any; selectedType?: any; loading?: any; image?: any; imagePath?: any; license?: any; } ) => {
+export const companyDetailsReducer = (
+  state: any,
+  action: {
+    type?: any;
+    selectedType?: any;
+    loading?: any;
+    image?: any;
+    imagePath?: any;
+    license?: any;
+  },
+) => {
   switch (action.type) {
     case "SETSELECTEDTYPE":
       return { ...state, selectedType: action?.selectedType };
@@ -15,7 +25,17 @@ export const companyDetailsReducer = (state: any, action: { type?: any; selected
   }
 };
 
-export const updateCompanyProfileReducer = (state: any, action: { type: any; selectedType: any; loading: any; image: any; imagePath: any; license: any; }) => {
+export const updateCompanyProfileReducer = (
+  state: any,
+  action: {
+    type: any;
+    selectedType: any;
+    loading: any;
+    image: any;
+    imagePath: any;
+    license: any;
+  },
+) => {
   switch (action.type) {
     case "SETSELECTEDTYPE":
       return { ...state, selectedType: action.selectedType };
@@ -32,7 +52,23 @@ export const updateCompanyProfileReducer = (state: any, action: { type: any; sel
   }
 };
 
-export const companyJobsReducer = (state: any, action: { type?: any; value?: any; requirements?: any; benefits?: any; loading?: any; selectedSkills?: any; selectedType?: any; jobsList?: any; open?: any; message?: any; jobType?: any; jobLocationType?: any; }) => {
+export const companyJobsReducer = (
+  state: any,
+  action: {
+    type?: any;
+    value?: any;
+    requirements?: any;
+    benefits?: any;
+    loading?: any;
+    selectedSkills?: any;
+    selectedType?: any;
+    jobsList?: any;
+    open?: any;
+    message?: any;
+    jobType?: any;
+    jobLocationType?: any;
+  },
+) => {
   switch (action.type) {
     case "SETVALUE":
       return { ...state, value: action.value };
@@ -61,7 +97,18 @@ export const companyJobsReducer = (state: any, action: { type?: any; value?: any
   }
 };
 
-export const skillsReducer = (state: any, action: { type: any; loading: any; selectedProfession: any; jobsList: any; image: any; imagePath: any; resume: any; }) => {
+export const skillsReducer = (
+  state: any,
+  action: {
+    type: any;
+    loading: any;
+    selectedProfession: any;
+    jobsList: any;
+    image: any;
+    imagePath: any;
+    resume: any;
+  },
+) => {
   switch (action.type) {
     case "SETLOADING":
       return { ...state, loading: action.loading };
@@ -82,7 +129,18 @@ export const skillsReducer = (state: any, action: { type: any; loading: any; sel
   }
 };
 
-export const updateUserProfileReducer = (state: any, action: { type: any; loading: any; selectedProfession: any; jobsList: any; image: any; imagePath: any; resume: any; }) => {
+export const updateUserProfileReducer = (
+  state: any,
+  action: {
+    type: any;
+    loading: any;
+    selectedProfession: any;
+    jobsList: any;
+    image: any;
+    imagePath: any;
+    resume: any;
+  },
+) => {
   switch (action.type) {
     case "SETLOADING":
       return { ...state, loading: action.loading };

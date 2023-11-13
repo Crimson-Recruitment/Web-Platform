@@ -7,14 +7,19 @@ import ApplicationsCard from "../../../components/Users/ApplicationsCard";
 import { applications as dApplications } from "../../../Data/DummyData";
 
 function Applications() {
-  const [applications, setApplications] = useState<Array<ApplicationsModel>>([]);
+  const [applications, setApplications] = useState<Array<ApplicationsModel>>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
- 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -22,7 +27,7 @@ function Applications() {
   };
 
   useEffect(() => {
-    setApplications(dApplications)
+    setApplications(dApplications);
   }, []);
   return (
     <Box>
@@ -39,21 +44,23 @@ function Applications() {
             visible={true}
           />
         </div>
-      ) : (applications !== null && applications.length > 0 && (
-        <>
-          {applications.map((application: ApplicationsModel) => (
-            <ApplicationsCard
-              key={application.id} // Don't forget to add a unique key for each element in the array
-              applicant={application.firstName}
-              jobName={application.jobName}
-              timeOfApplication={application.timeOfApplication}
-              applicationStatus={application.applicationStatus}
-              resumePath={application.resume}
-            />
-          ))}
-        </>
-      )
-          )}
+      ) : (
+        applications !== null &&
+        applications.length > 0 && (
+          <>
+            {applications.map((application: ApplicationsModel) => (
+              <ApplicationsCard
+                key={application.id} // Don't forget to add a unique key for each element in the array
+                applicant={application.firstName}
+                jobName={application.jobName}
+                timeOfApplication={application.timeOfApplication}
+                applicationStatus={application.applicationStatus}
+                resumePath={application.resume}
+              />
+            ))}
+          </>
+        )
+      )}
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           {message}

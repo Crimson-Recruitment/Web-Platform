@@ -9,5 +9,4 @@ export class UserModel {
   phoneNumber: any;
   emailAddress: any;
   resume: any;
-
 }

@@ -33,9 +33,9 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful }
+    formState: { errors, isSubmitSuccessful },
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
-  
+
   type SignUpSchemaType = z.infer<typeof validationSchema>;
 
   React.useEffect(() => {
@@ -43,21 +43,23 @@ export default function Login() {
     }
   }, [isSubmitSuccessful]);
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
 
-
   const cookie = new Cookies();
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
     setLoading(false);
-    }
+  };
 
   return (
     <Grid container component="main" sx={{ minHeight: { lg: "90vh" } }}>
@@ -114,8 +116,12 @@ export default function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2,  backgroundColor: "darkred",
-              ":hover": { backgroundColor: "black" } }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: "darkred",
+                ":hover": { backgroundColor: "black" },
+              }}
             >
               {loading ? "Loading..." : "Sign In"}
             </Button>
@@ -141,14 +147,10 @@ export default function Login() {
             </Link>
             <Grid container>
               <Grid item xs>
-                <Link to="*">
-                  Forgot password?
-                </Link>
+                <Link to="*">Forgot password?</Link>
               </Grid>
               <Grid item>
-                <Link to="/register">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Link to="/register">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </Box>
@@ -164,8 +166,8 @@ export default function Login() {
         sx={{
           objectFit: "cover",
           objectPosition: "center",
-          height:"90vh",
-          display: { xs: 'none', md: 'block' }
+          height: "90vh",
+          display: { xs: "none", md: "block" },
         }}
       />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

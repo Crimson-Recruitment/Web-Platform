@@ -5,5 +5,4 @@ import Bg2 from "../assets/images/bg2.jpg";
 import About1 from "../assets/images/about1.jpg";
 import Frustrated from "../assets/images/frustrated.jpg";
 
-
-export {HomePage, HelpImage, Bg1, Bg2, About1, Frustrated};
+export { HomePage, HelpImage, Bg1, Bg2, About1, Frustrated };

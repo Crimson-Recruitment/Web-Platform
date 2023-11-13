@@ -10,8 +10,7 @@ function UserView() {
   const [userData, setUserData] = useState<UserModel>();
   const { id } = useParams();
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="min-h-screen">
@@ -74,16 +73,31 @@ function UserView() {
                         </Typography>
                         <Typography color="text.secondary">
                           <ul>
-                            {userData.skills.map((skill: { label: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => {
-                              return (
-                                <li
-                                  className="mb-3"
-                                  style={{ fontSize: "1rem" }}
-                                >
-                                  {skill.label}
-                                </li>
-                              );
-                            })}
+                            {userData.skills.map(
+                              (skill: {
+                                label:
+                                  | string
+                                  | number
+                                  | boolean
+                                  | React.ReactElement<
+                                      any,
+                                      string | React.JSXElementConstructor<any>
+                                    >
+                                  | Iterable<React.ReactNode>
+                                  | React.ReactPortal
+                                  | null
+                                  | undefined;
+                              }) => {
+                                return (
+                                  <li
+                                    className="mb-3"
+                                    style={{ fontSize: "1rem" }}
+                                  >
+                                    {skill.label}
+                                  </li>
+                                );
+                              },
+                            )}
                           </ul>
                         </Typography>
                       </Grid>

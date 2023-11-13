@@ -22,9 +22,8 @@ function JobView() {
     setDialogOpen(false);
   };
 
-  useEffect(() => {
-  });
-  
+  useEffect(() => {});
+
   return (
     <div className="min-h-screen lg:mx-[300px]">
       {localStorage.getItem("userEmail") != null ? (
@@ -54,18 +53,19 @@ function JobView() {
       ) : jobData != null ? (
         <>
           <JobDescription
-              jobTitle={jobData.jobTitle}
-              overview={jobData.companyOverview}
-              description={jobData.jobDescription}
-              requirements={jobData.requirements}
-              skills={jobData.skills}
-              minSalary={jobData.minSalary}
-              maxSalary={jobData.maxSalary}
-              location={jobData.location}
-              type={jobData.jobType}
-              hideSalary={jobData.hideSalary}
-              benefits={jobData.benefits} 
-              otherDetails={jobData.otherDetails}/>
+            jobTitle={jobData.jobTitle}
+            overview={jobData.companyOverview}
+            description={jobData.jobDescription}
+            requirements={jobData.requirements}
+            skills={jobData.skills}
+            minSalary={jobData.minSalary}
+            maxSalary={jobData.maxSalary}
+            location={jobData.location}
+            type={jobData.jobType}
+            hideSalary={jobData.hideSalary}
+            benefits={jobData.benefits}
+            otherDetails={jobData.otherDetails}
+          />
           <CardActions>
             <Button onClick={handleDialogOpen} variant="contained" size="small">
               Apply

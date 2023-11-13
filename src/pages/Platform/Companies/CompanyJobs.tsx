@@ -34,7 +34,12 @@ import LocationSearchInput from "../../../components/LocationInput";
 import { JobsModel } from "../../../Models/JobsModel";
 import { jobs } from "../../../Data/DummyData";
 
-function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
+function CustomTabPanel(props: {
+  [x: string]: any;
+  children: any;
+  value: any;
+  index: any;
+}) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -105,7 +110,7 @@ function CompanyJobs() {
     const newList = state.benefits.filter((item: any) => item !== res);
     dispatch({ type: "SETBENEFITS", benefits: newList });
   };
-  const handleClick = (message: { type: any; message: any; }) => {
+  const handleClick = (message: { type: any; message: any }) => {
     dispatch({
       type: "SETMESSAGE",
       message: { type: message.type, message: message.message },
@@ -113,8 +118,11 @@ function CompanyJobs() {
     dispatch({ type: "SETOPEN", open: true });
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -125,17 +133,14 @@ function CompanyJobs() {
   var viewList: any[] = [];
 
   useEffect(() => {
-    dispatch({type:"SETJOBLIST", jobsList:jobs});
+    dispatch({ type: "SETJOBLIST", jobsList: jobs });
   }, []);
 
   const onSubmitHandler = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
   };
 
-  const editJob = () => {
-
-  }
+  const editJob = () => {};
 
   return (
     <Box>
@@ -165,11 +170,14 @@ function CompanyJobs() {
           </div>
         ) : state.jobsList ? (
           state.jobsList
-            .sort((a: { timestamp: number; }, b: { timestamp: number; }) => a.timestamp < b.timestamp)
+            .sort(
+              (a: { timestamp: number }, b: { timestamp: number }) =>
+                a.timestamp < b.timestamp,
+            )
             .map((job: JobsModel) => {
               return (
                 <JobCard
-                key={job.id}
+                  key={job.id}
                   title={job.jobTitle}
                   description={job.jobDescription}
                   timestamp={job.timestamp}
@@ -178,7 +186,7 @@ function CompanyJobs() {
                   maxSalary={job.maxSalary}
                   location={job.location}
                   edit={editJob}
-/>
+                />
               );
             })
         ) : null}
@@ -229,7 +237,7 @@ function CompanyJobs() {
                     className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                     options={jobType}
                     placeholder="Select the type of job."
-                    onChange={(val: { label: any; }|null) => {
+                    onChange={(val: { label: any } | null) => {
                       dispatch({
                         type: "SETJOBTYPE",
                         jobType: val?.label,
@@ -256,7 +264,9 @@ function CompanyJobs() {
                       { value: "hybrid", label: "Hybrid" },
                     ]}
                     placeholder="Select the type of job."
-                    onChange={(val: { label: string, value:string }|null) => {
+                    onChange={(
+                      val: { label: string; value: string } | null,
+                    ) => {
                       dispatch({
                         type: "SETJOBLOCATIONTYPE",
                         jobLocationType: val?.label,
@@ -284,7 +294,7 @@ function CompanyJobs() {
                     options={industries}
                     name="field"
                     placeholder="Healthcare, technology,....."
-                    onChange={(val: { label: any; }|null) => {
+                    onChange={(val: { label: any } | null) => {
                       dispatch({
                         type: "SETSELECTEDTYPE",
                         selectedType: val?.label,
@@ -349,18 +359,20 @@ function CompanyJobs() {
                     }}
                     onClick={() => {
                       if (
-                        document.getElementsByName("requirements")[0].innerHTML !=
-                        ""
+                        document.getElementsByName("requirements")[0]
+                          .innerHTML != ""
                       ) {
                         dispatch({
                           type: "SETREQUIREMENTS",
                           requirements: [
                             ...state.requirements,
-                            document.getElementsByName("requirements")[0].innerHTML,
+                            document.getElementsByName("requirements")[0]
+                              .innerHTML,
                           ],
                         });
-                        document.getElementsByName("requirements")[0].innerHTML =
-                          "";
+                        document.getElementsByName(
+                          "requirements",
+                        )[0].innerHTML = "";
                       }
                     }}
                   >
@@ -370,7 +382,22 @@ function CompanyJobs() {
                 <Grid xs={12}>
                   <List>
                     {state.requirements &&
-                       state.requirements.map((req: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => {
+                      state.requirements.map(
+                        (
+                          req:
+                            | string
+                            | number
+                            | boolean
+                            | React.ReactElement<
+                                any,
+                                string | React.JSXElementConstructor<any>
+                              >
+                            | Iterable<React.ReactNode>
+                            | React.ReactPortal
+                            | null
+                            | undefined,
+                          index: React.Key | null | undefined,
+                        ) => {
                           return (
                             <ListItem
                               key={index}
@@ -390,8 +417,8 @@ function CompanyJobs() {
                               </ListItemButton>
                             </ListItem>
                           );
-                        })
-                    }
+                        },
+                      )}
                   </List>
                 </Grid>
                 <Grid item xs={12}>
@@ -405,7 +432,7 @@ function CompanyJobs() {
                     required
                     className="border mb-4 border-blue-300"
                     selected={expiryDate}
-                    onChange={(date: Date | undefined|null) => {
+                    onChange={(date: Date | undefined | null) => {
                       try {
                         dateHandler(date!);
                       } catch (error: any) {
@@ -426,7 +453,7 @@ function CompanyJobs() {
                     options={skills}
                     placeholder="Select skills,..."
                     name="skills"
-                    onChange={(val: string | any |null) => {
+                    onChange={(val: string | any | null) => {
                       if (val?.length <= 6) {
                         dispatch({
                           type: "SETSELECTEDSKILLS",
@@ -504,9 +531,7 @@ function CompanyJobs() {
                       backgroundColor: "darkred",
                       ":hover": { backgroundColor: "black" },
                     }}
-                    onClick={() => {
-                    
-                    }}
+                    onClick={() => {}}
                   >
                     Add
                   </Button>
@@ -514,28 +539,27 @@ function CompanyJobs() {
                 <Grid item xs={12}>
                   <List>
                     {state.benefits &&
-                       state.benefits.map((req: string, index:number) => {
-                          return (
-                            <ListItem
-                              key={index}
-                              secondaryAction={
-                                <IconButton
-                                  onClick={() => removeBenefitsHandler(req)}
-                                  edge="end"
-                                  aria-label="delete"
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              }
-                              disablePadding
-                            >
-                              <ListItemButton>
-                                <ListItemText primary={req} />
-                              </ListItemButton>
-                            </ListItem>
-                          );
-                        })
-                      }
+                      state.benefits.map((req: string, index: number) => {
+                        return (
+                          <ListItem
+                            key={index}
+                            secondaryAction={
+                              <IconButton
+                                onClick={() => removeBenefitsHandler(req)}
+                                edge="end"
+                                aria-label="delete"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            }
+                            disablePadding
+                          >
+                            <ListItemButton>
+                              <ListItemText primary={req} />
+                            </ListItemButton>
+                          </ListItem>
+                        );
+                      })}
                   </List>
                 </Grid>
                 <Grid item xs={12}>

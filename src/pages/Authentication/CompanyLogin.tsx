@@ -37,23 +37,25 @@ export default function CompanyLogin() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful }
+    formState: { errors, isSubmitSuccessful },
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
-
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
     }
   }, [isSubmitSuccessful]);
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
-  
+
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
     setLoading(false);
@@ -117,8 +119,12 @@ export default function CompanyLogin() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2,backgroundColor: "darkred",
-                ":hover": { backgroundColor: "black" } }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "darkred",
+                  ":hover": { backgroundColor: "black" },
+                }}
               >
                 {loading ? "Loading..." : "Sign In"}
               </Button>
@@ -144,9 +150,7 @@ export default function CompanyLogin() {
               </Link>
               <Grid container>
                 <Grid item xs>
-                <Link to="*">
-                  Forgot password?
-                </Link>
+                  <Link to="*">Forgot password?</Link>
                 </Grid>
                 <Grid item>
                   <Link to="/company-register">
@@ -158,19 +162,19 @@ export default function CompanyLogin() {
           </Box>
         </Grid>
         <Grid
-        item
-        component="img"
-        src={Bg2}
-        xs={false}
-        sm={false}
-        md={8}
-        sx={{
-          objectFit: "cover",
-          objectPosition: "center",
-          height:"90vh",
-          display: { xs: 'none', md: 'block' }
-        }}
-      />
+          item
+          component="img"
+          src={Bg2}
+          xs={false}
+          sm={false}
+          md={8}
+          sx={{
+            objectFit: "cover",
+            objectPosition: "center",
+            height: "90vh",
+            display: { xs: "none", md: "block" },
+          }}
+        />
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>

@@ -43,7 +43,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/company-login" element={<CompanyLogin />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/view-jobs" element={<ShowJobs/>}/>
+        <Route path="/view-jobs" element={<ShowJobs />} />
         <Route path="/register" element={<Register />} />
         <Route path="/company-register" element={<CompanyRegister />} />
         <Route path="/user-view/:id" element={<UserView />} />
@@ -64,7 +64,7 @@ function App() {
         {!cookie.get("company-login") ? (
           <>
             <Route path="/company-pricing" element={<CompanyPricing />} />
-            <Route path="/company-home" element={<CompanyHome/>}/>
+            <Route path="/company-home" element={<CompanyHome />} />
             <Route
               path="/company-applications"
               element={<CompanyApplications />}
@@ -73,10 +73,7 @@ function App() {
               path="/company-applications/:id"
               element={<CompanyApplicationDetails />}
             />
-            <Route
-              path="/company-settings"
-              element={<CompanySettings />}
-            />
+            <Route path="/company-settings" element={<CompanySettings />} />
           </>
         ) : null}
         <Route path="*" element={<PageNotFound />} />

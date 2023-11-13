@@ -13,21 +13,24 @@ import ApplicationJobCard from "../../../components/Companies/ApplicationJobCard
 function CompanyApplications() {
   const [applications, setApplications] = useState<Array<JobsModel>>([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState<number|null>(null);
+  const [expanded, setExpanded] = useState<number | null>(null);
   const [calendarAccess, setCalendarAccess] = useState(false);
   const navigate = useNavigate();
   const [message, setMessage] = useState({ message: "", severity: "" });
-  const [open, setOpen] = React.useState<boolean|undefined>();
+  const [open, setOpen] = React.useState<boolean | undefined>();
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
 
-  const expandedHandler = (index:number) => {
+  const expandedHandler = (index: number) => {
     if (expanded == index) {
       setExpanded(null);
     } else {
@@ -35,14 +38,12 @@ function CompanyApplications() {
     }
   };
 
-  const updateHandler = async (applicationId:number, status:string) => {
-   
-  };
+  const updateHandler = async (applicationId: number, status: string) => {};
 
   useEffect(() => {
-  setApplications(jobs);
+    setApplications(jobs);
   }, []);
-  
+
   return (
     <Box>
       <div className="xs:min-h-[120vh]  min-h-[120vh] ms-2">
@@ -61,13 +62,15 @@ function CompanyApplications() {
           </div>
         ) : applications !== null ? (
           <>
-            {jobs.map((application:JobsModel, index:number) => {
+            {jobs.map((application: JobsModel, index: number) => {
               return (
                 <div role="button" onClick={() => expandedHandler(index)}>
                   <ApplicationJobCard
                     title={application.jobTitle}
                     timestamp={application.timestamp}
-                    applications={() => navigate(`/company-applications/${application.id}`)}
+                    applications={() =>
+                      navigate(`/company-applications/${application.id}`)
+                    }
                   />
                 </div>
               );

@@ -4,7 +4,20 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import { Button, CardActions } from "@mui/material";
 
-function JobDescription(props: { jobTitle: any; type: any; overview: any; description: any; requirements: any; skills: any; benefits: any; location: any; minSalary: any; maxSalary: any; hideSalary: any; otherDetails: any; }) {
+function JobDescription(props: {
+  jobTitle: any;
+  type: any;
+  overview: any;
+  description: any;
+  requirements: any;
+  skills: any;
+  benefits: any;
+  location: any;
+  minSalary: any;
+  maxSalary: any;
+  hideSalary: any;
+  otherDetails: any;
+}) {
   const {
     jobTitle,
     type,
@@ -35,23 +48,26 @@ function JobDescription(props: { jobTitle: any; type: any; overview: any; descri
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [isFixed]);
 
   return (
-    <Card sx={{ 
-      width: "45vw", 
-      position: "fixed",
-      top: isFixed ? `${initialOffset}px` : 'auto',
-      bottom: isFixed ? 'auto' : 0,
-       maxHeight: '75vh', 
-       overflowY: 'auto', 
-       marginTop: '10vh', 
-       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+    <Card
+      sx={{
+        width: "45vw",
+        position: "fixed",
+        top: isFixed ? `${initialOffset}px` : "auto",
+        bottom: isFixed ? "auto" : 0,
+        maxHeight: "75vh",
+        overflowY: "auto",
+        marginTop: "10vh",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <CardContent>
         <Typography variant="h4" color="text.primary" gutterBottom>
           {jobTitle}
@@ -85,7 +101,7 @@ function JobDescription(props: { jobTitle: any; type: any; overview: any; descri
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           <ul>
-            {requirements.map((req:string, index:number) => (
+            {requirements.map((req: string, index: number) => (
               <li key={index}>{req}</li>
             ))}
           </ul>
@@ -94,14 +110,14 @@ function JobDescription(props: { jobTitle: any; type: any; overview: any; descri
           Salary (Annual in USD)
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {hideSalary === 'on' ? (
+          {hideSalary === "on" ? (
             <div className="flex">
               <span
                 className="text-center me-3"
                 style={{
-                  width: '80px',
-                  height: '20px',
-                  backgroundColor: 'gray',
+                  width: "80px",
+                  height: "20px",
+                  backgroundColor: "gray",
                 }}
               >
                 Hidden
@@ -118,7 +134,7 @@ function JobDescription(props: { jobTitle: any; type: any; overview: any; descri
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               <ul>
-                {skills.map((skill:string, index:number) => (
+                {skills.map((skill: string, index: number) => (
                   <li key={index}>{skill}</li>
                 ))}
               </ul>
@@ -132,7 +148,7 @@ function JobDescription(props: { jobTitle: any; type: any; overview: any; descri
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               <ul>
-                {benefits.map((benefit: string, index:number) => (
+                {benefits.map((benefit: string, index: number) => (
                   <li key={index}>{benefit}</li>
                 ))}
               </ul>

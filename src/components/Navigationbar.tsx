@@ -26,16 +26,16 @@ const pages = [
 ];
 
 function NavigationBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<Element|null>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<Element|null>(null);
+  const [anchorElNav, setAnchorElNav] = React.useState<Element | null>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<Element | null>(null);
 
   const navigate = useNavigate();
   const cookie = new Cookies();
 
-  const handleOpenNavMenu = (event:React.MouseEvent) => {
+  const handleOpenNavMenu = (event: React.MouseEvent) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event:React.MouseEvent) => {
+  const handleOpenUserMenu = (event: React.MouseEvent) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -135,17 +135,15 @@ function NavigationBar() {
             ))}
           </Box>
           {cookie.get("user-login") == "true" ||
-            cookie.get("company-login") == "true" ? (
+          cookie.get("company-login") == "true" ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Icon">
-                <IconButton       
-                onClick={handleOpenUserMenu} 
-                color="inherit"
-                sx={{ p: 0 }}>
-                  <Avatar
-                    alt="Remy Sharp"
-                  src={""}
-                  />
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  color="inherit"
+                  sx={{ p: 0 }}
+                >
+                  <Avatar alt="Remy Sharp" src={""} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -163,8 +161,7 @@ function NavigationBar() {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
-              >
-              </Menu>
+              ></Menu>
             </Box>
           ) : (
             <Box sx={{ flexGrow: 0 }}>
@@ -227,9 +224,7 @@ function NavigationBar() {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
-              >
-          
-              </Menu>
+              ></Menu>
             </Box>
           )}
         </Toolbar>

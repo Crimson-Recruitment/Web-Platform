@@ -38,7 +38,7 @@ export default function AboutUs() {
                   align: "center",
                 }}
               >
-                Ignite your Professional journey with 
+                Ignite your Professional journey with
                 <Typography
                   component="span"
                   sx={{
@@ -68,18 +68,18 @@ export default function AboutUs() {
       <Container sx={{ py: 8 }} maxWidth="md">
         {/* End hero unit */}
         <Grid container spacing={5} sx={{ marginBottom: "100px" }}>
-        <Grid
-          item
-          component="img"
-          xs={12}
-          sm={6}
-          src={Frustrated}
-          sx={{
-            marginTop:"-50px",
-            objectFit: "contain",
-            maxHeight: "400px",
-          }}
-        />
+          <Grid
+            item
+            component="img"
+            xs={12}
+            sm={6}
+            src={Frustrated}
+            sx={{
+              marginTop: "-50px",
+              objectFit: "contain",
+              maxHeight: "400px",
+            }}
+          />
           <Grid xs={12} sm={6}>
             <Typography
               align="center"
@@ -102,7 +102,7 @@ export default function AboutUs() {
           sx={{
             objectFit: "cover",
             objectPosition: "center",
-            paddingX:{md:"100px"}
+            paddingX: { md: "100px" },
           }}
         />
         <Grid item xs={12} sm={6}>
@@ -121,18 +121,18 @@ export default function AboutUs() {
           </Typography>
         </Grid>
         <Grid container sx={{ marginTop: "100px" }}>
-        <Grid
-        item
-        component="img"
-        src={About1}
-        xs={12}
-        sm={6}
-        sx={{
-          objectFit: "cover",
-          objectPosition: "center",
-          height:"300px"
-        }}
-      />
+          <Grid
+            item
+            component="img"
+            src={About1}
+            xs={12}
+            sm={6}
+            sx={{
+              objectFit: "cover",
+              objectPosition: "center",
+              height: "300px",
+            }}
+          />
           <Grid item xs={12} sm={6} justifyContent="flex-end">
             <Typography
               component="blockquote"

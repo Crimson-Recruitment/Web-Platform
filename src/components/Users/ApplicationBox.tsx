@@ -6,27 +6,38 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from "@mui/material";
+import {
+  Alert,
+  AlertColor,
+  Snackbar,
+  SnackbarCloseReason,
+} from "@mui/material";
 
-export default function ApplicationBox(props: { needCoverLetter: any; onClose: any; isOpen: any; jobId: any; jobName: any; companyId: any; }) {
-  const {
-    needCoverLetter,
-    onClose,
-    isOpen,
-    jobId,
-    jobName,
-    companyId,
-  } = props;
+export default function ApplicationBox(props: {
+  needCoverLetter: any;
+  onClose: any;
+  isOpen: any;
+  jobId: any;
+  jobName: any;
+  companyId: any;
+}) {
+  const { needCoverLetter, onClose, isOpen, jobId, jobName, companyId } = props;
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [message, setMessage] = React.useState<{message:string|null, type:string|null}>({ message: null, type: null });
-  const handleClick = (val:{message:string, type:string}) => {
+  const [message, setMessage] = React.useState<{
+    message: string | null;
+    type: string | null;
+  }>({ message: null, type: null });
+  const handleClick = (val: { message: string; type: string }) => {
     setMessage(val);
     setOpen(true);
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
