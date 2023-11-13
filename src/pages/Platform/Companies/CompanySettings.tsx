@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { Avatar, TextField, Typography, Box } from '@mui/material';
+import { Avatar, TextField, Typography, Box, FormControlLabel, ListItemButton, ListItemIcon, ListItemText, List } from '@mui/material';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import LocationSearchInput from '../../../components/LocationInput';
 import { Link } from 'react-router-dom';
@@ -29,11 +29,26 @@ const CompanySettings = () => {
       switch (value) {
         case "account":
           return (
-            <Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
+            <Card sx={{ width:{xs:"80vw", md:"100%"}, bgcolor: 'background.paper' }} style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
                 <CardHeader title="Public info" />
                 <CardContent>
                   <form>
                     <Grid container spacing={2}>
+                    <Grid item xs={12} md={4}>
+                        <Box sx={{   
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center"}}>
+                          <Avatar 
+                          src="https://bootdey.com/img/Content/avatar/avatar1.png" 
+                          sx={{ height: "150px", width: "150px" }}/>
+                          <div className="mt-2">
+                            <span className="btn btn-primary">
+                              <input type="file"  className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
+                            </span>
+                          </div>
+                        </Box>
+                      </Grid>
                       <Grid item md={8}>
                       <Grid container spacing={2}>
                    <Grid item xs={12}>
@@ -79,30 +94,7 @@ const CompanySettings = () => {
                        label="Email Address"
                      />
                    </Grid>
-                   <Grid item xs={12}>
-                     <TextField
-                       required
-                       fullWidth
-                       label="Password"
-                       type="password"
-                     />
-                   </Grid>
                  </Grid>
-                      </Grid>
-                      <Grid item md={4}>
-                        <Box sx={{   
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",}}>
-                          <Avatar 
-                          src="https://bootdey.com/img/Content/avatar/avatar1.png" 
-                          sx={{ height: "150px", width: "150px" }}/>
-                          <div className="mt-2">
-                            <span className="btn btn-primary">
-                              <input type="file"  className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                            </span>
-                          </div>
-                        </Box>
                       </Grid>
                     </Grid>
                     <Button type="submit" variant="contained" color="primary" style={{ marginTop: '0.5rem' }}>
@@ -113,7 +105,8 @@ const CompanySettings = () => {
               </Card>
           )
           case "password":
-            return (<Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
+            return (
+            <Card sx={{ width:{xs:"80vw", md:"100%"}, bgcolor: 'background.paper' }} style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
             <CardHeader title="Password" />
             <CardContent>
               <form>
@@ -142,9 +135,32 @@ const CompanySettings = () => {
           </Card>)
           case "privacy":
             return (
-              <Typography>
-                Privacy
-              </Typography>
+              <Card sx={{ width:{xs:"80vw", md:"100%"}, bgcolor: 'background.paper' }} style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
+            <CardHeader title="Notification Settings" />
+            <CardContent>
+              <form>
+                <FormControl fullWidth margin="normal">
+                <List
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+    >
+      <ListItemButton>
+        <ListItemText primary="Privacy Policy" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemText primary="Terms & Conditions" />
+      </ListItemButton>
+    </List>
+                  <Typography><Switch  name="notifications" /> Enable Notifications </Typography>
+                  <Grid item xs>
+                </Grid>
+                </FormControl>
+                <Button type="submit" variant="contained" style={{ marginTop: '0.5rem' }}>
+                  Save changes
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
             )
       }
 
@@ -156,19 +172,27 @@ const CompanySettings = () => {
       background: "#FAFAFA", 
       minHeight:"70vh", 
       boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)'  }}>
-       <Typography variant="h4" gutterBottom style={{ marginBottom: '1.5rem' }}>
+        <Grid container xs={12} sx={{ display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center"}}>
+                              <Tabs value={tabValue} onChange={handleTabChange} sx={{display:{xs:"block", md:"none"}}}>
+                <Tab label="Account" value="account" />
+                <Tab label="Change Password" value="password"/>
+                <Tab label="Privacy Settings" value="privacy"/>
+              </Tabs>
+        </Grid>
+       <Typography variant="h4" gutterBottom style={{ marginBottom: '1.5rem', marginLeft:"1.5rem" }}>
         Settings
       </Typography>
       <Grid container spacing={2}>
         <Grid item md={5} xl={4}>
-          <Card style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
+          <Card sx={{display:{xs:"none", md:"block"}}} style={{ marginBottom: '1.5rem', boxShadow: '0 1px 15px 1px rgba(52,40,104,.08)' }}>
             <CardHeader title="Profile Settings" />
             <div className="list-group list-group-flush" role="tablist">
               <Tabs value={tabValue} onChange={handleTabChange} orientation="vertical">
                 <Tab label="Account" value="account" />
                 <Tab label="Change Password" value="password"/>
                 <Tab label="Privacy Settings" value="privacy"/>
-                {/* ... Add other tabs as needed */}
               </Tabs>
             </div>
           </Card>
