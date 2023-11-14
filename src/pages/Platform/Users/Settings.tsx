@@ -1,31 +1,28 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Input from "@mui/material/Input";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import Button from "@mui/material/Button";
-import Switch from "@mui/material/Switch";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import {
   Avatar,
-  TextField,
-  Typography,
   Box,
-  FormControlLabel,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   List,
+  ListItemButton,
+  ListItemText,
+  TextField,
+  Typography
 } from "@mui/material";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import Switch from "@mui/material/Switch";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import MuiPhoneNumber from "material-ui-phone-number";
-import LocationSearchInput from "../../../components/LocationInput";
+import React from "react";
 import { Link } from "react-router-dom";
+import LocationSearchInput from "../../../components/LocationInput";
 
 const Settings = () => {
   const [tabValue, setTabValue] = React.useState("account");
