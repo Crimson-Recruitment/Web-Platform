@@ -1,16 +1,11 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import { CardMedia } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
-import CardText from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Avatar from "@mui/material/Avatar";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { CardMedia } from "@mui/material";
 
 const CompanyProfile = () => {
   return (
