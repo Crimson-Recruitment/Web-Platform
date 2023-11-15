@@ -1,67 +1,54 @@
 import { CardMedia } from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Popover from '@mui/material/Popover';
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import { Person, peopleData } from "../../../Data/DummyData";
 
 const CompanyProfile = () => {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>, personId: number) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedPerson(personId);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedPerson(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? `simple-popover-${selectedPerson}` : undefined;
+
   return (
     <div className="gradient-custom-2">
          <Container className="py-5 h-100">
       <Grid container justifyContent="center" alignItems="center" className="h-100">
         <Grid item lg={9} xl={7}>
           <Card>
-            <Box sx={{ bgcolor: '#000', height: '200px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '16px' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: '150px' }}>
+            <Box sx={{ bgcolor: '#000', height: '270px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
                 <CardMedia
                   component="img"
                   alt="Profile Image"
-                  height="150"
-                  image="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                  style={{ width: '150px', zIndex: '1' }}
+                  height="300"
+                  image="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
+                  style={{ width: '200px', zIndex: '1', borderRadius:"10px" }}
                 />
-                <Button variant="outlined" style={{ height: '36px', overflow: 'visible', marginTop: '8px' }}>
-                  Edit profile
-                </Button>
-              </Box>
-              <Box sx={{ marginLeft: '16px', marginTop: '16px' }}>
-                <Typography variant="h5" color="textPrimary">
-                  Andy Horwitz
+                     <Box sx={{ marginLeft: '16px', marginTop: '16px' }}>
+                <Typography variant="h6" color="white">
+                  Beauty Delights
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  New York
+                <Typography variant="body1" sx={{marginBottom:"10px"}} color="lightgray">
+                  New York, USA
                 </Typography>
               </Box>
-            </Box>
-            <Box sx={{ bgcolor: '#f8f9fa', padding: '16px' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'end', textAlign: 'center', py: 1 }}>
-                <Box>
-                  <Typography variant="h5" className="mb-1">
-                    253
-                  </Typography>
-                  <Typography variant="body2" className="small text-muted mb-0">
-                    Photos
-                  </Typography>
-                </Box>
-                <Box sx={{ px: 3 }}>
-                  <Typography variant="h5" className="mb-1">
-                    1026
-                  </Typography>
-                  <Typography variant="body2" className="small text-muted mb-0">
-                    Followers
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h5" className="mb-1">
-                    478
-                  </Typography>
-                  <Typography variant="body2" className="small text-muted mb-0">
-                    Following
-                  </Typography>
-                </Box>
               </Box>
             </Box>
             <CardContent className="text-black p-4">
@@ -83,7 +70,7 @@ const CompanyProfile = () => {
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Typography variant="h6" className="fw-normal mb-0">
-                  Recent photos
+                  Company Photos
                 </Typography>
                 <Typography variant="body1" className="mb-0">
                   <a href="#!" className="text-muted">
@@ -112,6 +99,56 @@ const CompanyProfile = () => {
                 </Grid>
                 {/* Add more Grid items for additional photos */}
               </Grid>
+              <Typography variant="h5" marginY={"10px"} gutterBottom>
+          Our Team
+        </Typography>
+        <Box display="flex" justifyContent="space-between">
+          {peopleData.map((person) => (
+            <Box key={person.id} textAlign="center">
+              <CardMedia
+                component="img"
+                alt={person.name}
+                height="150"
+                image={person.image}
+                sx={{ cursor: 'pointer', borderRadius: '50%', width: '150px', height: '150px' }}
+                onClick={(event) => handleClick(event, person.id)}
+              />
+              <Typography variant="subtitle1" mt={1}>
+                {person.name}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {person.position}
+              </Typography>
+              <Popover
+                id={id}
+                open={selectedPerson === person.id && open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+              >
+                <Box p={2}>
+                  <Typography variant="subtitle1">{person.name}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {person.position}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Email: {person.contactDetails.email}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Phone: {person.contactDetails.phone}
+                  </Typography>
+                </Box>
+              </Popover>
+            </Box>
+          ))}
+        </Box>
             </CardContent>
           </Card>
         </Grid>

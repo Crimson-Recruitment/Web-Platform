@@ -10,22 +10,22 @@ export default function Footer() {
           </div>
           <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-white sm:mb-0 list-none">
             <li>
-              <a href="#" className="mr-4 hover:underline md:mr-6 ">
+              <a href="/" className="mr-4 hover:underline md:mr-6 ">
                 Home
               </a>
             </li>
             <li>
-              <a href="#" className="mr-4 hover:underline md:mr-6">
+              <a href="/about" className="mr-4 hover:underline md:mr-6">
                 About
               </a>
             </li>
             <li>
-              <a href="#" className="mr-4 hover:underline md:mr-6 ">
+              <a href="/pricing" className="mr-4 hover:underline md:mr-6 ">
                 Pricing
               </a>
             </li>
             <li>
-              <a href="#" className="hover:underline  md:mr-6">
+              <a href="/contact-us" className="hover:underline  md:mr-6">
                 Contact Us
               </a>
             </li>
