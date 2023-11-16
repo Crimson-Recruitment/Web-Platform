@@ -13,12 +13,14 @@ import CompanyJobs from "./CompanyJobs";
 import CompanyProfile from "./CompanyProfile";
 import CompanySettings from "./CompanySettings";
 import CompanyPricing from "./CompanyPricing";
+import {useSelector, useDispatch} from "react-redux";
 
 export default function CompanyHome() {
   const [state, setState] = React.useState(false);
-  const [section, setSection] = React.useState("company-jobs");
+  const company = useSelector((state:any) => state.company);
+  const dispatch = useDispatch();
 
-  React.useEffect(() => {}, [section]);
+  React.useEffect(() => {}, [company]);
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
@@ -41,7 +43,7 @@ export default function CompanyHome() {
       <List>
         {companyPages.map((pages, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemButton onClick={() => setSection(pages.section)}>
+            <ListItemButton onClick={() => dashboardHandler(pages.section)}>
               <ListItemText primary={pages.pageName} />
             </ListItemButton>
           </ListItem>
@@ -49,23 +51,9 @@ export default function CompanyHome() {
       </List>
     </Box>
   );
-
-  function getByDisplayed(): React.ReactNode {
-    switch (section) {
-      case "company-jobs":
-        return <CompanyJobs />;
-      case "company-profile":
-        return <CompanyProfile />;
-      case "company-applications":
-        return <CompanyApplications />;
-      case "company-settings":
-        return <CompanySettings />;
-      case "company-pricing":
-        return <CompanyPricing />;
-      default:
-        throw new Error("Not a valid section!");
-    }
-  }
+const dashboardHandler = (value:string) => {
+  dispatch({type:value});
+}
 
   return (
     <div style={{ minHeight: "100vh" }}>
@@ -86,7 +74,7 @@ export default function CompanyHome() {
       <Drawer anchor={"left"} open={state} onClose={toggleDrawer(false)}>
         {list()}
       </Drawer>
-      {getByDisplayed()}
+      {company.currentPage}
     </div>
   );
 }

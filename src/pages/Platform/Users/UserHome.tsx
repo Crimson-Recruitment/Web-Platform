@@ -7,19 +7,19 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { userPages } from "../../../Data/UserPages";
-import Applications from "./Applications";
-import ForYou from "./ForYou";
-import Jobs from "./Jobs";
-import Profile from "./Profile";
-import Settings from "./Settings";
-import UserPricing from "./UserPricing";
 
 export default function UserHome() {
   const [state, setState] = React.useState(false);
-  const [section, setSection] = React.useState("for-you");
+  const user = useSelector((state:any) => state.user);
+  const dispatch = useDispatch();
 
-  React.useEffect(() => {}, [section]);
+  React.useEffect(() => {}, [user.currentPage]);
+
+  const dashboardHandler = (value:string) => {
+    dispatch({type:value});
+  }
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
@@ -40,37 +40,16 @@ export default function UserHome() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {userPages.map((pages, index) => (
+        {userPages.map((page, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemButton onClick={() => setSection(pages.section)}>
-              <ListItemText primary={pages.pageName} />
+            <ListItemButton onClick={() => dashboardHandler(page.section)}>
+              <ListItemText primary={page.pageName} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </Box>
   );
-
-  function getByDisplayed(): React.ReactNode {
-    switch (section) {
-      case "for-you":
-        return <ForYou />;
-      case "profile":
-        return <Profile />;
-      case "applications":
-        return <Applications />;
-      case "settings":
-        return <Settings />;
-      case "jobs":
-        return <Jobs />;
-      case "settings":
-        return <Settings />;
-      case "user-pricing":
-        return <UserPricing />;
-      default:
-        throw new Error("Not a valid section!");
-    }
-  }
 
   return (
     <div style={{ minHeight: "100vh" }}>
@@ -91,7 +70,7 @@ export default function UserHome() {
       <Drawer anchor={"left"} open={state} onClose={toggleDrawer(false)}>
         {list()}
       </Drawer>
-      {getByDisplayed()}
+      {user.currentPage}
     </div>
   );
 }
