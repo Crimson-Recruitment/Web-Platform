@@ -30,7 +30,8 @@ export default function CompanyRegisterForm() {
       .min(5, "You must enter atleast 5 characters!")
       .max(16, "You must enter at most 16 characters!")
       .nonempty("Field is required!"),
-  });
+      reenter_password: string()
+  }).refine(obj => obj.password == obj.reenter_password);
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
 
@@ -170,6 +171,21 @@ export default function CompanyRegisterForm() {
                   }
                   {...register("password")}
                   id="password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Re-Enter Password"
+                  type="password"
+                  id="reenter_password"
+                  error={!!errors["reenter_password"]}
+                  helperText={
+                    errors["reenter_password"] ? errors["reenter_password"].message : ""
+                  }
+                  {...register("reenter_password")}
+                  autoComplete="new-password"
                 />
               </Grid>
             </Grid>
