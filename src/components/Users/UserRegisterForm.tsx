@@ -1,19 +1,18 @@
-import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Avatar, FormControl, FormHelperText, FormLabel, Grid, MenuItem, Select, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
+import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { object, string, z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Avatar, Grid, TextField } from "@mui/material";
-import Select from "react-select";
-import LocationSearchInput from "../LocationInput";
 import MuiPhoneNumber from "material-ui-phone-number";
+import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { object, string, z } from "zod";
 import { professionList, skills } from "../../Data/UserProfessions";
+import LocationSearchInput from "../LocationInput";
 
 const steps = ["Contact info", "User details", "Profile Image"];
 
@@ -25,15 +24,15 @@ export default function UserRegisterForm() {
   const navigate = useNavigate();
 
   const validationSchema = object({
-    firstName: string().nonempty("Field is required!"),
-    lastName: string().nonempty("Field is required!"),
-    email: string().email("Email is invalid").nonempty("Field is required!"),
+    firstName: string().min(1,"Field is required!"),
+    lastName: string().min(1,"Field is required!"),
+    email: string().email("Email is invalid!").min(1,"Field is required!"),
     password: string()
       .min(5, "You must enter atleast 5 characters!")
-      .max(16, "You must enter at most 16 characters!")
-      .nonempty("Field is required!"),
-    reenter_password: string()
-  }).refine(obj => obj.password == obj.reenter_password);
+      .max(16, "You must enter at most 16 characters!"),
+    reenter_password: string(),
+    profession:string().min(1, "Field is required!"),
+  }).refine(obj => obj.password == obj.reenter_password, "Passwords do not match!");
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
 
@@ -43,8 +42,10 @@ export default function UserRegisterForm() {
     formState: { errors, isSubmitSuccessful },
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
-  const handleNext = () => {
+  const handleNext = (val:any) => {
     if (activeStep == steps.length - 1) {
+      console.log(val);
+      return;
       navigate("/user-home");
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -57,11 +58,7 @@ export default function UserRegisterForm() {
   const handleSkip = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
+  
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
     setLoading(false);
@@ -90,14 +87,15 @@ export default function UserRegisterForm() {
         })}
       </Stepper>
       <React.Fragment>
-        {activeStep == 0 ? (
-          <Box
+      <Box
             component="form"
             noValidate={false}
             onSubmit={handleSubmit(onSubmitHandler)}
             sx={{ marginTop: 8 }}
           >
-            <Grid container spacing={2}>
+        {activeStep == 0 ? (
+     <>
+     <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
@@ -186,40 +184,35 @@ export default function UserRegisterForm() {
                 />
               </Grid>
             </Grid>
-            {/* <Button
-                 disabled={loading}
-                 type="submit"
-                 fullWidth
-                 variant="contained"
-                 sx={{
-                   mt: 3,
-                   mb: 2,
-                   backgroundColor: "darkred",
-                   ":hover": { backgroundColor: "black" },
-                 }}
-               >
-                 {loading ? "Loading..." : "Sign Up"}
-               </Button> */}
             <Grid container justifyContent="flex-end">
               <Grid item></Grid>
             </Grid>
-          </Box>
+     </>
+            
         ) : activeStep == 1 ? (
           <form className="w-full">
-            <div className="mb-6">
-              <label
-                htmlFor="profession"
-                className="block mb-2 text-sm font-medium text-gray-900 w-full"
-              >
-                Profession
-              </label>
-              <Select
-                required
-                className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                options={professionList}
-                placeholder="Medicine, technology,....."
-                isSearchable={true}
-              />
+            <div className="mb-6 mt-3">
+              <FormLabel sx={{color:"black"}}>Profession</FormLabel>
+            <FormControl fullWidth margin="normal">
+          <Select
+            id="profession"
+            error={!!errors["profession"]?.message}
+          {...register("profession")}
+          >
+            {professionList.map((profession) => {
+              return (
+                <>
+                <MenuItem value={profession.value}>{profession.label}</MenuItem>
+                </>
+              )
+            })}
+          </Select>
+          <FormHelperText sx={{color:"red"}}>
+          {errors["profession"] ? errors["profession"].message : ""}
+          </FormHelperText>
+        </FormControl>
+            
+          
             </div>
             <div className="mb-6">
               <label
@@ -243,14 +236,18 @@ export default function UserRegisterForm() {
             >
               Select your prominent skills (6 max).
             </label>
-            <Select
-              required
-              className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              options={skills}
-              placeholder="Select skills,..."
-              isSearchable={true}
-              isMulti
-            />
+            <Select multiple value={[]} sx={{width:"100%"}}
+        
+            >
+              {skills.map((skill => {
+                return (
+                  <>
+                  <MenuItem value={skill.value}>{skill.label}</MenuItem>
+                  </>
+                )
+              }))}
+            </Select>
+          
 
             <label
               className="block mb-2 text-sm font-medium text-gray-900"
@@ -324,13 +321,39 @@ export default function UserRegisterForm() {
             Back
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleNext}>
-            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          {activeStep === steps.length - 1 ?
+          <Button disabled={loading}
+          type="submit"
+          variant="contained"
+          sx={{
+            color:"white",
+                   mt: 3,
+                   mb: 2,
+                   backgroundColor: "darkred",
+                   ":hover": { backgroundColor: "black" },
+                 }}>
+        
+          {loading ? "Loading..." : "Sign Up"}
+          </Button>:
+          <Button onClick={handleNext}  
+          type="button"
+          sx={{
+            color:"white",
+                   mt: 3,
+                   mb: 2,
+                   backgroundColor: "darkred",
+                   ":hover": { backgroundColor: "black" },
+                 }}>
+            Next
           </Button>
+
+          }
+          
         </Box>
         <Link className="text-red-600 hover:text-red-800" to="/login">
           Already have an account? Sign in
         </Link>
+        </Box>
       </React.Fragment>
     </Box>
   );

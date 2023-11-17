@@ -23,13 +23,10 @@ export default function CompanyLogin() {
   const cookie = new Cookies();
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
-  const handleClick = () => {
-    setOpen(true);
-  };
 
   const validationSchema = object({
-    email: string().nonempty("Field is required!"),
-    password: string().nonempty("Field is required!"),
+    email: string().min(1,"Field is required!").email("Enter a valid email address!"),
+    password: string().min(1,"Field is required!"),
   });
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
@@ -58,6 +55,7 @@ export default function CompanyLogin() {
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
+    console.log(values)
     setLoading(false);
   };
 
