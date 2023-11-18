@@ -13,11 +13,11 @@ import CompanyJobs from "./CompanyJobs";
 import CompanyProfile from "./CompanyProfile";
 import CompanySettings from "./CompanySettings";
 import CompanyPricing from "./CompanyPricing";
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function CompanyHome() {
   const [state, setState] = React.useState(false);
-  const company = useSelector((state:any) => state.company);
+  const company = useSelector((state: any) => state.company);
   const dispatch = useDispatch();
 
   React.useEffect(() => {}, [company]);
@@ -51,9 +51,9 @@ export default function CompanyHome() {
       </List>
     </Box>
   );
-const dashboardHandler = (value:string) => {
-  dispatch({type:value});
-}
+  const dashboardHandler = (value: string) => {
+    dispatch({ type: value });
+  };
 
   return (
     <div style={{ minHeight: "100vh" }}>

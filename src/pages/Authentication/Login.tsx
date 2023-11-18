@@ -26,8 +26,10 @@ export default function Login() {
   };
 
   const validationSchema = object({
-    email: string().min(1,"Field is required!").email("Enter a valid email address!"),
-    password: string().min(1,"Field is required!"),
+    email: string()
+      .min(1, "Field is required!")
+      .email("Enter a valid email address!"),
+    password: string().min(1, "Field is required!"),
   });
 
   const {

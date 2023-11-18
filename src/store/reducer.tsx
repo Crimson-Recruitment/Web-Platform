@@ -11,47 +11,48 @@ import Settings from "../pages/Platform/Users/Settings";
 import UserPricing from "../pages/Platform/Users/UserPricing";
 
 const userInitState = {
-    currentPage:<ForYou/>
-}
+  currentPage: <ForYou />,
+};
 
-export const userDashboardReducer = (state=userInitState, action:any) => {
-    switch (action.type) {
-        case "for-you":
-          return{...state, currentPage:<ForYou/>};
-        case "profile":
-            return{...state, currentPage:<Profile/>};
-        case "applications":
-            return{...state, currentPage:<Applications/>};
-        case "settings":
-            return{...state, currentPage:<Settings/>};
-        case "jobs":
-            return{...state, currentPage:<Jobs/>};
-        case "user-pricing":
-            return{...state, currentPage:<UserPricing/>};
-        default:
-          return state;
-      }
-
-}
+export const userDashboardReducer = (state = userInitState, action: any) => {
+  switch (action.type) {
+    case "for-you":
+      return { ...state, currentPage: <ForYou /> };
+    case "profile":
+      return { ...state, currentPage: <Profile /> };
+    case "applications":
+      return { ...state, currentPage: <Applications /> };
+    case "settings":
+      return { ...state, currentPage: <Settings /> };
+    case "jobs":
+      return { ...state, currentPage: <Jobs /> };
+    case "user-pricing":
+      return { ...state, currentPage: <UserPricing /> };
+    default:
+      return state;
+  }
+};
 
 const companyInitState = {
-    currentPage:<CompanyJobs/>
-}
+  currentPage: <CompanyJobs />,
+};
 
-export const companyDashboardReducer = (state=companyInitState, action:any) => {
-    switch (action.type) {
-        case "company-jobs":
-            return{...state, currentPage:<CompanyJobs/>};
-        case "company-profile":
-            return{...state, currentPage:<CompanyProfile/>};
-        case "company-applications":
-            return{...state, currentPage:<CompanyApplications/>};
-        case "company-settings":
-            return{...state, currentPage:<CompanySettings/>};
-        case "company-pricing":
-            return{...state, currentPage:<CompanyPricing/>};
-        default:
-          return state;
-      }
-
-}
+export const companyDashboardReducer = (
+  state = companyInitState,
+  action: any,
+) => {
+  switch (action.type) {
+    case "company-jobs":
+      return { ...state, currentPage: <CompanyJobs /> };
+    case "company-profile":
+      return { ...state, currentPage: <CompanyProfile /> };
+    case "company-applications":
+      return { ...state, currentPage: <CompanyApplications /> };
+    case "company-settings":
+      return { ...state, currentPage: <CompanySettings /> };
+    case "company-pricing":
+      return { ...state, currentPage: <CompanyPricing /> };
+    default:
+      return state;
+  }
+};

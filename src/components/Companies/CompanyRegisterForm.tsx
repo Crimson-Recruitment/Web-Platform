@@ -24,14 +24,15 @@ export default function CompanyRegisterForm() {
   const navigate = useNavigate();
 
   const validationSchema = object({
-    companyName: string().nonempty("Field is required!"),
-    email: string().email("Email is invalid").nonempty("Field is required!"),
+    companyName: string().min(1, "Field is required!"),
+    email: string().email("Email is invalid").min(1, "Field is required!"),
     password: string()
       .min(5, "You must enter atleast 5 characters!")
       .max(16, "You must enter at most 16 characters!")
-      .nonempty("Field is required!"),
-      reenter_password: string()
-  }).refine(obj => obj.password == obj.reenter_password);
+      .min(1, "Field is required!"),
+    reenter_password: string(),
+    location: string().min(1, "Field is required!"),
+  }).refine((obj) => obj.password == obj.reenter_password);
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
 
@@ -121,7 +122,13 @@ export default function CompanyRegisterForm() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <LocationSearchInput />
+                <LocationSearchInput
+                  error={!!errors["location"]}
+                  helperText={
+                    errors["location"] ? errors["location"].message : ""
+                  }
+                  obj={{ ...register("location") }}
+                />
               </Grid>
               <Grid item xs={12}>
                 <MuiPhoneNumber
@@ -182,27 +189,15 @@ export default function CompanyRegisterForm() {
                   id="reenter_password"
                   error={!!errors["reenter_password"]}
                   helperText={
-                    errors["reenter_password"] ? errors["reenter_password"].message : ""
+                    errors["reenter_password"]
+                      ? errors["reenter_password"].message
+                      : ""
                   }
                   {...register("reenter_password")}
                   autoComplete="new-password"
                 />
               </Grid>
             </Grid>
-            {/* <Button
-                   disabled={loading}
-                   type="submit"
-                   fullWidth
-                   variant="contained"
-                   sx={{
-                     mt: 3,
-                     mb: 2,
-                     backgroundColor: "darkred",
-                     ":hover": { backgroundColor: "black" },
-                   }}
-                 >
-                   {loading ? "Loading..." : "Sign Up"}
-                 </Button> */}
             <Grid container justifyContent="flex-end">
               <Grid item></Grid>
             </Grid>
@@ -336,9 +331,36 @@ export default function CompanyRegisterForm() {
             Back
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleNext}>
-            {activeStep === steps.length - 1 ? "Finish" : "Next"}
-          </Button>
+          {activeStep === steps.length - 1 ? (
+            <Button
+              disabled={loading}
+              type="submit"
+              variant="contained"
+              sx={{
+                color: "white",
+                mt: 3,
+                mb: 2,
+                backgroundColor: "darkred",
+                ":hover": { backgroundColor: "black" },
+              }}
+            >
+              {loading ? "Loading..." : "Sign Up"}
+            </Button>
+          ) : (
+            <Button
+              onClick={handleNext}
+              type="button"
+              sx={{
+                color: "white",
+                mt: 3,
+                mb: 2,
+                backgroundColor: "darkred",
+                ":hover": { backgroundColor: "black" },
+              }}
+            >
+              Next
+            </Button>
+          )}
         </Box>
         <Link className="text-red-600 hover:text-red-800" to="/company-login">
           Already have an account? Sign in

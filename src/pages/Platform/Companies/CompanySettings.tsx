@@ -12,6 +12,9 @@ import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { Link, useNavigate } from "react-router-dom";
+import { object, string, z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   Avatar,
   TextField,
@@ -25,10 +28,36 @@ import {
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number";
 import LocationSearchInput from "../../../components/LocationInput";
-import { Link } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const CompanySettings = () => {
   const [tabValue, setTabValue] = React.useState("account");
+
+  const validationSchema = object({
+    companyName: string().min(1, "Field is required!"),
+    email: string().email("Email is invalid").min(1, "Field is required!"),
+    password: string()
+      .min(5, "You must enter atleast 5 characters!")
+      .max(16, "You must enter at most 16 characters!")
+      .min(1, "Field is required!"),
+    reenter_password: string(),
+    location: string().min(1, "Field is required!"),
+  }).refine((obj) => obj.password == obj.reenter_password);
+
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
+
+  React.useEffect(() => {
+    if (isSubmitSuccessful) {
+    }
+  }, [isSubmitSuccessful]);
+
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {};
 
   const handleTabChange = (event: any, newValue: string) => {
     setTabValue(newValue);
@@ -82,10 +111,23 @@ const CompanySettings = () => {
                           fullWidth
                           id="companyname"
                           label="Company Name"
+                          error={!!errors["companyName"]}
+                          helperText={
+                            errors["companyName"]
+                              ? errors["companyName"].message
+                              : ""
+                          }
+                          {...register("companyName")}
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <LocationSearchInput />
+                        <LocationSearchInput
+                          error={!!errors["location"]}
+                          helperText={
+                            errors["location"] ? errors["location"].message : ""
+                          }
+                          obj={register("location")}
+                        />
                       </Grid>
                       <Grid item xs={12}>
                         <MuiPhoneNumber
@@ -117,6 +159,43 @@ const CompanySettings = () => {
                           fullWidth
                           id="email"
                           label="Email Address"
+                          error={!!errors["email"]}
+                          helperText={
+                            errors["email"] ? errors["email"].message : ""
+                          }
+                          {...register("email")}
+                          autoComplete="email"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          fullWidth
+                          label="Password"
+                          type="password"
+                          error={!!errors["password"]}
+                          helperText={
+                            errors["password"] ? errors["password"].message : ""
+                          }
+                          {...register("password")}
+                          id="password"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          fullWidth
+                          label="Re-Enter Password"
+                          type="password"
+                          id="reenter_password"
+                          error={!!errors["reenter_password"]}
+                          helperText={
+                            errors["reenter_password"]
+                              ? errors["reenter_password"].message
+                              : ""
+                          }
+                          {...register("reenter_password")}
+                          autoComplete="new-password"
                         />
                       </Grid>
                     </Grid>

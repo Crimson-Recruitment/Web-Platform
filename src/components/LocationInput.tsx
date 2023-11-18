@@ -1,69 +1,118 @@
-import { CircularProgress, TextField } from "@mui/material";
-import { useState } from "react";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
+// BingMapsAutocomplete.tsx
+import React, { useState, useEffect } from "react";
+import Autocomplete, {
+  AutocompleteInputChangeReason,
+} from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function LocationSearchInput() {
-  const [address, setAddress] = useState<string>("");
-  const handleChange = (address: string) => {
-    setAddress(address);
-  };
-
-  const handleSelect = (address: string) => {
-    geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
-      .catch((error: Error) => alert(error));
-  };
-  return (
-    <PlacesAutocomplete
-      value={address}
-      onChange={handleChange}
-      onSelect={handleSelect}
-    >
-      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <div>
-          <TextField
-            {...getInputProps({
-              placeholder: "Search Places ...",
-              className: "location-search-input",
-              required: true,
-              fullWidth: true,
-              id: "location",
-              label: "Location",
-              name: "location",
-            })}
-          />
-          <div className="autocomplete-dropdown-container">
-            {loading ? (
-              <div className="flex justify-center">
-                <CircularProgress className="my-5" />
-              </div>
-            ) : (
-              suggestions.map((suggestion, index) => {
-                const className = suggestion.active
-                  ? "suggestion-item--active"
-                  : "suggestion-item";
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: "#b8d1a4", cursor: "pointer" }
-                  : { backgroundColor: "#f1f6ec", cursor: "pointer" };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-      )}
-    </PlacesAutocomplete>
-  );
+declare global {
+  interface Window {
+    Microsoft: any;
+    initializeBingMap: () => void;
+  }
 }
+
+const LocationInput = ({
+  error,
+  helperText,
+  obj,
+}: {
+  error: boolean | undefined;
+  helperText: string | undefined;
+  obj: any;
+}) => {
+  const apiKey =
+    "AspJNokRcnZQKBDoUmhLayY19jcaXfh0h_c0d-FWWzgKD5eLyY5I7CaRdOiQ-Y7o";
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState<string | undefined>(
+    "",
+  );
+  const [newLocations, setNewLocations] = useState<any[]>([]);
+  const location = useSelector((state: any) => state.userRegister);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = `https://www.bing.com/api/maps/mapcontrol?key=${apiKey}&callback=initializeBingMap`;
+    script.async = true;
+    script.defer = true;
+    console.log(location);
+    setSelectedAddress(location.location);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, [location.location, selectedAddress]);
+
+  const handleInputChange = (
+    event: React.ChangeEvent<{}>,
+    value: string,
+    reason: AutocompleteInputChangeReason,
+  ) => {
+    setSearchTerm(value);
+    if (value.length !== 0) {
+      dispatch({ type: "CHANGE_LOCATION", payload: value });
+    }
+  };
+
+  const getOptionLabel = (option: any) => {
+    if (option && option.address && option.address.formattedAddress) {
+      const country = option.address.countryRegion || "";
+      return `${option.address.formattedAddress}, ${country}`;
+    }
+    return "";
+  };
+
+  const handlePlaceSelected = (place: any) => {
+    const address = place?.address?.formattedAddress || "";
+    setSelectedAddress(address);
+    if (address.length !== 0) {
+      dispatch({ type: "CHANGE_LOCATION", payload: address });
+    }
+  };
+
+  const fetchLocations = async () => {
+    const response = await fetch(
+      `https://dev.virtualearth.net/REST/v1/Autosuggest?query=${searchTerm}&key=${apiKey}`,
+    );
+    const data = await response.json();
+
+    const newLocationsData =
+      data?.resourceSets?.[0]?.resources?.[0]?.value || [];
+    setNewLocations(newLocationsData);
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchLocations();
+    }
+  }, [searchTerm]);
+
+  return (
+    <div>
+      <Autocomplete
+        id="bing-maps-autocomplete"
+        options={newLocations}
+        inputValue={location.location}
+        getOptionLabel={getOptionLabel}
+        onInputChange={handleInputChange}
+        onChange={(_, value) => handlePlaceSelected(value)}
+        {...obj}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Location"
+            variant="outlined"
+            error={error}
+            helperText={helperText}
+          />
+        )}
+      />
+    </div>
+  );
+};
+
+export default LocationInput;

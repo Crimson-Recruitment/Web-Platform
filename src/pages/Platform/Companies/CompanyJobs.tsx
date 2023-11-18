@@ -330,7 +330,11 @@ function CompanyJobs() {
                   >
                     Location
                   </label>
-                  <LocationSearchInput />
+                  <LocationSearchInput
+                    error={false}
+                    helperText={""}
+                    obj={null}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <label

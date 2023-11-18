@@ -12,14 +12,14 @@ import { userPages } from "../../../Data/UserPages";
 
 export default function UserHome() {
   const [state, setState] = React.useState(false);
-  const user = useSelector((state:any) => state.user);
+  const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
 
   React.useEffect(() => {}, [user.currentPage]);
 
-  const dashboardHandler = (value:string) => {
-    dispatch({type:value});
-  }
+  const dashboardHandler = (value: string) => {
+    dispatch({ type: value });
+  };
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (

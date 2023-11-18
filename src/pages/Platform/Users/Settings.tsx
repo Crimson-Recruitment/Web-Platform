@@ -5,7 +5,7 @@ import {
   ListItemButton,
   ListItemText,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -23,9 +23,35 @@ import MuiPhoneNumber from "material-ui-phone-number";
 import React from "react";
 import { Link } from "react-router-dom";
 import LocationSearchInput from "../../../components/LocationInput";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { object, string, z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Settings = () => {
   const [tabValue, setTabValue] = React.useState("account");
+
+  const validationSchema = object({
+    firstName: string().min(1, "Field is required!"),
+    lastName: string().min(1, "Field is required!"),
+    email: string().email("Email is invalid!").min(1, "Field is required!"),
+    password: string()
+      .min(5, "You must enter atleast 5 characters!")
+      .max(16, "You must enter at most 16 characters!"),
+    reenter_password: string(),
+    profession: string().min(1, "Field is required!"),
+    location: string().min(1, "Field is required!"),
+  }).refine(
+    (obj) => obj.password == obj.reenter_password,
+    "Passwords do not match!",
+  );
+
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
   const handleTabChange = (event: any, newValue: string) => {
     setTabValue(newValue);
@@ -80,6 +106,14 @@ const Settings = () => {
                           fullWidth
                           id="firstName"
                           label="First Name"
+                          error={!!errors["firstName"]}
+                          helperText={
+                            errors["firstName"]
+                              ? errors["firstName"].message
+                              : ""
+                          }
+                          {...register("firstName")}
+                          autoFocus
                         />
                       </Grid>
 
@@ -89,6 +123,11 @@ const Settings = () => {
                           fullWidth
                           id="lastName"
                           label="Last Name"
+                          error={!!errors["lastName"]}
+                          helperText={
+                            errors["lastName"] ? errors["lastName"].message : ""
+                          }
+                          {...register("lastName")}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -104,7 +143,13 @@ const Settings = () => {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <LocationSearchInput />
+                        <LocationSearchInput
+                          error={!!errors["location"]}
+                          helperText={
+                            errors["location"] ? errors["location"].message : ""
+                          }
+                          obj={{ ...register("location") }}
+                        />
                       </Grid>
                       <Grid item xs={12}>
                         <TextField
@@ -114,6 +159,43 @@ const Settings = () => {
                           id="email"
                           label="Email Address"
                           autoComplete="email"
+                          error={!!errors["email"]}
+                          helperText={
+                            errors["email"] ? errors["email"].message : ""
+                          }
+                          {...register("email")}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          fullWidth
+                          label="Password"
+                          type="password"
+                          id="password"
+                          error={!!errors["password"]}
+                          helperText={
+                            errors["password"] ? errors["password"].message : ""
+                          }
+                          {...register("password")}
+                          autoComplete="new-password"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          fullWidth
+                          label="Re-Enter Password"
+                          type="password"
+                          id="reenter_password"
+                          error={!!errors["reenter_password"]}
+                          helperText={
+                            errors["reenter_password"]
+                              ? errors["reenter_password"].message
+                              : ""
+                          }
+                          {...register("reenter_password")}
+                          autoComplete="new-password"
                         />
                       </Grid>
                     </Grid>
