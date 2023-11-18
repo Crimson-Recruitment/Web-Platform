@@ -10,10 +10,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import Select from "react-select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Avatar, Grid, TextField } from "@mui/material";
+import { Autocomplete, AutocompleteInputChangeReason, Avatar, FormControl, Grid, TextField } from "@mui/material";
 import LocationSearchInput from "../LocationInput";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { industries } from "../../Data/CompanyIndustries";
+import { useDispatch, useSelector } from "react-redux";
+import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
 
 const steps = ["Contact info", "Company details", "Company Logo"];
 
@@ -22,6 +24,8 @@ export default function CompanyRegisterForm() {
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
+  const company = useSelector((state: any) => state.companyRegister);
+  const dispatch = useDispatch();
 
   const validationSchema = object({
     companyName: string().min(1, "Field is required!"),
@@ -30,9 +34,36 @@ export default function CompanyRegisterForm() {
       .min(5, "You must enter atleast 5 characters!")
       .max(16, "You must enter at most 16 characters!")
       .min(1, "Field is required!"),
-    reenter_password: string(),
+    reenter_password: string().min(1,"Field is required!"),
     location: string().min(1, "Field is required!"),
-  }).refine((obj) => obj.password == obj.reenter_password);
+    companyType: string().min(1, "Field is required!"),
+    overview: string()
+    .min(300, "Enter atleast 300 characters!")
+  }).refine((obj) => obj.password === obj.reenter_password, {
+    message: "Passwords do not match!",
+    path: ["reenter_password"],
+  });
+
+  const handleInputChange = (
+    event: React.ChangeEvent<{}>,
+    value: string,
+    reason: AutocompleteInputChangeReason,
+  ) => {
+    if (value.length !== 0) {
+      dispatch({ type: "SET_COMPANY_TYPE", payload: value });
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        dispatch({type:"SET_LOGO", payload:reader.result as string})
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
 
@@ -72,10 +103,6 @@ export default function CompanyRegisterForm() {
     });
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   return (
     <Box sx={{ width: "80%" }}>
       <Typography
@@ -100,14 +127,15 @@ export default function CompanyRegisterForm() {
       </Stepper>
 
       <React.Fragment>
-        {activeStep == 0 ? (
-          <Box
+      <Box
             component="form"
             noValidate={false}
             onSubmit={handleSubmit(onSubmitHandler)}
             sx={{ marginTop: 8 }}
           >
-            <Grid container spacing={2}>
+        {activeStep == 0 ? (
+         <>
+         <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -123,11 +151,7 @@ export default function CompanyRegisterForm() {
               </Grid>
               <Grid item xs={12}>
                 <LocationSearchInput
-                  error={!!errors["location"]}
-                  helperText={
-                    errors["location"] ? errors["location"].message : ""
-                  }
-                  obj={{ ...register("location") }}
+                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -201,7 +225,9 @@ export default function CompanyRegisterForm() {
             <Grid container justifyContent="flex-end">
               <Grid item></Grid>
             </Grid>
-          </Box>
+         </>
+            
+          
         ) : activeStep == 1 ? (
           <>
             <label
@@ -210,12 +236,34 @@ export default function CompanyRegisterForm() {
             >
               Company Type
             </label>
-            <Select
-              required
-              className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              options={industries}
-              placeholder="Healthcare, technology,....."
-            />
+            <FormControl fullWidth margin="normal">
+                  <Autocomplete
+                    id="profession"
+                    options={industries}
+                    getOptionLabel={(option) => option.label || ""}
+                    inputValue={company.companyType?.label || ""}
+                    onInputChange={handleInputChange}
+                    onChange={(_, value) =>
+                      dispatch({ type: "SET_COMPANY_TYPE", payload: value })
+                    }
+                    renderInput={(params) => (
+                      <>
+                        <TextField
+                          {...params}
+                          label="Company Type"
+                          variant="outlined"
+                          error={!!errors["companyType"]}
+                          helperText={
+                            errors["companyType"]
+                              ? errors["companyType"].message
+                              : ""
+                          }
+                          {...register("companyType")}
+                        />
+                      </>
+                    )}
+                  />
+                </FormControl>
             <div className="mb-6">
               <label
                 htmlFor="overview"
@@ -223,103 +271,65 @@ export default function CompanyRegisterForm() {
               >
                 Company Overview
               </label>
-              <textarea
-                required
-                id="overview"
-                name="overview"
-                rows={4}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
-                placeholder="About the company"
-              ></textarea>
-            </div>
-            <label className="block mb-2 text-sm font-medium text-gray-900">
-              Is your company licensed?
-            </label>
-            <div className="flex items-center pl-4 border border-gray-200 rounded">
-              <input
-                required
-                checked
-                id="bordered-radio-1"
-                type="radio"
-                value={"true"}
-                name="bordered-radio"
-                className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500"
-              />
-              <label
-                htmlFor="bordered-radio-1"
-                className="w-full py-4 ml-2 text-sm font-medium text-gray-900"
-              >
-                Yes
-              </label>
-            </div>
-            <div className="flex items-center pl-4 border border-gray-200 rounded">
-              <input
-                required
-                id="bordered-radio-2"
-                type="radio"
-                value={"false"}
-                name="bordered-radio"
-                className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 "
-              />
-              <label
-                htmlFor="bordered-radio-2"
-                className="w-full py-4 ml-2 text-sm font-medium text-gray-900"
-              >
-                No
-              </label>
+              <TextField
+                  required
+                  id="overview"
+                  multiline
+                  rows={4}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
+                  placeholder="What do you do?"
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors["overview"]}
+                  helperText={
+                    errors["overview"] ? errors["overview"].message : ""
+                  }
+                  {...register("overview")}
+                />
             </div>
           </>
         ) : (
           <>
-            <label
-              htmlFor="dropzone-file"
-              className="block mb-2 mt-3 text-sm font-medium text-gray-900 w-full"
-            >
-              Company Logo
-            </label>
-            {false ? (
-              <div className="flex justify-center mb-5">
-                <Avatar alt="Logo" sx={{ height: "400px", width: "400px" }} />
-              </div>
-            ) : (
-              <div className="flex mt-5 items-center justify-center w-full">
-                <label
-                  htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
-                >
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg
-                      className="w-8 h-8 mb-4 text-gray-500"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop Company Logo.
-                    </p>
-                    <p className="text-xs text-gray-500">JPEG, PNG, or JPG</p>
-                  </div>
-                </label>
-              </div>
-            )}
-            <input
-              required
-              id="dropzone-file"
-              type="file"
-              accept=".jpeg, .png, .jpg"
-              className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-            />
-          </>
+              {company.logo ? (
+                <div className="flex justify-center mb-5">
+                  <Avatar
+                    alt="Uploaded Image"
+                    src={company.logo}
+                    sx={{ height: "400px", width: "400px" }}
+                  />
+                </div>
+              ) : (
+                <StyledDropzone>
+                  <StyledLabel htmlFor="dropzone-file">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <StyledIcon
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        {/* ... Your SVG path */}
+                      </StyledIcon>
+                      <p className="mb-2 text-sm text-gray-500">
+                        <span className="font-semibold">Click to upload</span>{" "}
+                        or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        JPEG, PNG, or JPG (3mbs max)
+                      </p>
+                    </div>
+                  </StyledLabel>
+                </StyledDropzone>
+              )}
+              <input
+                onChange={handleFileChange}
+                required={company.logo !== null ? false:true}
+                id="dropzone-file"
+                type="file"
+                accept=".jpeg, .png, .jpg"
+                className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+              />
+            </>
         )}
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
           <Button
@@ -365,6 +375,8 @@ export default function CompanyRegisterForm() {
         <Link className="text-red-600 hover:text-red-800" to="/company-login">
           Already have an account? Sign in
         </Link>
+      
+      </Box>
       </React.Fragment>
     </Box>
   );

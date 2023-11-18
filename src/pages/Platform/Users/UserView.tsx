@@ -3,11 +3,11 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Grid as GridLoader } from "react-loader-spinner";
 import { useParams } from "react-router-dom";
-import { UserModel } from "../../../Models/UserModel";
+import { userModel } from "../../../Models/UserModel";
 
 function UserView() {
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<UserModel>();
+  const [userData, setUserData] = useState<userModel>();
   const { id } = useParams();
 
   useEffect(() => {}, []);
@@ -57,7 +57,7 @@ function UserView() {
                   </div>
                   <div className="mb-2 text-blueGray-600 mt-10">
                     <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                    {userData.profession.label}
+                    {userData.jobTitle}
                   </div>
                 </div>
                 <div className="mt-10 py-10 border-t border-blueGray-200">
@@ -66,7 +66,7 @@ function UserView() {
                       <Grid item xs={12} md={5}>
                         <Typography variant="h6">Bio</Typography>
                         <Typography color="text.secondary">
-                          {userData.about}
+                          {userData.bio}
                         </Typography>
                         <Typography sx={{ marginTop: "20px" }} variant="h6">
                           Skills
@@ -74,20 +74,7 @@ function UserView() {
                         <Typography color="text.secondary">
                           <ul>
                             {userData.skills.map(
-                              (skill: {
-                                label:
-                                  | string
-                                  | number
-                                  | boolean
-                                  | React.ReactElement<
-                                      any,
-                                      string | React.JSXElementConstructor<any>
-                                    >
-                                  | Iterable<React.ReactNode>
-                                  | React.ReactPortal
-                                  | null
-                                  | undefined;
-                              }) => {
+                              (skill:any) => {
                                 return (
                                   <li
                                     className="mb-3"
@@ -107,14 +94,14 @@ function UserView() {
                           <PhoneInTalk /> {userData.phoneNumber}
                         </Typography>
                         <Typography color="text.secondary">
-                          <Email /> {userData.emailAddress}
+                          <Email /> {userData.email}
                         </Typography>
                         <Typography sx={{ marginTop: "20px" }} variant="h6">
                           Download Resume
                         </Typography>
                         <Button
                           onClick={() => {
-                            window.open(`${userData.resume}.pdf`, "_blank");
+                            window.open(`${userData.cv}.pdf`, "_blank");
                           }}
                         >
                           Download Resume

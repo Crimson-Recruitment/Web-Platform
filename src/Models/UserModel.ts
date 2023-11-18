@@ -1,12 +1,13 @@
-export class UserModel {
-  profileImage: any;
-  firstName!: string;
-  lastName!: string;
-  location: any;
-  profession: any;
-  about: any;
-  skills: any;
-  phoneNumber: any;
-  emailAddress: any;
-  resume: any;
+export interface userModel {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  skills: string[];
+  profileImage: string;
+  cv: string;
+  location: string;
+  jobTitle: string;
+  bio: string;
+  password: string;
 }

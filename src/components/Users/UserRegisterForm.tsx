@@ -1,20 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   Autocomplete,
   AutocompleteInputChangeReason,
   Avatar,
   Checkbox,
   FormControl,
-  FormHelperText,
   FormLabel,
   Grid,
   IconButton,
   Input,
   InputAdornment,
   InputLabel,
-  MenuItem,
-  Select,
-  TextField,
+  TextField
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -24,16 +24,15 @@ import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 import MuiPhoneNumber from "material-ui-phone-number";
 import * as React from "react";
-import { SubmitHandler, useForm, useWatch } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { array, object, string, z } from "zod";
-import { professionList, skills } from "../../Data/UserProfessions";
-import LocationSearchInput from "../LocationInput";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Link, useNavigate } from "react-router-dom";
+import { object, string, z } from "zod";
+import { professionList, skills } from "../../Data/UserProfessions";
 import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
+import LocationSearchInput from "../LocationInput";
+import { userModel } from "../../Models/UserModel";
+import { userRegister } from "../../core/api";
 
 const steps = ["Contact info", "User details", "Profile Image"];
 
@@ -55,14 +54,13 @@ export default function UserRegisterForm() {
     }
   };
 
-  const [image, setImage] = React.useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string);
+        dispatch({type:"SET_PROFILE_IMAGE", payload:reader.result as string})
       };
       reader.readAsDataURL(file);
     }
@@ -74,11 +72,9 @@ export default function UserRegisterForm() {
     password: string()
       .min(5, "You must enter atleast 5 characters!")
       .max(16, "You must enter at most 16 characters!"),
-    reenter_password: string(),
-    profession: string().min(1, "Field is required!"),
-    location: string().min(1, "Field is required!"),
-    professionList: string().min(1, "Field is required!"),
-    about_you: string()
+    reenter_password: string().min(1,"Field is required!"),
+    jobTitle: string().min(1, "Field is required!"),
+    bio: string()
       .min(300, "Enter atleast 300 characters!")
       .max(2000, "Max characters reached!"),
   }).refine((obj) => obj.password === obj.reenter_password, {
@@ -92,21 +88,10 @@ export default function UserRegisterForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitSuccessful },
-    control,
-    setValue, // Add setValue for updating form values
-    getValues,
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
-  const locationValue = useWatch({
-    control,
-    name: "location",
-    defaultValue: "", // Set default value if needed
-  });
-
   const handleNext = (val: any) => {
-    const formValues = getValues();
     if (activeStep == steps.length - 1) {
-      console.log(val);
       return;
       navigate("/user-home");
     }
@@ -117,12 +102,10 @@ export default function UserRegisterForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = (values) => {
     setLoading(true);
+    let newValues:userModel = {...values, profileImage:"image string", cv:"cv string", skills:user.skills.map((skill:any) => skill.label), location:user.location, phoneNumber:user.phoneNumber};
+    userRegister(newValues);
     setLoading(false);
   };
 
@@ -190,7 +173,8 @@ export default function UserRegisterForm() {
                 <Grid item xs={12}>
                   <MuiPhoneNumber
                     required={true}
-                    onChange={() => null}
+                    value={user.phoneNumber}
+                    onChange={(val) => dispatch({type:"SET_PHONENUMBER",payload:val})}
                     variant="outlined"
                     id="phonenumber"
                     label="Phone Number"
@@ -201,11 +185,6 @@ export default function UserRegisterForm() {
                 </Grid>
                 <Grid item xs={12}>
                   <LocationSearchInput
-                    error={!!errors["location"]}
-                    helperText={
-                      errors["location"] ? errors["location"].message : ""
-                    }
-                    obj={register("location")}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -278,13 +257,13 @@ export default function UserRegisterForm() {
                           {...params}
                           label="Profession"
                           variant="outlined"
-                          error={!!errors["profession"]}
+                          error={!!errors["jobTitle"]}
                           helperText={
-                            errors["profession"]
-                              ? errors["profession"].message
+                            errors["jobTitle"]
+                              ? errors["jobTitle"].message
                               : ""
                           }
-                          {...register("profession")}
+                          {...register("jobTitle")}
                         />
                       </>
                     )}
@@ -307,11 +286,11 @@ export default function UserRegisterForm() {
                   placeholder="Describe yourself,..."
                   variant="outlined"
                   fullWidth
-                  error={!!errors["about_you"]}
+                  error={!!errors["bio"]}
                   helperText={
-                    errors["about_you"] ? errors["about_you"].message : ""
+                    errors["bio"] ? errors["bio"].message : ""
                   }
-                  {...register("about_you")}
+                  {...register("bio")}
                 />
               </div>
               <label
@@ -398,11 +377,11 @@ export default function UserRegisterForm() {
             </form>
           ) : (
             <>
-              {image ? (
+              {user.profileImage ? (
                 <div className="flex justify-center mb-5">
                   <Avatar
                     alt="Uploaded Image"
-                    src={image}
+                    src={user.profileImage}
                     sx={{ height: "400px", width: "400px" }}
                   />
                 </div>
@@ -431,7 +410,7 @@ export default function UserRegisterForm() {
               )}
               <input
                 onChange={handleFileChange}
-                required
+                required={user.profileImage !== null ? false:true}
                 id="dropzone-file"
                 type="file"
                 accept=".jpeg, .png, .jpg"
@@ -467,7 +446,6 @@ export default function UserRegisterForm() {
             ) : (
               <Button
                 onClick={handleNext}
-                type="button"
                 sx={{
                   color: "white",
                   mt: 3,
@@ -488,3 +466,8 @@ export default function UserRegisterForm() {
     </Box>
   );
 }
+
+
+
+
+

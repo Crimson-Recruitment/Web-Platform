@@ -122,11 +122,7 @@ const CompanySettings = () => {
                       </Grid>
                       <Grid item xs={12}>
                         <LocationSearchInput
-                          error={!!errors["location"]}
-                          helperText={
-                            errors["location"] ? errors["location"].message : ""
-                          }
-                          obj={register("location")}
+                         
                         />
                       </Grid>
                       <Grid item xs={12}>

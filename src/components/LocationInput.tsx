@@ -13,15 +13,7 @@ declare global {
   }
 }
 
-const LocationInput = ({
-  error,
-  helperText,
-  obj,
-}: {
-  error: boolean | undefined;
-  helperText: string | undefined;
-  obj: any;
-}) => {
+const LocationInput = () => {
   const apiKey =
     "AspJNokRcnZQKBDoUmhLayY19jcaXfh0h_c0d-FWWzgKD5eLyY5I7CaRdOiQ-Y7o";
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,7 +30,6 @@ const LocationInput = ({
     script.src = `https://www.bing.com/api/maps/mapcontrol?key=${apiKey}&callback=initializeBingMap`;
     script.async = true;
     script.defer = true;
-    console.log(location);
     setSelectedAddress(location.location);
     document.head.appendChild(script);
 
@@ -100,14 +91,11 @@ const LocationInput = ({
         getOptionLabel={getOptionLabel}
         onInputChange={handleInputChange}
         onChange={(_, value) => handlePlaceSelected(value)}
-        {...obj}
         renderInput={(params) => (
           <TextField
             {...params}
             label="Location"
             variant="outlined"
-            error={error}
-            helperText={helperText}
           />
         )}
       />
