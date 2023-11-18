@@ -4,8 +4,22 @@ import { userModel } from "../Models/UserModel";
 
 
 export const userLogin = async ({email, password}:{email:string;password:string}) => {
-    const response = await axios.post(`${baseUrl}/user/login`,{email:email, password:password})
-    console.log(response);
+    try{
+        const response = await axios.post(`${baseUrl}/user/login`,JSON.stringify({email,password}),{
+            headers: {
+              'Content-Type': 'application/json',
+            }})
+            if(response?.status == 200) {
+                sessionStorage.setItem("userToken", response.data.accessToken)
+                sessionStorage.setItem("account", "user")
+                return response;
+            }
+           
+
+    } catch(e:any) {
+        console.log(e.response.data.message);
+        return e.response;
+    }
 }
 
 export const userRegister = async(user:userModel) => {
@@ -15,12 +29,14 @@ export const userRegister = async(user:userModel) => {
               'Content-Type': 'application/json',
             }})
             if(response?.status == 200) {
-                sessionStorage.setItem("token", response.data.accessToken)
+                sessionStorage.setItem("userToken", response.data.accessToken)
+                sessionStorage.setItem("account", "user")
+                return response;
             }
-            console.log(response);
 
     } catch(e:any) {
         console.log(e.response.data.message);
+        return e.response;
     }
     
    

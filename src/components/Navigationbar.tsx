@@ -12,10 +12,10 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { userPages } from "../Data/UserPages";
 import { companyPages } from "../Data/CompanyPages";
 import logo from "../assets/images/logo.png";
+import { useDispatch } from "react-redux";
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -28,9 +28,9 @@ const pages = [
 function NavigationBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<Element | null>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<Element | null>(null);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const cookie = new Cookies();
 
   const handleOpenNavMenu = (event: React.MouseEvent) => {
     setAnchorElNav(event.currentTarget);
@@ -134,8 +134,8 @@ function NavigationBar() {
               </Link>
             ))}
           </Box>
-          {cookie.get("user-login") == "true" ||
-          cookie.get("company-login") == "true" ? (
+          {(sessionStorage.getItem("userToken") || "").length > 0 ||
+  (sessionStorage.getItem("companyToken") || "").length > 0 ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Icon">
                 <IconButton
@@ -161,7 +161,23 @@ function NavigationBar() {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
-              ></Menu>
+              >
+                {sessionStorage.getItem("account") == "user" ?
+                userPages.map((page) => (
+                  <MenuItem key={page.section} onClick={() => {dispatch({type:page.section});navigate("/user-home")}}>
+                    {page.pageName}
+                  </MenuItem>
+                ))
+                 :null}
+                  {sessionStorage.getItem("account") == "company" ?
+                companyPages.map((page) => (
+                  <MenuItem key={page.section} onClick={() => {dispatch({type:page.section});navigate("/company-home")}}>
+                    {page.pageName}
+                  </MenuItem>
+                ))
+                 :null}
+                
+              </Menu>
             </Box>
           ) : (
             <Box sx={{ flexGrow: 0 }}>

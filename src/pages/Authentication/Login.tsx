@@ -11,19 +11,17 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { object, string, z } from "zod";
 import { Bg1 } from "../../Data/Images";
+import { userLogin } from "../../core/api";
 
 export default function Login() {
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
+  const navigate  = useNavigate();
 
   const validationSchema = object({
     email: string()
@@ -60,6 +58,10 @@ export default function Login() {
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
+    let res = await userLogin(values);
+    if(res?.status == 200) {
+      window.location.href = "/user-home";
+    }
     setLoading(false);
   };
 
