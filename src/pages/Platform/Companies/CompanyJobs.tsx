@@ -39,7 +39,7 @@ import { skills } from "../../../Data/UserProfessions";
 import { JobsModel } from "../../../Models/JobsModel";
 import JobCard from "../../../components/Companies/JobCard";
 import LocationSearchInput from "../../../components/LocationInput";
-import { postJob } from "../../../core/api";
+import { getCompanyJobs, postJob } from "../../../core/api";
 
 function CustomTabPanel(props: {
   [x: string]: any;
@@ -158,8 +158,24 @@ function CompanyJobs() {
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
   useEffect(() => {
-    dispatch({ type: "SET_JOBLIST", payload: jobs });
-  }, [state.requirements]);
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "SET_LOADING", payload: true });
+
+        const jobArray = await getCompanyJobs();
+
+        dispatch({ type: "SET_JOBLIST", payload: jobArray });
+      } catch (error) {
+        // Handle errors as needed
+        console.error("Error fetching data:", error);
+      } finally {
+        dispatch({ type: "SET_LOADING", payload: false });
+        console.log(state.jobsList);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     dispatch({ type: "SET_LOADING", payload: true });

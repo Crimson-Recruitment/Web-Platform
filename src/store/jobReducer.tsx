@@ -1,11 +1,9 @@
-import { jobs } from "../Data/DummyData";
-
 const createJobInitialState = {
   requirements: [],
   benefits: [],
   loading: false,
   selectedSkills: null,
-  jobsList: jobs,
+  jobsList: [],
   open: false,
   hideSalary: false,
   requestCoverLetter: false,
@@ -39,7 +37,7 @@ export const createJobReducer = (
     case "SET_MESSAGE":
       return { ...state, message: action.payload };
     case "SET_JOBLIST":
-      return { ...state, jobList: action.payload };
+      return { ...state, jobsList: action.payload };
     case "SET_HIDE_SALARY":
       return { ...state, hideSalary: !state.hideSalary };
     case "SET_REQUEST_COVER_LETTER":

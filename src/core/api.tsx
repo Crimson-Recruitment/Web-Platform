@@ -24,6 +24,7 @@ export const userLogin = async ({
     if (response?.status == 200) {
       sessionStorage.setItem("userToken", response.data.accessToken);
       sessionStorage.setItem("account", "user");
+      sessionStorage.setItem("user", JSON.stringify(response.data.user));
       return response;
     }
   } catch (e: any) {
@@ -45,6 +46,7 @@ export const userRegister = async (user: userModel) => {
     if (response?.status == 200) {
       sessionStorage.setItem("userToken", response.data.accessToken);
       sessionStorage.setItem("account", "user");
+      sessionStorage.setItem("user", JSON.stringify(response.data.user));
       return response;
     }
   } catch (e: any) {
@@ -72,6 +74,7 @@ export const companyLogin = async ({
     if (response?.status == 200) {
       sessionStorage.setItem("companyToken", response.data.accessToken);
       sessionStorage.setItem("account", "company");
+      sessionStorage.setItem("company", JSON.stringify(response.data.company));
       return response;
     }
   } catch (e: any) {
@@ -93,6 +96,7 @@ export const companyRegister = async (user: CompanyModel) => {
     if (response?.status == 200) {
       sessionStorage.setItem("companyToken", response.data.accessToken);
       sessionStorage.setItem("account", "company");
+      sessionStorage.setItem("company", JSON.stringify(response.data.company));
       return response;
     }
   } catch (e: any) {
@@ -113,6 +117,26 @@ export const postJob = async (job: JobsModel) => {
     );
     if (response?.status == 200) {
       return response;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};
+
+export const getCompanyJobs = async () => {
+  try {
+    const response = await AxiosCompanyInstance.get(
+      `${baseUrl}/jobs/company-jobs/${
+        JSON.parse(sessionStorage.getItem("company")!).id
+      }`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
+      return response.data;
     }
   } catch (e: any) {
     return e.response;
