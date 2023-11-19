@@ -145,7 +145,7 @@ export default function UserRegisterForm() {
       ...values,
       profileImage: "image string",
       cv: "cv string",
-      jobTitle: user.jobTitle.label,
+      jobTitle: user.profession.label,
       skills: user.skills.map((skill: any) => skill.label),
       location: user.location,
       phoneNumber: user.phoneNumber,
