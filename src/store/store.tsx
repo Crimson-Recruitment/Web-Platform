@@ -4,7 +4,7 @@ import {
   companyRegisterReducer,
   userRegisterReducer,
 } from "./registerReducers";
-import { createJobReducer, editJobReducer } from "./jobReducer";
+import { createJobReducer, editJobReducer, jobsReducer } from "./jobReducer";
 import { locationReducer } from "./locationReducer";
 
 const allReducers = combineReducers({
@@ -15,6 +15,7 @@ const allReducers = combineReducers({
   createJobs: createJobReducer,
   editJob: editJobReducer,
   location: locationReducer,
+  jobs: jobsReducer
 });
 
 const store = createStore(allReducers);

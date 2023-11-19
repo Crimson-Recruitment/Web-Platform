@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AxiosCompanyInstance, baseUrl } from "./baseURL";
+import { AxiosCompanyInstance, AxiosInstance, baseUrl } from "./baseURL";
 import { userModel } from "../Models/UserModel";
 import { CompanyModel } from "../Models/companyModel";
 import { JobsModel } from "../Models/JobsModel";
@@ -162,3 +162,20 @@ export const updateJob = async (job: JobsModel,id: any) => {
   }
 };
 
+export const getAllJobs = async () => {
+  try {
+    const response = await AxiosInstance.get(
+      `${baseUrl}/jobs/all`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};

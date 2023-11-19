@@ -17,3 +17,15 @@ export const AxiosCompanyInstance = axios.create({
     Accept: "application/json",
   },
 });
+
+const token:string|undefined = sessionStorage.getItem("companyToken") !== undefined? 
+sessionStorage.getItem("companyToken")!:
+sessionStorage.getItem("userToken") !== undefined?
+sessionStorage.getItem("userToken")!:
+undefined
+export const AxiosInstance = axios.create({
+  headers: {
+    Authorization: `${token}`,
+    Accept: "application/json",
+  },
+});

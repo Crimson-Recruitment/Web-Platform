@@ -72,7 +72,7 @@ function UserJobCard(props: {
             color="text.secondary"
             sx={{ marginBottom: 2 }}
           >
-            {description}
+            {description.length > 200 ? `${description.substring(0, 200)}...` : description}
           </Typography>
           <Typography
             variant="body2"
@@ -89,9 +89,10 @@ function UserJobCard(props: {
             Salary: ${minSalary} - ${maxSalary}
           </Typography>
           <Typography
+          
             variant="body2"
             color="text.secondary"
-            sx={{ marginBottom: 1 }}
+            sx={{ marginBottom: 1, display:benefits.length <= 0? "none": "block"  }}
           >
             Benefits: {benefits.join(", ")}
           </Typography>

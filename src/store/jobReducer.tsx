@@ -95,3 +95,19 @@ export const editJobReducer = (
       return state;
   }
 };
+
+const jobsInitState = {
+  loading:false,
+  jobs: []
+}
+
+export const jobsReducer = (state=jobsInitState, action:any) => {
+  switch (action.type) {
+    case "SET_JOBS_LOADING":
+      return {...state, loading: action.payload};
+    case "SET_JOBS":
+      return {...state, jobs: action.payload};
+    default:
+      return state;
+  }
+}

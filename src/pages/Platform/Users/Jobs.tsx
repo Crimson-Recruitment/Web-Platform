@@ -8,16 +8,16 @@ import "../../../Styles/jobs.css";
 import ApplicationBox from "../../../components/Users/ApplicationBox";
 import JobDescription from "../../../components/Users/JobDescription";
 import UserJobCard from "../../../components/Users/UserJobCard";
-import { jobs } from "../../../Data/DummyData";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllJobs } from "../../../core/api";
+
 
 function Jobs() {
-  const [jobsList, setJobsList] = React.useState<Array<JobsModel>>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
   const [current, setCurrent] = React.useState<number>(0);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState<boolean | undefined>();
-
-  var viewList: Array<JobsModel> = [];
+  const state = useSelector((state:any) => state.jobs);
+  const dispatch = useDispatch();
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -48,7 +48,23 @@ function Jobs() {
   };
 
   React.useEffect(() => {
-    setJobsList(jobs);
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "SET_JOBS_LOADING", payload: true });
+
+        const jobArray = await getAllJobs();
+        console.log(jobArray);
+
+        dispatch({ type: "SET_JOBS", payload: jobArray });
+      } catch (error) {
+        // Handle errors as needed
+        console.error("Error fetching data:", error);
+      } finally {
+        dispatch({ type: "SET_JOBS_LOADING", payload: false });
+      }
+    };
+
+    fetchData();
   }, []);
   return (
     <Box>
@@ -60,7 +76,7 @@ function Jobs() {
               <i className="fas fa-search"></i>
             </Button>
           </Box>
-          {!loading ? (
+          {state.loading ? (
             <div className="flex justify-center mt-12">
               <GridLoader
                 height="130"
@@ -74,14 +90,14 @@ function Jobs() {
               />
             </div>
           ) : (
-            jobsList.length != 0 &&
-            jobsList
+            state.jobs.length != 0 &&
+            state.jobs
               .sort(
-                (a, b) =>
+                (a:any, b:any) =>
                   new Date(a.timestamp).getTime() -
                   new Date(b.timestamp).getTime(),
               )
-              .map((job, index) => {
+              .map((job:JobsModel, index:number) => {
                 return (
                   <UserJobCard
                     key={index}
@@ -116,31 +132,31 @@ function Jobs() {
           }}
           md={5.9}
         >
-          {jobsList.length != 0 && current !== -1 ? (
+          {state.jobs.length != 0 && current !== -1 ? (
             <>
               <JobDescription
-                jobTitle={jobsList[current].jobTitle}
-                description={jobsList[current].jobDescription}
-                requirements={jobsList[current].requirements}
-                skills={jobsList[current].skills}
-                minSalary={jobsList[current].minSalary}
-                maxSalary={jobsList[current].maxSalary}
-                location={jobsList[current].location}
-                type={jobsList[current].jobType}
-                hideSalary={jobsList[current].hideSalary}
-                benefits={jobsList[current].benefits}
-                otherDetails={jobsList[current].otherDetails}
+                jobTitle={state.jobs[current].jobTitle}
+                description={state.jobs[current].jobDescription}
+                requirements={state.jobs[current].requirements}
+                skills={state.jobs[current].skills}
+                minSalary={state.jobs[current].minSalary}
+                maxSalary={state.jobs[current].maxSalary}
+                location={state.jobs[current].location}
+                type={state.jobs[current].jobType}
+                hideSalary={state.jobs[current].hideSalary}
+                benefits={state.jobs[current].benefits}
+                otherDetails={state.jobs[current].otherDetails}
               />
             </>
           ) : null}
         </Grid>
       </Grid>
-      {jobsList.length != 0 ? (
+      {state.jobs.length != 0 ? (
         <ApplicationBox
-          jobId={!!jobsList[current].id}
-          jobName={!!jobsList[current].jobTitle}
-          companyId={!!jobsList[current].companyId}
-          needCoverLetter={!!jobsList[current].requestCoverLetter}
+          jobId={!!state.jobs[current].id}
+          jobName={!!state.jobs[current].jobTitle}
+          companyId={!!state.jobs[current].companyId}
+          needCoverLetter={!!state.jobs[current].requestCoverLetter}
           isOpen={dialogOpen}
           onClose={handleDialogClose}
         />

@@ -1,4 +1,4 @@
-import { Pagination } from "@mui/material";
+import { Box, Pagination } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -8,23 +8,53 @@ import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-const pageSize = 6;
+import { JobsModel } from "../Models/JobsModel";
+import { Grid as GridLoader } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllJobs } from "../core/api";
+import { Dialog, DialogTitle, DialogContent, Link } from "@mui/material";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
+const pageSize = 6;
+
 export default function ShowJobs() {
   const [pagination, setPagination] = React.useState({ from: 0, to: 0 });
-  const pages = Math.ceil(cards.length / pageSize);
+  const state = useSelector((state:any) => state.jobs);
+  const dispatch = useDispatch();
+  const [pages, setPages] = React.useState<number>(0);
   const [index, setIndex] = React.useState(0);
+  const [dialog, setDialog] = React.useState<boolean>(false);
+  const navigate = useNavigate();
   React.useEffect(() => {
-    if (index + 1 < pages) {
-      setPagination({ from: index * pageSize, to: pageSize });
-    } else {
-      setPagination({ from: index * pageSize, to: cards.length });
-    }
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "SET_JOBS_LOADING", payload: true });
+
+        const jobArray = await getAllJobs();
+        //jobArray = Array.from({ length: 3 }, () => jobArray).flat()
+        console.log(jobArray);
+        setPages(Math.ceil(jobArray.length/pageSize));
+        if (index + 1 < pages) {
+          setPagination({ from: index * pageSize, to: pageSize });
+        } else {
+          setPagination({ from: index * pageSize, to: jobArray.length });
+        }
+
+        dispatch({ type: "SET_JOBS", payload: jobArray });
+      } catch (error) {
+        // Handle errors as needed
+        console.error("Error fetching data:", error);
+      } finally {
+        dispatch({ type: "SET_JOBS_LOADING", payload: false });
+       
+      }
+    };
+
+    fetchData();
+    
   }, [index, pages]);
 
   const pageHandler = (event: React.ChangeEvent<unknown>, page: number) => {
@@ -33,11 +63,22 @@ export default function ShowJobs() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <main>
-        <Container sx={{ py: 8 }} maxWidth="xl">
+      <Box component="main" sx={{minHeight:{md:"90vh"}}}>
+        {state.loading ?  <div className="flex justify-center mt-12">
+            <GridLoader
+              height="130"
+              width="130"
+              color="#4fa94d"
+              ariaLabel="grid-loading"
+              radius="12.5"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          </div>:  <Container sx={{ py: 8 }} maxWidth="xl">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.slice(pagination.from, pagination.to).map((card) => (
+            {state.jobs && state.jobs.slice(pagination.from, pagination.to).map((card:any) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card
                   sx={{
@@ -48,17 +89,14 @@ export default function ShowJobs() {
                 >
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Software Engineer
+                      {card.jobTitle}
                     </Typography>
                     <Typography>
-                      A software engineer creates and maintains computer
-                      programs and applications. They write code, solve
-                      problems, and collaborate with teams to build functional
-                      software
+                    {card.jobDescription.length > 200 ? `${card.jobDescription.substring(0, 200)}...` : card.jobDescription}
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">View More</Button>
+                    <Button onClick={() => setDialog(true)} size="small">View More</Button>
                   </CardActions>
                 </Card>
               </Grid>
@@ -73,12 +111,27 @@ export default function ShowJobs() {
             }}
           >
             <Pagination
-              count={Math.ceil(cards.length / 6)}
+              sx={{bottom:"50px", position:"absolute"}}
+              count={Math.ceil(state.jobs.length / 6)}
               onChange={pageHandler}
             />
           </Grid>
-        </Container>
-      </main>
+        </Container>}
+        <Dialog open={dialog} onClose={() => setDialog(false)}>
+      <DialogTitle>Login to apply</DialogTitle>
+      <DialogContent>
+        <p>
+        We're thrilled that you're interested in applying for this job opportunity! To proceed, please log in or create a new account.
+        </p>
+        <Button variant="contained">
+          <Link component={RouterLink} to="/login" color="inherit" underline="none">
+            Login
+          </Link>
+        </Button>
+      </DialogContent>
+    </Dialog>
+      
+      </Box>
     </ThemeProvider>
   );
 }
