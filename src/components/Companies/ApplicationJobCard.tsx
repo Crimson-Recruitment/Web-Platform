@@ -39,7 +39,7 @@ const ApplicationJobCard = (props: {
           color="text.secondary"
           sx={{ fontStyle: "italic", marginBottom: 1 }}
         >
-          Posted on: {timestamp.toDateString()}
+          Posted on: {new Date(timestamp).toDateString()}
         </Typography>
       </CardContent>
       <CardActions>

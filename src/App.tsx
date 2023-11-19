@@ -10,13 +10,16 @@ import Register from "./pages/Authentication/Register";
 import ContactUs from "./pages/ContactUs";
 import Home from "./pages/Home";
 import PageNotFound from "./pages/PageNotFound";
+import CompanyApplications from "./pages/Platform/Companies/CompanyApplications";
 import CompanyHome from "./pages/Platform/Companies/CompanyHome";
 import CompanyView from "./pages/Platform/Companies/CompanyView";
+import { EditJob } from "./pages/Platform/Companies/EditJob";
 import JobView from "./pages/Platform/Users/JobView";
 import UserHome from "./pages/Platform/Users/UserHome";
 import UserView from "./pages/Platform/Users/UserView";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
+import CompanyApplicationDetails from "./pages/Platform/Companies/CompanyApplicationDetails";
 
 function App() {
   const cookie = new Cookies();
@@ -43,7 +46,9 @@ function App() {
         ) : null}
         {sessionStorage.getItem("companyToken") ? (
           <>
+            <Route path="/edit-job/:id" element={<EditJob/>}/>
             <Route path="/company-home" element={<CompanyHome />} />
+            <Route path="/company-applications/:id" element={<CompanyApplicationDetails/>}/>
           </>
         ) : null}
         <Route path="*" element={<PageNotFound />} />

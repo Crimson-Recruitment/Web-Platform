@@ -1,277 +1,195 @@
+
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Alert,
-  Autocomplete,
-  AutocompleteInputChangeReason,
-  Button,
-  Checkbox,
-  Container,
-  CssBaseline,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Snackbar,
-  Switch,
-  TextField,
+    Alert,
+    Autocomplete,
+    Button,
+    Card,
+    CardContent,
+    Checkbox,
+    Container,
+    CssBaseline,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Snackbar,
+    Switch,
+    TextField,
+    Typography
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { number, object, string, z } from "zod";
+import { array, object, string, z } from "zod";
 import { industries, jobType } from "../../../Data/CompanyIndustries";
-import { jobs } from "../../../Data/DummyData";
 import { skills } from "../../../Data/UserProfessions";
 import { JobsModel } from "../../../Models/JobsModel";
-import JobCard from "../../../components/Companies/JobCard";
 import LocationSearchInput from "../../../components/LocationInput";
-import { getCompanyJobs, postJob } from "../../../core/api";
-import { useNavigate } from "react-router-dom";
+import { getCompanyJobs, postJob, updateJob } from "../../../core/api";
+import { useNavigate, useParams } from "react-router-dom";
 
-function CustomTabPanel(props: {
-  [x: string]: any;
-  children: any;
-  value: any;
-  index: any;
-}) {
-  const { children, value, index, ...other } = props;
+export const EditJob = () => {
+    const {id} = useParams(); 
+    const [req, setReq] = React.useState("");
+    const [benefit, setBenefit] = React.useState("");
+    const state = useSelector((state:any) => state.editJob);
+    const jobs = useSelector((state: any) => state.createJobs);
+    const location = useSelector((state: any) => state.location);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3, minHeight: "100vh" }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
 
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
+    const removeRequirementsHandler = (res: any) => {
+        const newList = state.requirements.filter((item: any) => item !== res);
+        dispatch({ type: "SET_REQUIREMENTS", payload: newList });
+      };
+      const removeBenefitsHandler = (res: any) => {
+        const newList = state.benefits.filter((item: any) => item !== res);
+        dispatch({ type: "SET_BENEFITS", payload: newList });
+      };
+      
+    const handleClick = (message: { type: string; message: string }) => {
+        dispatch({
+          type: "SET_MESSAGE",
+          payload: { type: message.type, message: message.message },
+        });
+        dispatch({ type: "SET_OPEN", payload: true });
+      };
+      const handleClose = (
+        event?: React.SyntheticEvent | Event,
+        reason?: string,
+      ) => {
+        if (reason === "clickaway") {
+          return;
+        }
+    
+        dispatch({ type: "SET_OPEN", payload: false });
+      };
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
-function CompanyJobs() {
-  const [req, setReq] = React.useState("");
-  const [benefit, setBenefit] = React.useState("");
-  const state = useSelector((state: any) => state.createJobs);
-  const location = useSelector((state: any) => state.location);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleChange = (event: any, newValue: any) => {
-    dispatch({ type: "SET_VALUE", payload: newValue });
-  };
-
-  const removeRequirementsHandler = (res: any) => {
-    const newList = state.requirements.filter((item: any) => item !== res);
-    dispatch({ type: "SET_REQUIREMENTS", payload: newList });
-  };
-  const removeBenefitsHandler = (res: any) => {
-    const newList = state.benefits.filter((item: any) => item !== res);
-    dispatch({ type: "SET_BENEFITS", payload: newList });
-  };
-  const handleClick = (message: { type: string; message: string }) => {
-    dispatch({
-      type: "SET_MESSAGE",
-      payload: { type: message.type, message: message.message },
+    const isInteger = (val: string) => /^\d+$/.test(val);
+    const validationSchema = object({
+      jobTitle: string().min(1, "Field is required!"),
+      jobType: string().min(1, "Field is required!"),
+      jobDescription: string()
+        .min(500, "Enter atleast 500 characters!")
+        .max(2000, "Max limit 2000 characters!"),
+      field: string().min(1, "Field is required!"),
+      locationType: string().min(1, "Field is required!"),
+      expiryDate: string()
+        .min(1, "Field is required!")
+        .refine((val) => {
+          var start = new Date(val);
+          return start > new Date();
+        }, "Invalid Expiry date, Date must be in the future!"),
+      minSalary: string()
+        .min(1, "Field is required!")
+        .refine((val) => isInteger(val), {
+          message: "Must be a valid Number.",
+        })
+        .transform((val) => parseInt(val, 10)),
+  
+      maxSalary: string()
+        .min(1, "Field is required!")
+        .refine((val) => isInteger(val), {
+          message: "Must be a valid Number.",
+        })
+        .transform((val) => parseInt(val, 10)),
+      otherDetails: string(),
+    }).refine((obj) => obj.minSalary < obj.maxSalary, {
+      message: "Max Salary has to be more than Min Salary!",
+      path: ["maxSalary"],
     });
-    dispatch({ type: "SET_OPEN", payload: true });
-  };
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string,
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    dispatch({ type: "SET_OPEN", payload: false });
-  };
-  const isInteger = (val: string) => /^\d+$/.test(val);
-  const validationSchema = object({
-    jobTitle: string().min(1, "Field is required!"),
-    jobType: string().min(1, "Field is required!"),
-    jobDescription: string()
-      .min(500, "Enter atleast 500 characters!")
-      .max(2000, "Max limit 2000 characters!"),
-    field: string().min(1, "Field is required!"),
-    locationType: string().min(1, "Field is required!"),
-    expiryDate: string()
-      .min(1, "Field is required!")
-      .refine((val) => {
-        var start = new Date(val);
-        return start > new Date();
-      }, "Invalid Expiry date, Date must be in the future!"),
-    minSalary: string()
-      .min(1, "Field is required!")
-      .refine((val) => isInteger(val), {
-        message: "Must be a valid Number.",
-      })
-      .transform((val) => parseInt(val, 10)),
-
-    maxSalary: string()
-      .min(1, "Field is required!")
-      .refine((val) => isInteger(val), {
-        message: "Must be a valid Number.",
-      })
-      .transform((val) => parseInt(val, 10)),
-    otherDetails: string(),
-  }).refine((obj) => obj.minSalary < obj.maxSalary, {
-    message: "Max Salary has to be more than Min Salary!",
-    path: ["maxSalary"],
-  });
-
-  type SignUpSchemaType = z.infer<typeof validationSchema>;
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "SET_LOADING", payload: true });
-
-        const jobArray = await getCompanyJobs();
-
-        dispatch({ type: "SET_JOBLIST", payload: jobArray });
-      } catch (error) {
-        // Handle errors as needed
-        console.error("Error fetching data:", error);
-      } finally {
+  
+    type SignUpSchemaType = z.infer<typeof validationSchema>;
+  
+    const {
+      register,
+      handleSubmit,
+      getValues,
+      setValue,
+      formState: {errors, isSubmitSuccessful },
+    } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema), defaultValues:{...jobs.jobsList.filter((val:any) => val.id == id)[0], expiryDate: new Date(jobs.jobsList.filter((val:any) => val.id == id)[0].expiryDate).toISOString()}});
+    
+  
+    const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
+      dispatch({ type: "SET_LOADING", payload: true });
+      if (state.requirements.length <= 0) {
+        handleClick({
+          type: "error",
+          message: "Please enter atleast one job requirement!",
+        });
         dispatch({ type: "SET_LOADING", payload: false });
-        console.log(state.jobsList);
+        return;
+      } else if (state.location == "") {
+        handleClick({ type: "error", message: "Please enter the job location!" });
+        dispatch({ type: "SET_LOADING", payload: false });
+        return;
       }
+      const job: JobsModel = {
+        ...values,
+        skills: state.selectedSkills.map((skill: any) => skill.label),
+        expiryDate: new Date(values.expiryDate).toISOString(),
+        location: location.location,
+        timestamp: new Date().toISOString(),
+        benefits: state.benefits,
+        requirements: state.requirements,
+        requestCoverLetter: state.requestCoverLetterEdit,
+        hideSalary: state.hideSalaryEdit,
+      };
+      let res = await updateJob(job, id);
+      if (res?.status == 200) {
+        window.location.href = "/company-home";
+      } else {
+        let mes: string = res?.data?.message;
+        handleClick({
+          type: "error",
+          message: (mes.indexOf(":") + 1).toString(),
+        });
+      }
+      dispatch({ type: "SET_LOADING", payload: false });
     };
 
-    fetchData();
-  }, []);
-
-  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
-    dispatch({ type: "SET_LOADING", payload: true });
-    if (state.requirements.length <= 0) {
-      handleClick({
-        type: "error",
-        message: "Please enter atleast one job requirement!",
-      });
-      dispatch({ type: "SET_LOADING", payload: false });
-      return;
-    } else if (state.location == "") {
-      handleClick({ type: "error", message: "Please enter the job location!" });
-      dispatch({ type: "SET_LOADING", payload: false });
-      return;
-    }
-    const job: JobsModel = {
-      ...values,
-      skills: state.selectedSkills.map((skill: any) => skill.label),
-      expiryDate: new Date(values.expiryDate).toISOString(),
-      location: location.location,
-      timestamp: new Date().toISOString(),
-      benefits: state.benefits,
-      requirements: state.requirements,
-      requestCoverLetter: state.requestCoverLetter,
-      hideSalary: state.hideSalary,
-    };
-    let res = await postJob(job);
-    if (res?.status == 200) {
-      window.location.reload();
-    } else {
-      let mes: string = res?.data?.message;
-      handleClick({
-        type: "error",
-        message: (mes.indexOf(":") + 1).toString(),
-      });
-    }
-    dispatch({ type: "SET_LOADING", payload: false });
-  };
-
-  const editJob = (id:any) => {
-    navigate(`/edit-job/${id}`)
-  };
-
-  return (
-    <Box>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={state.value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Your Jobs" {...a11yProps(0)} />
-          <Tab label="Create Job" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={state.value} index={0}>
-        {state.loading ? (
-          <div className="flex justify-center mt-12">
-            <GridLoader
-              height="130"
-              width="130"
-              color="#4fa94d"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div>
-        ) : state.jobsList ? (
-          state.jobsList
-            .sort(
-              (a: { timestamp: number }, b: { timestamp: number }) =>
-                a.timestamp < b.timestamp,
-            )
-            .map((job: JobsModel) => {
-              return (
-                <JobCard
-                  key={job.id!}
-                  title={job.jobTitle}
-                  description={job.jobDescription}
-                  timestamp={new Date(job.timestamp)}
-                  benefits={job.benefits}
-                  minSalary={job.minSalary.toString()}
-                  maxSalary={job.maxSalary.toString()}
-                  location={job.location}
-                  edit={() => editJob(job.id!)}
-                />
-              );
-            })
-        ) : null}
-      </CustomTabPanel>
-      <CustomTabPanel value={state.value} index={1}>
-        <Container component="main" maxWidth="lg">
+    useEffect(() => {
+        dispatch({ type: "SET_REQUIREMENTS", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].requirements });
+        dispatch({type:"SET_BENEFITS", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].benefits });
+        dispatch({type:"SET_HIDE_SALARY_EDIT", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].hideSalary});
+        dispatch({type:"SET_REQUEST_COVER_LETTER_EDIT", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].requestCoverLetter});
+        dispatch({type:"SET_SELECTED_SKILLS", payload: skills.filter((skill) => jobs.jobsList.filter((val:any) => val.id == id)[0].skills?.includes(skill.label)) });
+    },[])
+    return(
+        <Box sx={{ display: "flex",
+        flexDirection: "column",
+        alignItems: "center"}}>
+              
+              <Card sx={{maxWidth: "80%",
+              marginTop:"10px",
+        padding: "20px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",}}>
+              <Grid container sx={{marginTop:5, marginLeft:5}}>
+            <Grid item marginBottom={5} xs={12}>
+                <Button variant="contained" onClick={() => navigate(-1)}>
+                    Go Back
+                </Button>
+            </Grid>
+            <Grid item xs={12}>
+            <Typography variant="h4">
+            Edit Job
+        </Typography>
+            </Grid>
+        </Grid>
+            <CardContent>
+            <Container component="main" maxWidth="lg">
           <CssBaseline />
           <Box
             sx={{
@@ -320,6 +238,7 @@ function CompanyJobs() {
                       id="jobType"
                       options={jobType}
                       getOptionLabel={(option) => option.label || ""}
+                      inputValue={getValues().jobType}
                       renderInput={(params) => (
                         <>
                           <TextField
@@ -353,6 +272,7 @@ function CompanyJobs() {
                         { value: "hybrid", label: "Hybrid" },
                       ]}
                       getOptionLabel={(option) => option.label || ""}
+                      inputValue={getValues().locationType}
                       renderInput={(params) => (
                         <>
                           <TextField
@@ -384,6 +304,7 @@ function CompanyJobs() {
                       id="selectedType"
                       options={industries}
                       getOptionLabel={(option) => option.label || ""}
+                      inputValue={getValues().field}
                       renderInput={(params) => (
                         <>
                           <TextField
@@ -531,7 +452,7 @@ function CompanyJobs() {
                     id="skills"
                     options={skills}
                     getOptionLabel={(option) => option.label || ""}
-                    value={state.selectedSkills} // Replace with your actual selected values state
+                    value={state.selectedSkills|| []} // Replace with your actual selected values state
                     onChange={(_, values) =>
                       dispatch({ type: "SET_SELECTED_SKILLS", payload: values })
                     }
@@ -601,8 +522,8 @@ function CompanyJobs() {
                   <FormControlLabel
                     control={
                       <Switch
-                        checked={state.hideSalary}
-                        onChange={() => dispatch({ type: "SET_HIDE_SALARY" })}
+                        checked={state.hideSalaryEdit}
+                        onChange={() => dispatch({ type: "SET_HIDE_SALARY_EDIT" })}
                         name="hideSalary"
                       />
                     }
@@ -680,9 +601,9 @@ function CompanyJobs() {
                   <FormControlLabel
                     control={
                       <Switch
-                        checked={state.requestCoverLetter}
+                        checked={state.requestCoverLetterEdit}
                         onChange={() =>
-                          dispatch({ type: "SET_REQUEST_COVER_LETTER" })
+                          dispatch({ type: "SET_REQUEST_COVER_LETTER_EDIT" })
                         }
                         name="requestCoverLetter"
                       />
@@ -727,13 +648,11 @@ function CompanyJobs() {
                   ":hover": { backgroundColor: "black" },
                 }}
               >
-                {state.loading ? "Loading..." : "Create Job"}
+                {state.loading ? "Loading..." : "Submit changes"}
               </Button>
             </Box>
           </Box>
-        </Container>
-      </CustomTabPanel>
-      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
+          <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
           severity={state.message.type}
@@ -742,8 +661,10 @@ function CompanyJobs() {
           {state.message.message}
         </Alert>
       </Snackbar>
-    </Box>
-  );
-}
+        </Container>
+            </CardContent>
+        </Card>
 
-export default CompanyJobs;
+        </Box>
+    )
+}
