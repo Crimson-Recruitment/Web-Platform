@@ -3,6 +3,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
+  Alert,
   Autocomplete,
   AutocompleteInputChangeReason,
   Avatar,
@@ -14,7 +15,8 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  TextField
+  Snackbar,
+  TextField,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -33,16 +35,29 @@ import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
 import LocationSearchInput from "../LocationInput";
 import { userModel } from "../../Models/UserModel";
 import { userRegister } from "../../core/api";
+import { checkDocumentSize, checkImageSize } from "../../Functions/utils";
 
 const steps = ["Contact info", "User details", "Profile Image"];
 
 export default function UserRegisterForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [open, setOpen] = React.useState(false);
   const user = useSelector((state: any) => state.userRegister);
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleInputChange = (
     event: React.ChangeEvent<{}>,
@@ -54,13 +69,15 @@ export default function UserRegisterForm() {
     }
   };
 
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        dispatch({type:"SET_PROFILE_IMAGE", payload:reader.result as string})
+        dispatch({
+          type: "SET_PROFILE_IMAGE",
+          payload: reader.result as string,
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -72,8 +89,7 @@ export default function UserRegisterForm() {
     password: string()
       .min(5, "You must enter atleast 5 characters!")
       .max(16, "You must enter at most 16 characters!"),
-    reenter_password: string().min(1,"Field is required!"),
-    jobTitle: string().min(1, "Field is required!"),
+    reenter_password: string().min(1, "Field is required!"),
     bio: string()
       .min(300, "Enter atleast 300 characters!")
       .max(2000, "Max characters reached!"),
@@ -91,10 +107,6 @@ export default function UserRegisterForm() {
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
   const handleNext = (val: any) => {
-    if (activeStep == steps.length - 1) {
-      return;
-      navigate("/user-home");
-    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -102,10 +114,50 @@ export default function UserRegisterForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = (values) => {
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    let newValues:userModel = {...values, profileImage:"image string", cv:"cv string", skills:user.skills.map((skill:any) => skill.label), location:user.location, phoneNumber:user.phoneNumber};
-    userRegister(newValues);
+    if (user.phoneNumber == "") {
+      setMessage("You haven't entered your phone number!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    } else if (user.cv == null) {
+      setMessage("You haven't uploaded as resume!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    } else if (user.profession == "") {
+      setMessage("You haven't entered your profession!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+    try {
+      checkImageSize(user.profileImage);
+      checkDocumentSize(user.cv);
+    } catch (e: any) {
+      setMessage(e.message);
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+    let newValues: userModel = {
+      ...values,
+      profileImage: "image string",
+      cv: "cv string",
+      jobTitle: user.jobTitle.label,
+      skills: user.skills.map((skill: any) => skill.label),
+      location: user.location,
+      phoneNumber: user.phoneNumber,
+    };
+    let res = await userRegister(newValues);
+    if (res?.status == 200) {
+      window.location.href = "/user-home";
+    } else {
+      let mes: string = res?.data?.message;
+      setMessage(mes.slice(mes.indexOf(":") + 1));
+      setOpen(true);
+    }
     setLoading(false);
   };
 
@@ -174,7 +226,9 @@ export default function UserRegisterForm() {
                   <MuiPhoneNumber
                     required={true}
                     value={user.phoneNumber}
-                    onChange={(val) => dispatch({type:"SET_PHONENUMBER",payload:val})}
+                    onChange={(val) =>
+                      dispatch({ type: "SET_PHONENUMBER", payload: val })
+                    }
                     variant="outlined"
                     id="phonenumber"
                     label="Phone Number"
@@ -184,8 +238,7 @@ export default function UserRegisterForm() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <LocationSearchInput
-                  />
+                  <LocationSearchInput />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -257,13 +310,6 @@ export default function UserRegisterForm() {
                           {...params}
                           label="Profession"
                           variant="outlined"
-                          error={!!errors["jobTitle"]}
-                          helperText={
-                            errors["jobTitle"]
-                              ? errors["jobTitle"].message
-                              : ""
-                          }
-                          {...register("jobTitle")}
                         />
                       </>
                     )}
@@ -287,9 +333,7 @@ export default function UserRegisterForm() {
                   variant="outlined"
                   fullWidth
                   error={!!errors["bio"]}
-                  helperText={
-                    errors["bio"] ? errors["bio"].message : ""
-                  }
+                  helperText={errors["bio"] ? errors["bio"].message : ""}
                   {...register("bio")}
                 />
               </div>
@@ -355,7 +399,7 @@ export default function UserRegisterForm() {
                     </InputAdornment>
                   }
                 />
-                {user.resume != null ? (
+                {user.cv != null ? (
                   <Box mt={2}>
                     <Box
                       mt={2}
@@ -368,7 +412,7 @@ export default function UserRegisterForm() {
                         sx={{ marginRight: 1 }}
                       />
                       <Typography variant="body2">
-                        Document "{user.resume.name}" submitted successfully!
+                        Document "{user.cv.name}" submitted successfully!
                       </Typography>
                     </Box>
                   </Box>
@@ -410,7 +454,7 @@ export default function UserRegisterForm() {
               )}
               <input
                 onChange={handleFileChange}
-                required={user.profileImage !== null ? false:true}
+                required={user.profileImage !== null ? false : true}
                 id="dropzone-file"
                 type="file"
                 accept=".jpeg, .png, .jpg"
@@ -462,12 +506,12 @@ export default function UserRegisterForm() {
             Already have an account? Sign in
           </Link>
         </Box>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {message}
+          </Alert>
+        </Snackbar>
       </React.Fragment>
     </Box>
   );
 }
-
-
-
-
-

@@ -73,18 +73,16 @@ function UserView() {
                         </Typography>
                         <Typography color="text.secondary">
                           <ul>
-                            {userData.skills.map(
-                              (skill:any) => {
-                                return (
-                                  <li
-                                    className="mb-3"
-                                    style={{ fontSize: "1rem" }}
-                                  >
-                                    {skill.label}
-                                  </li>
-                                );
-                              },
-                            )}
+                            {userData.skills.map((skill: any) => {
+                              return (
+                                <li
+                                  className="mb-3"
+                                  style={{ fontSize: "1rem" }}
+                                >
+                                  {skill.label}
+                                </li>
+                              );
+                            })}
                           </ul>
                         </Typography>
                       </Grid>

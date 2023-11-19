@@ -36,12 +36,12 @@ function App() {
         <Route path="/company-view/:id" element={<CompanyView />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/jobs/:id" element={<JobView />} />
-        {!cookie.get("user-login") ? (
+        {sessionStorage.getItem("userToken") ? (
           <>
             <Route path="/user-home" element={<UserHome />} />
           </>
         ) : null}
-        {!cookie.get("company-login") ? (
+        {sessionStorage.getItem("companyToken") ? (
           <>
             <Route path="/company-home" element={<CompanyHome />} />
           </>

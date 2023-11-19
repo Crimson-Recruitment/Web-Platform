@@ -143,9 +143,7 @@ const Settings = () => {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <LocationSearchInput
-                       
-                        />
+                        <LocationSearchInput />
                       </Grid>
                       <Grid item xs={12}>
                         <TextField

@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { object, string, z } from "zod";
 import { Bg2 } from "../../Data/Images";
+import { companyLogin } from "../../core/api";
 
 const defaultTheme = createTheme();
 export default function CompanyLogin() {
@@ -57,7 +58,14 @@ export default function CompanyLogin() {
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    console.log(values);
+    let res = await companyLogin(values);
+    if (res?.status == 200) {
+      window.location.href = "/company-home";
+    } else {
+      let mes: string = res?.data?.message;
+      setMessage(mes.slice(mes.indexOf(":") + 1));
+      setOpen(true);
+    }
     setLoading(false);
   };
 

@@ -1,21 +1,32 @@
-import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Alert,
+  Autocomplete,
+  AutocompleteInputChangeReason,
+  Avatar,
+  FormControl,
+  Grid,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
+import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import { Link, useNavigate } from "react-router-dom";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { object, string, z } from "zod";
-import Select from "react-select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Autocomplete, AutocompleteInputChangeReason, Avatar, FormControl, Grid, TextField } from "@mui/material";
-import LocationSearchInput from "../LocationInput";
 import MuiPhoneNumber from "material-ui-phone-number";
-import { industries } from "../../Data/CompanyIndustries";
+import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { object, string, z } from "zod";
+import { industries } from "../../Data/CompanyIndustries";
+import { checkImageSize } from "../../Functions/utils";
+import { CompanyModel } from "../../Models/companyModel";
 import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
+import { companyRegister } from "../../core/api";
+import LocationSearchInput from "../LocationInput";
 
 const steps = ["Contact info", "Company details", "Company Logo"];
 
@@ -23,6 +34,8 @@ export default function CompanyRegisterForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const company = useSelector((state: any) => state.companyRegister);
   const dispatch = useDispatch();
@@ -34,11 +47,8 @@ export default function CompanyRegisterForm() {
       .min(5, "You must enter atleast 5 characters!")
       .max(16, "You must enter at most 16 characters!")
       .min(1, "Field is required!"),
-    reenter_password: string().min(1,"Field is required!"),
-    location: string().min(1, "Field is required!"),
-    companyType: string().min(1, "Field is required!"),
-    overview: string()
-    .min(300, "Enter atleast 300 characters!")
+    reenter_password: string().min(1, "Field is required!"),
+    overview: string().min(300, "Enter atleast 300 characters!"),
   }).refine((obj) => obj.password === obj.reenter_password, {
     message: "Passwords do not match!",
     path: ["reenter_password"],
@@ -54,12 +64,23 @@ export default function CompanyRegisterForm() {
     }
   };
 
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        dispatch({type:"SET_LOGO", payload:reader.result as string})
+        dispatch({ type: "SET_LOGO", payload: reader.result as string });
       };
       reader.readAsDataURL(file);
     }
@@ -80,6 +101,42 @@ export default function CompanyRegisterForm() {
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
+    if (company.primaryPhoneNumber == "") {
+      setMessage("You haven't entered your primary phone number!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    } else if (company.category == "") {
+      setMessage("You haven't entered a Company type!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+    try {
+      checkImageSize(company.logo);
+    } catch (e: any) {
+      setMessage(e.message);
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+    let newValues: CompanyModel = {
+      ...values,
+      profileImage: "image string",
+      location: company.location,
+      category: company.category.label,
+      primaryPhoneNumber: company.primaryPhoneNumber,
+      secondaryPhoneNumber: company.secondaryPhoneNumber,
+    };
+    console.log(newValues);
+    let res = await companyRegister(newValues);
+    if (res?.status == 200) {
+      window.location.href = "/company-home";
+    } else {
+      let mes: string = res?.data?.message;
+      setMessage(mes.slice(mes.indexOf(":") + 1));
+      setOpen(true);
+    }
     setLoading(false);
   };
 
@@ -127,151 +184,152 @@ export default function CompanyRegisterForm() {
       </Stepper>
 
       <React.Fragment>
-      <Box
-            component="form"
-            noValidate={false}
-            onSubmit={handleSubmit(onSubmitHandler)}
-            sx={{ marginTop: 8 }}
-          >
-        {activeStep == 0 ? (
-         <>
-         <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="companyname"
-                  label="Company Name"
-                  error={!!errors["companyName"]}
-                  helperText={
-                    errors["companyName"] ? errors["companyName"].message : ""
-                  }
-                  {...register("companyName")}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <LocationSearchInput
-                  
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <MuiPhoneNumber
-                  required
-                  onChange={() => null}
-                  variant="outlined"
-                  id="phonenumber"
-                  label="Phone Number 1"
-                  name="phonenumber1"
-                  fullWidth
-                  defaultCountry={"ug"}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <MuiPhoneNumber
-                  required
-                  onChange={() => null}
-                  variant="outlined"
-                  id="phonenumber"
-                  label="Phone Number 2"
-                  name="phonenumber2"
-                  fullWidth
-                  defaultCountry={"ug"}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  error={!!errors["email"]}
-                  helperText={errors["email"] ? errors["email"].message : ""}
-                  {...register("email")}
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Password"
-                  type="password"
-                  error={!!errors["password"]}
-                  helperText={
-                    errors["password"] ? errors["password"].message : ""
-                  }
-                  {...register("password")}
-                  id="password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Re-Enter Password"
-                  type="password"
-                  id="reenter_password"
-                  error={!!errors["reenter_password"]}
-                  helperText={
-                    errors["reenter_password"]
-                      ? errors["reenter_password"].message
-                      : ""
-                  }
-                  {...register("reenter_password")}
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
-            <Grid container justifyContent="flex-end">
-              <Grid item></Grid>
-            </Grid>
-         </>
-            
-          
-        ) : activeStep == 1 ? (
-          <>
-            <label
-              htmlFor="profession"
-              className="block mb-2 mt-3 text-sm font-medium text-gray-900 w-full"
-            >
-              Company Type
-            </label>
-            <FormControl fullWidth margin="normal">
-                  <Autocomplete
-                    id="profession"
-                    options={industries}
-                    getOptionLabel={(option) => option.label || ""}
-                    inputValue={company.companyType?.label || ""}
-                    onInputChange={handleInputChange}
-                    onChange={(_, value) =>
-                      dispatch({ type: "SET_COMPANY_TYPE", payload: value })
+        <Box
+          component="form"
+          noValidate={false}
+          onSubmit={handleSubmit(onSubmitHandler)}
+          sx={{ marginTop: 8 }}
+        >
+          {activeStep == 0 ? (
+            <>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="companyname"
+                    label="Company Name"
+                    error={!!errors["companyName"]}
+                    helperText={
+                      errors["companyName"] ? errors["companyName"].message : ""
                     }
-                    renderInput={(params) => (
-                      <>
-                        <TextField
-                          {...params}
-                          label="Company Type"
-                          variant="outlined"
-                          error={!!errors["companyType"]}
-                          helperText={
-                            errors["companyType"]
-                              ? errors["companyType"].message
-                              : ""
-                          }
-                          {...register("companyType")}
-                        />
-                      </>
-                    )}
+                    {...register("companyName")}
                   />
-                </FormControl>
-            <div className="mb-6">
+                </Grid>
+                <Grid item xs={12}>
+                  <LocationSearchInput />
+                </Grid>
+                <Grid item xs={12}>
+                  <MuiPhoneNumber
+                    required
+                    variant="outlined"
+                    id="phonenumber"
+                    label="Primary Phone Number"
+                    value={company.primaryphoneNumber}
+                    onChange={(val) =>
+                      dispatch({
+                        type: "SET_PRIMARY_PHONENUMBER",
+                        payload: val,
+                      })
+                    }
+                    name="phonenumber1"
+                    fullWidth
+                    defaultCountry={"ug"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <MuiPhoneNumber
+                    required
+                    variant="outlined"
+                    id="phonenumber"
+                    label="Secondary Phone Number"
+                    value={company.primaryphoneNumber}
+                    onChange={(val) =>
+                      dispatch({
+                        type: "SET_SECONDARY_PHONENUMBER",
+                        payload: val,
+                      })
+                    }
+                    name="phonenumber2"
+                    fullWidth
+                    defaultCountry={"ug"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    error={!!errors["email"]}
+                    helperText={errors["email"] ? errors["email"].message : ""}
+                    {...register("email")}
+                    autoComplete="email"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    label="Password"
+                    type="password"
+                    error={!!errors["password"]}
+                    helperText={
+                      errors["password"] ? errors["password"].message : ""
+                    }
+                    {...register("password")}
+                    id="password"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    label="Re-Enter Password"
+                    type="password"
+                    id="reenter_password"
+                    error={!!errors["reenter_password"]}
+                    helperText={
+                      errors["reenter_password"]
+                        ? errors["reenter_password"].message
+                        : ""
+                    }
+                    {...register("reenter_password")}
+                    autoComplete="new-password"
+                  />
+                </Grid>
+              </Grid>
+              <Grid container justifyContent="flex-end">
+                <Grid item></Grid>
+              </Grid>
+            </>
+          ) : activeStep == 1 ? (
+            <>
               <label
-                htmlFor="overview"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                htmlFor="profession"
+                className="block mb-2 mt-3 text-sm font-medium text-gray-900 w-full"
               >
-                Company Overview
+                Company Type
               </label>
-              <TextField
+              <FormControl fullWidth margin="normal">
+                <Autocomplete
+                  id="profession"
+                  options={industries}
+                  getOptionLabel={(option) => option.label || ""}
+                  inputValue={company.category?.label || ""}
+                  onInputChange={handleInputChange}
+                  onChange={(_, value) =>
+                    dispatch({ type: "SET_COMPANY_TYPE", payload: value })
+                  }
+                  renderInput={(params) => (
+                    <>
+                      <TextField
+                        {...params}
+                        label="Company Type"
+                        variant="outlined"
+                      />
+                    </>
+                  )}
+                />
+              </FormControl>
+              <div className="mb-6">
+                <label
+                  htmlFor="overview"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Company Overview
+                </label>
+                <TextField
                   required
                   id="overview"
                   multiline
@@ -286,10 +344,10 @@ export default function CompanyRegisterForm() {
                   }
                   {...register("overview")}
                 />
-            </div>
-          </>
-        ) : (
-          <>
+              </div>
+            </>
+          ) : (
+            <>
               {company.logo ? (
                 <div className="flex justify-center mb-5">
                   <Avatar
@@ -323,60 +381,64 @@ export default function CompanyRegisterForm() {
               )}
               <input
                 onChange={handleFileChange}
-                required={company.logo !== null ? false:true}
+                required={company.logo !== null ? false : true}
                 id="dropzone-file"
                 type="file"
                 accept=".jpeg, .png, .jpg"
                 className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
               />
             </>
-        )}
-        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Button
-            color="inherit"
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}
-          >
-            Back
-          </Button>
-          <Box sx={{ flex: "1 1 auto" }} />
-          {activeStep === steps.length - 1 ? (
-            <Button
-              disabled={loading}
-              type="submit"
-              variant="contained"
-              sx={{
-                color: "white",
-                mt: 3,
-                mb: 2,
-                backgroundColor: "darkred",
-                ":hover": { backgroundColor: "black" },
-              }}
-            >
-              {loading ? "Loading..." : "Sign Up"}
-            </Button>
-          ) : (
-            <Button
-              onClick={handleNext}
-              type="button"
-              sx={{
-                color: "white",
-                mt: 3,
-                mb: 2,
-                backgroundColor: "darkred",
-                ":hover": { backgroundColor: "black" },
-              }}
-            >
-              Next
-            </Button>
           )}
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            {activeStep === steps.length - 1 ? (
+              <Button
+                disabled={loading}
+                type="submit"
+                variant="contained"
+                sx={{
+                  color: "white",
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "darkred",
+                  ":hover": { backgroundColor: "black" },
+                }}
+              >
+                {loading ? "Loading..." : "Sign Up"}
+              </Button>
+            ) : (
+              <Button
+                onClick={handleNext}
+                type="button"
+                sx={{
+                  color: "white",
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "darkred",
+                  ":hover": { backgroundColor: "black" },
+                }}
+              >
+                Next
+              </Button>
+            )}
+          </Box>
+          <Link className="text-red-600 hover:text-red-800" to="/company-login">
+            Already have an account? Sign in
+          </Link>
         </Box>
-        <Link className="text-red-600 hover:text-red-800" to="/company-login">
-          Already have an account? Sign in
-        </Link>
-      
-      </Box>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {message}
+          </Alert>
+        </Snackbar>
       </React.Fragment>
     </Box>
   );

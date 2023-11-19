@@ -16,6 +16,7 @@ import { userPages } from "../Data/UserPages";
 import { companyPages } from "../Data/CompanyPages";
 import logo from "../assets/images/logo.png";
 import { useDispatch } from "react-redux";
+import { Logout } from "@mui/icons-material";
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -31,6 +32,11 @@ function NavigationBar() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const logout = () => {
+    sessionStorage.clear();
+    window.location.href = "/";
+  };
 
   const handleOpenNavMenu = (event: React.MouseEvent) => {
     setAnchorElNav(event.currentTarget);
@@ -135,7 +141,7 @@ function NavigationBar() {
             ))}
           </Box>
           {(sessionStorage.getItem("userToken") || "").length > 0 ||
-  (sessionStorage.getItem("companyToken") || "").length > 0 ? (
+          (sessionStorage.getItem("companyToken") || "").length > 0 ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Icon">
                 <IconButton
@@ -162,21 +168,33 @@ function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {sessionStorage.getItem("account") == "user" ?
-                userPages.map((page) => (
-                  <MenuItem key={page.section} onClick={() => {dispatch({type:page.section});navigate("/user-home")}}>
-                    {page.pageName}
-                  </MenuItem>
-                ))
-                 :null}
-                  {sessionStorage.getItem("account") == "company" ?
-                companyPages.map((page) => (
-                  <MenuItem key={page.section} onClick={() => {dispatch({type:page.section});navigate("/company-home")}}>
-                    {page.pageName}
-                  </MenuItem>
-                ))
-                 :null}
-                
+                {sessionStorage.getItem("account") == "user"
+                  ? userPages.map((page) => (
+                      <MenuItem
+                        key={page.section}
+                        onClick={() => {
+                          dispatch({ type: page.section });
+                          navigate("/user-home");
+                        }}
+                      >
+                        {page.pageName}
+                      </MenuItem>
+                    ))
+                  : null}
+                {sessionStorage.getItem("account") == "company"
+                  ? companyPages.map((page) => (
+                      <MenuItem
+                        key={page.section}
+                        onClick={() => {
+                          dispatch({ type: page.section });
+                          navigate("/company-home");
+                        }}
+                      >
+                        {page.pageName}
+                      </MenuItem>
+                    ))
+                  : null}
+                <MenuItem onClick={() => logout()}>Logout</MenuItem>
               </Menu>
             </Box>
           ) : (

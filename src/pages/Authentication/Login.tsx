@@ -21,7 +21,6 @@ export default function Login() {
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const navigate  = useNavigate();
 
   const validationSchema = object({
     email: string()
@@ -59,8 +58,12 @@ export default function Login() {
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
     let res = await userLogin(values);
-    if(res?.status == 200) {
+    if (res?.status == 200) {
       window.location.href = "/user-home";
+    } else {
+      let mes: string = res?.data?.message;
+      setMessage(mes.slice(mes.indexOf(":") + 1));
+      setOpen(true);
     }
     setLoading(false);
   };

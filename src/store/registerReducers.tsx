@@ -2,8 +2,8 @@ const userInitState = {
   location: "",
   profession: "",
   skills: [],
-  resume: null,
-  phoneNumber:"",
+  cv: null,
+  phoneNumber: "",
   profileImage: null,
 };
 
@@ -19,7 +19,7 @@ export const userRegisterReducer = (
     case "SET_SKILLS":
       return { ...state, skills: action.payload };
     case "SET_RESUME":
-      return { ...state, resume: action.payload };
+      return { ...state, cv: action.payload };
     case "SET_PROFILE_IMAGE":
       return { ...state, profileImage: action.payload };
     case "SET_PHONENUMBER":
@@ -31,7 +31,9 @@ export const userRegisterReducer = (
 
 const companyInitState = {
   location: "",
-  companyType: "",
+  category: "",
+  primaryPhoneNumber: "",
+  secondaryPhoneNumber: "",
   logo: null,
 };
 
@@ -43,9 +45,13 @@ export const companyRegisterReducer = (
     case "CHANGE_LOCATION":
       return { ...state, location: action.payload };
     case "SET_COMPANY_TYPE":
-      return { ...state, companyType: action.payload };
+      return { ...state, category: action.payload };
     case "SET_LOGO":
       return { ...state, logo: action.payload };
+    case "SET_PRIMARY_PHONENUMBER":
+      return { ...state, primaryPhoneNumber: action.payload };
+    case "SET_SECONDARY_PHONENUMBER":
+      return { ...state, secondaryPhoneNumber: action.payload };
     default:
       return state;
   }

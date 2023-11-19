@@ -92,11 +92,7 @@ const LocationInput = () => {
         onInputChange={handleInputChange}
         onChange={(_, value) => handlePlaceSelected(value)}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Location"
-            variant="outlined"
-          />
+          <TextField {...params} label="Location" variant="outlined" />
         )}
       />
     </div>

@@ -330,9 +330,7 @@ function CompanyJobs() {
                   >
                     Location
                   </label>
-                  <LocationSearchInput
-                   
-                  />
+                  <LocationSearchInput />
                 </Grid>
                 <Grid item xs={12}>
                   <label
