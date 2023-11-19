@@ -21,7 +21,7 @@ const LocationInput = () => {
     "",
   );
   const [newLocations, setNewLocations] = useState<any[]>([]);
-  const location = useSelector((state: any) => state.userRegister);
+  const location = useSelector((state: any) => state.location);
   const dispatch = useDispatch();
 
   useEffect(() => {

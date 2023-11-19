@@ -1,19 +1,20 @@
-export class JobsModel {
-  id!: number;
-  timestamp!: Date;
-  jobField!: string;
-  jobTitle!: string;
-  jobDescription!: string;
-  companyOverview!: string[];
-  requirements!: string[];
-  skills!: string[];
-  minSalary!: string;
-  maxSalary!: string;
-  location!: string;
-  jobType!: string;
-  hideSalary!: boolean;
-  benefits!: string[];
-  companyId!: number;
-  requestCoverLetter!: boolean;
-  otherDetails!: string;
+export interface JobsModel {
+  id?: number;
+  jobTitle: string;
+  jobType: string;
+  locationType: string;
+  field: string;
+  jobDescription: string;
+  location: string;
+  requirements: string[];
+  expiryDate: string;
+  minSalary: number; // Assuming nullable salary values
+  maxSalary: number; // Assuming nullable salary values
+  hideSalary: boolean;
+  benefits: string[];
+  requestCoverLetter: boolean;
+  otherDetails: string;
+  timestamp: string;
+  companyId?: number;
+  skills?: string[];
 }

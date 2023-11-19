@@ -7,7 +7,6 @@ import { Button, CardActions } from "@mui/material";
 function JobDescription(props: {
   jobTitle: any;
   type: any;
-  overview: any;
   description: any;
   requirements: any;
   skills: any;
@@ -21,7 +20,6 @@ function JobDescription(props: {
   const {
     jobTitle,
     type,
-    overview,
     description,
     requirements,
     skills,
@@ -75,9 +73,7 @@ function JobDescription(props: {
         <Typography variant="h6" component="div">
           Company Overview
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {overview}
-        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
         <Typography variant="h6" component="div">
           Job type
         </Typography>

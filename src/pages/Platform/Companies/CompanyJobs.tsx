@@ -1,9 +1,16 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Alert,
+  Autocomplete,
+  AutocompleteInputChangeReason,
   Button,
+  Checkbox,
   Container,
   CssBaseline,
+  FormControl,
   FormControlLabel,
   Grid,
   IconButton,
@@ -20,19 +27,19 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import React, { useEffect, useReducer, useState } from "react";
-import DatePicker from "react-datepicker";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Grid as GridLoader } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
-import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
+import { number, object, string, z } from "zod";
 import { industries, jobType } from "../../../Data/CompanyIndustries";
+import { jobs } from "../../../Data/DummyData";
 import { skills } from "../../../Data/UserProfessions";
-import { companyJobsReducer } from "../../../Functions/Reducers";
+import { JobsModel } from "../../../Models/JobsModel";
 import JobCard from "../../../components/Companies/JobCard";
 import LocationSearchInput from "../../../components/LocationInput";
-import { JobsModel } from "../../../Models/JobsModel";
-import { jobs } from "../../../Data/DummyData";
+import { postJob } from "../../../core/api";
 
 function CustomTabPanel(props: {
   [x: string]: any;
@@ -72,52 +79,32 @@ function a11yProps(index: number) {
   };
 }
 
-let initState = {
-  requirements: [],
-  benefits: [],
-  loading: false,
-  selectedSkills: null,
-  selectedType: null,
-  jobsList: jobs,
-  open: false,
-  value: 0,
-  jobType: null,
-  jobLocationType: null,
-  message: { type: null, message: null },
-};
-
 function CompanyJobs() {
-  const [state, dispatch] = useReducer(companyJobsReducer, initState);
-
-  const dateHandler = (date = expiryDate) => {
-    if (date.getTime() <= new Date().getTime()) {
-      throw Error("Invalid Date, please enter a date in the future!");
-    } else {
-      setExpiryDate(date);
-    }
-  };
+  const [req, setReq] = React.useState("");
+  const [benefit, setBenefit] = React.useState("");
+  const state = useSelector((state: any) => state.createJobs);
+  const location = useSelector((state: any) => state.location);
+  const dispatch = useDispatch();
 
   const handleChange = (event: any, newValue: any) => {
-    dispatch({ type: "SETVALUE", value: newValue });
+    dispatch({ type: "SET_VALUE", payload: newValue });
   };
-  const navigate = useNavigate();
 
   const removeRequirementsHandler = (res: any) => {
     const newList = state.requirements.filter((item: any) => item !== res);
-    dispatch({ type: "SETREQUIREMENTS", requirements: newList });
+    dispatch({ type: "SET_REQUIREMENTS", payload: newList });
   };
   const removeBenefitsHandler = (res: any) => {
     const newList = state.benefits.filter((item: any) => item !== res);
-    dispatch({ type: "SETBENEFITS", benefits: newList });
+    dispatch({ type: "SET_BENEFITS", payload: newList });
   };
-  const handleClick = (message: { type: any; message: any }) => {
+  const handleClick = (message: { type: string; message: string }) => {
     dispatch({
-      type: "SETMESSAGE",
-      message: { type: message.type, message: message.message },
+      type: "SET_MESSAGE",
+      payload: { type: message.type, message: message.message },
     });
-    dispatch({ type: "SETOPEN", open: true });
+    dispatch({ type: "SET_OPEN", payload: true });
   };
-
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
@@ -126,18 +113,90 @@ function CompanyJobs() {
       return;
     }
 
-    dispatch({ type: "SETOPEN", open: false });
+    dispatch({ type: "SET_OPEN", payload: false });
   };
+  const isInteger = (val: string) => /^\d+$/.test(val);
+  const validationSchema = object({
+    jobTitle: string().min(1, "Field is required!"),
+    jobType: string().min(1, "Field is required!"),
+    jobDescription: string()
+      .min(500, "Enter atleast 500 characters!")
+      .max(2000, "Max limit 2000 characters!"),
+    field: string().min(1, "Field is required!"),
+    locationType: string().min(1, "Field is required!"),
+    expiryDate: string()
+      .min(1, "Field is required!")
+      .refine((val) => {
+        var start = new Date(val);
+        return start > new Date();
+      }, "Invalid Expiry date, Date must be in the future!"),
+    minSalary: string()
+      .min(1, "Field is required!")
+      .refine((val) => isInteger(val), {
+        message: "Must be a valid Number.",
+      })
+      .transform((val) => parseInt(val, 10)),
 
-  const [expiryDate, setExpiryDate] = useState(new Date());
-  var viewList: any[] = [];
+    maxSalary: string()
+      .min(1, "Field is required!")
+      .refine((val) => isInteger(val), {
+        message: "Must be a valid Number.",
+      })
+      .transform((val) => parseInt(val, 10)),
+    otherDetails: string(),
+  }).refine((obj) => obj.minSalary < obj.maxSalary, {
+    message: "Max Salary has to be more than Min Salary!",
+    path: ["maxSalary"],
+  });
+
+  type SignUpSchemaType = z.infer<typeof validationSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
 
   useEffect(() => {
-    dispatch({ type: "SETJOBLIST", jobsList: jobs });
-  }, []);
+    dispatch({ type: "SET_JOBLIST", payload: jobs });
+  }, [state.requirements]);
 
-  const onSubmitHandler = async (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
+    dispatch({ type: "SET_LOADING", payload: true });
+    if (state.requirements.length <= 0) {
+      handleClick({
+        type: "error",
+        message: "Please enter atleast one job requirement!",
+      });
+      dispatch({ type: "SET_LOADING", payload: false });
+      return;
+    } else if (state.location == "") {
+      handleClick({ type: "error", message: "Please enter the job location!" });
+      dispatch({ type: "SET_LOADING", payload: false });
+      return;
+    }
+    const job: JobsModel = {
+      ...values,
+      skills: state.selectedSkills.map((skill: any) => skill.label),
+      expiryDate: new Date(values.expiryDate).toISOString(),
+      location: location.location,
+      timestamp: new Date().toISOString(),
+      benefits: state.benefits,
+      requirements: state.requirements,
+      requestCoverLetter: state.requestCoverLetter,
+      hideSalary: state.hideSalary,
+    };
+    let res = await postJob(job);
+    if (res?.status == 200) {
+      window.location.reload();
+    } else {
+      let mes: string = res?.data?.message;
+      handleClick({
+        type: "error",
+        message: (mes.indexOf(":") + 1).toString(),
+      });
+    }
+    dispatch({ type: "SET_LOADING", payload: false });
   };
 
   const editJob = () => {};
@@ -177,13 +236,13 @@ function CompanyJobs() {
             .map((job: JobsModel) => {
               return (
                 <JobCard
-                  key={job.id}
+                  key={job.id!}
                   title={job.jobTitle}
                   description={job.jobDescription}
-                  timestamp={job.timestamp}
+                  timestamp={new Date(job.timestamp)}
                   benefits={job.benefits}
-                  minSalary={job.minSalary}
-                  maxSalary={job.maxSalary}
+                  minSalary={job.minSalary.toString()}
+                  maxSalary={job.maxSalary.toString()}
                   location={job.location}
                   edit={editJob}
                 />
@@ -204,8 +263,8 @@ function CompanyJobs() {
           >
             <Box
               component="form"
-              onSubmit={onSubmitHandler}
-              noValidate={false}
+              onSubmit={handleSubmit(onSubmitHandler)}
+              noValidate={true}
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
@@ -217,12 +276,16 @@ function CompanyJobs() {
                     Job Title
                   </label>
                   <TextField
-                    name="jobTitle"
                     required
                     fullWidth
                     id="jobTitle"
                     label="Job Title"
                     autoFocus
+                    error={!!errors["jobTitle"]}
+                    helperText={
+                      errors["jobTitle"] ? errors["jobTitle"].message : ""
+                    }
+                    {...register("jobTitle")}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -232,21 +295,27 @@ function CompanyJobs() {
                   >
                     Job Type
                   </label>
-                  <Select
-                    required
-                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                    options={jobType}
-                    placeholder="Select the type of job."
-                    onChange={(val: { label: any } | null) => {
-                      dispatch({
-                        type: "SETJOBTYPE",
-                        jobType: val?.label,
-                      });
-                    }}
-                    value={jobType.filter(function (option) {
-                      return option.label === state.jobType;
-                    })}
-                  />
+                  <FormControl fullWidth margin="normal">
+                    <Autocomplete
+                      id="jobType"
+                      options={jobType}
+                      getOptionLabel={(option) => option.label || ""}
+                      renderInput={(params) => (
+                        <>
+                          <TextField
+                            {...params}
+                            label="Job Type"
+                            variant="outlined"
+                            error={!!errors["jobType"]}
+                            helperText={
+                              errors["jobType"] ? errors["jobType"].message : ""
+                            }
+                            {...register("jobType")}
+                          />
+                        </>
+                      )}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -255,31 +324,33 @@ function CompanyJobs() {
                   >
                     Job location Type
                   </label>
-                  <Select
-                    required
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                    options={[
-                      { value: "remote", label: "Remote" },
-                      { value: "on_site", label: "On-site" },
-                      { value: "hybrid", label: "Hybrid" },
-                    ]}
-                    placeholder="Select the type of job."
-                    onChange={(
-                      val: { label: string; value: string } | null,
-                    ) => {
-                      dispatch({
-                        type: "SETJOBLOCATIONTYPE",
-                        jobLocationType: val?.label,
-                      });
-                    }}
-                    value={[
-                      { value: "remote", label: "Remote" },
-                      { value: "on_site", label: "On-site" },
-                      { value: "hybrid", label: "Hybrid" },
-                    ].filter(function (option) {
-                      return option.label === state.jobLocationType;
-                    })}
-                  />
+                  <FormControl fullWidth margin="normal">
+                    <Autocomplete
+                      id="jobLocationType"
+                      options={[
+                        { value: "remote", label: "Remote" },
+                        { value: "on_site", label: "On-site" },
+                        { value: "hybrid", label: "Hybrid" },
+                      ]}
+                      getOptionLabel={(option) => option.label || ""}
+                      renderInput={(params) => (
+                        <>
+                          <TextField
+                            {...params}
+                            label="Location Type"
+                            variant="outlined"
+                            error={!!errors["locationType"]}
+                            helperText={
+                              errors["locationType"]
+                                ? errors["locationType"].message
+                                : ""
+                            }
+                            {...register("locationType")}
+                          />
+                        </>
+                      )}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -288,22 +359,27 @@ function CompanyJobs() {
                   >
                     Job Field
                   </label>
-                  <Select
-                    required
-                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                    options={industries}
-                    name="field"
-                    placeholder="Healthcare, technology,....."
-                    onChange={(val: { label: any } | null) => {
-                      dispatch({
-                        type: "SETSELECTEDTYPE",
-                        selectedType: val?.label,
-                      });
-                    }}
-                    value={industries.filter(function (option) {
-                      return option.label === state.selectedType;
-                    })}
-                  />
+                  <FormControl fullWidth margin="normal">
+                    <Autocomplete
+                      id="selectedType"
+                      options={industries}
+                      getOptionLabel={(option) => option.label || ""}
+                      renderInput={(params) => (
+                        <>
+                          <TextField
+                            {...params}
+                            label="Job Field"
+                            variant="outlined"
+                            error={!!errors["field"]}
+                            helperText={
+                              errors["field"] ? errors["field"].message : ""
+                            }
+                            {...register("field")}
+                          />
+                        </>
+                      )}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                   <label
@@ -320,7 +396,13 @@ function CompanyJobs() {
                     maxRows={6}
                     id="jobDescription"
                     label="Job Description"
-                    name="jobDescription"
+                    error={!!errors["jobDescription"]}
+                    helperText={
+                      errors["jobDescription"]
+                        ? errors["jobDescription"].message
+                        : ""
+                    }
+                    {...register("jobDescription")}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -348,6 +430,8 @@ function CompanyJobs() {
                     label="Requirements"
                     name="requirements"
                     autoComplete=""
+                    value={req}
+                    onChange={(e) => setReq(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={2}>
@@ -358,21 +442,12 @@ function CompanyJobs() {
                       ":hover": { backgroundColor: "black" },
                     }}
                     onClick={() => {
-                      if (
-                        document.getElementsByName("requirements")[0]
-                          .innerHTML != ""
-                      ) {
+                      if (req != "") {
                         dispatch({
-                          type: "SETREQUIREMENTS",
-                          requirements: [
-                            ...state.requirements,
-                            document.getElementsByName("requirements")[0]
-                              .innerHTML,
-                          ],
+                          type: "SET_REQUIREMENTS",
+                          payload: [...state.requirements, req],
                         });
-                        document.getElementsByName(
-                          "requirements",
-                        )[0].innerHTML = "";
+                        setReq("");
                       }
                     }}
                   >
@@ -382,43 +457,27 @@ function CompanyJobs() {
                 <Grid xs={12}>
                   <List>
                     {state.requirements &&
-                      state.requirements.map(
-                        (
-                          req:
-                            | string
-                            | number
-                            | boolean
-                            | React.ReactElement<
-                                any,
-                                string | React.JSXElementConstructor<any>
+                      state.requirements.map((req: string, index: number) => {
+                        return (
+                          <ListItem
+                            key={index}
+                            secondaryAction={
+                              <IconButton
+                                onClick={() => removeRequirementsHandler(req)}
+                                edge="end"
+                                aria-label="delete"
                               >
-                            | Iterable<React.ReactNode>
-                            | React.ReactPortal
-                            | null
-                            | undefined,
-                          index: React.Key | null | undefined,
-                        ) => {
-                          return (
-                            <ListItem
-                              key={index}
-                              secondaryAction={
-                                <IconButton
-                                  onClick={() => removeRequirementsHandler(req)}
-                                  edge="end"
-                                  aria-label="delete"
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              }
-                              disablePadding
-                            >
-                              <ListItemButton>
-                                <ListItemText primary={req} />
-                              </ListItemButton>
-                            </ListItem>
-                          );
-                        },
-                      )}
+                                <DeleteIcon />
+                              </IconButton>
+                            }
+                            disablePadding
+                          >
+                            <ListItemButton>
+                              <ListItemText primary={req} />
+                            </ListItemButton>
+                          </ListItem>
+                        );
+                      })}
                   </List>
                 </Grid>
                 <Grid item xs={12}>
@@ -428,17 +487,16 @@ function CompanyJobs() {
                   >
                     Expiry Date
                   </label>
-                  <DatePicker
-                    required
-                    className="border mb-4 border-blue-300"
-                    selected={expiryDate}
-                    onChange={(date: Date | undefined | null) => {
-                      try {
-                        dateHandler(date!);
-                      } catch (error: any) {
-                        handleClick({ type: "error", message: error.message });
-                      }
-                    }}
+                  <TextField
+                    fullWidth
+                    type="datetime-local"
+                    margin="normal"
+                    variant="outlined"
+                    error={!!errors["expiryDate"]}
+                    helperText={
+                      errors["expiryDate"] ? errors["expiryDate"].message : ""
+                    }
+                    {...register("expiryDate")}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -448,27 +506,33 @@ function CompanyJobs() {
                   >
                     Skills (Not needed for non-programming jobs)
                   </label>
-                  <Select
-                    className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                  <Autocomplete
+                    multiple
+                    id="skills"
                     options={skills}
-                    placeholder="Select skills,..."
-                    name="skills"
-                    onChange={(val: string | any | null) => {
-                      if (val?.length <= 6) {
-                        dispatch({
-                          type: "SETSELECTEDSKILLS",
-                          selectedSkills: val,
-                        });
-                      } else {
-                        handleClick({
-                          type: "error",
-                          message: "Max number of skills Added!",
-                        });
-                      }
-                    }}
-                    isSearchable={true}
-                    value={state.selectedSkills}
-                    isMulti
+                    getOptionLabel={(option) => option.label || ""}
+                    value={state.selecteSkills} // Replace with your actual selected values state
+                    onChange={(_, values) =>
+                      dispatch({ type: "SET_SELECTED_SKILLS", payload: values })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Skills"
+                        variant="outlined"
+                      />
+                    )}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                          checkedIcon={<CheckBoxIcon fontSize="small" />}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
+                      </li>
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -479,13 +543,17 @@ function CompanyJobs() {
                     Min Salary in USD (Annual)
                   </label>
                   <TextField
-                    name="minSalary"
                     type="text"
                     required
                     fullWidth
                     id="minSalary"
                     label="Min Salary"
                     autoFocus
+                    error={!!errors["minSalary"]}
+                    helperText={
+                      errors["minSalary"] ? errors["minSalary"].message : ""
+                    }
+                    {...register("minSalary")}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -496,13 +564,29 @@ function CompanyJobs() {
                     Max Salary in USD (Annual)
                   </label>
                   <TextField
-                    name="maxSalary"
                     required
                     type="text"
                     fullWidth
                     id="maxSalary"
                     label="Max Salary"
                     autoFocus
+                    error={!!errors["maxSalary"]}
+                    helperText={
+                      errors["maxSalary"] ? errors["maxSalary"].message : ""
+                    }
+                    {...register("maxSalary")}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={state.hideSalary}
+                        onChange={() => dispatch({ type: "SET_HIDE_SALARY" })}
+                        name="hideSalary"
+                      />
+                    }
+                    label={`Hide Salary?`}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -521,6 +605,8 @@ function CompanyJobs() {
                     id="benefits"
                     label="Benefits"
                     name="benefits"
+                    value={benefit}
+                    onChange={(val) => setBenefit(val.target.value)}
                     autoComplete=""
                   />
                 </Grid>
@@ -531,7 +617,15 @@ function CompanyJobs() {
                       backgroundColor: "darkred",
                       ":hover": { backgroundColor: "black" },
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      if (benefit != "") {
+                        dispatch({
+                          type: "SET_BENEFITS",
+                          payload: [...state.benefits, benefit],
+                        });
+                        setBenefit("");
+                      }
+                    }}
                   >
                     Add
                   </Button>
@@ -564,8 +658,16 @@ function CompanyJobs() {
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
-                    control={<Switch name="requestCoverLetter" />}
-                    label="Request for a cover letter ?"
+                    control={
+                      <Switch
+                        checked={state.requestCoverLetter}
+                        onChange={() =>
+                          dispatch({ type: "SET_REQUEST_COVER_LETTER" })
+                        }
+                        name="requestCoverLetter"
+                      />
+                    }
+                    label={`Request for a cover letter?`}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -575,12 +677,22 @@ function CompanyJobs() {
                   >
                     Incase of any other details.
                   </label>
-                  <textarea
+                  <TextField
+                    required
                     id="otherDetails"
-                    name="otherDetails"
+                    multiline
                     rows={4}
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
-                  ></textarea>
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors["otherDetails"]}
+                    helperText={
+                      errors["otherDetails"]
+                        ? errors["otherDetails"].message
+                        : ""
+                    }
+                    {...register("otherDetails")}
+                  />
                 </Grid>
               </Grid>
               <Button

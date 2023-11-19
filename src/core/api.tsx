@@ -1,7 +1,8 @@
 import axios from "axios";
-import { AxiosInstance, baseUrl } from "./baseURL";
+import { AxiosCompanyInstance, baseUrl } from "./baseURL";
 import { userModel } from "../Models/UserModel";
 import { CompanyModel } from "../Models/companyModel";
+import { JobsModel } from "../Models/JobsModel";
 
 export const userLogin = async ({
   email,
@@ -92,6 +93,25 @@ export const companyRegister = async (user: CompanyModel) => {
     if (response?.status == 200) {
       sessionStorage.setItem("companyToken", response.data.accessToken);
       sessionStorage.setItem("account", "company");
+      return response;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};
+
+export const postJob = async (job: JobsModel) => {
+  try {
+    const response = await AxiosCompanyInstance.post(
+      `${baseUrl}/jobs/post-job`,
+      JSON.stringify(job),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
       return response;
     }
   } catch (e: any) {

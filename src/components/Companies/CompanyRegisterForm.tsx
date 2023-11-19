@@ -38,6 +38,7 @@ export default function CompanyRegisterForm() {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const company = useSelector((state: any) => state.companyRegister);
+  const location = useSelector((state: any) => state.location);
   const dispatch = useDispatch();
 
   const validationSchema = object({
@@ -48,7 +49,9 @@ export default function CompanyRegisterForm() {
       .max(16, "You must enter at most 16 characters!")
       .min(1, "Field is required!"),
     reenter_password: string().min(1, "Field is required!"),
-    overview: string().min(300, "Enter atleast 300 characters!"),
+    overview: string()
+      .min(300, "Enter atleast 300 characters!")
+      .max(2000, "Max limit 2000 characters!"),
   }).refine((obj) => obj.password === obj.reenter_password, {
     message: "Passwords do not match!",
     path: ["reenter_password"],
@@ -111,6 +114,11 @@ export default function CompanyRegisterForm() {
       setOpen(true);
       setLoading(false);
       return;
+    } else if (location.location == "") {
+      setMessage("You haven't entered your location!");
+      setOpen(true);
+      setLoading(false);
+      return;
     }
     try {
       checkImageSize(company.logo);
@@ -123,7 +131,7 @@ export default function CompanyRegisterForm() {
     let newValues: CompanyModel = {
       ...values,
       profileImage: "image string",
-      location: company.location,
+      location: location.location,
       category: company.category.label,
       primaryPhoneNumber: company.primaryPhoneNumber,
       secondaryPhoneNumber: company.secondaryPhoneNumber,

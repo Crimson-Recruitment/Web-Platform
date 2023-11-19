@@ -54,7 +54,6 @@ function JobView() {
         <>
           <JobDescription
             jobTitle={jobData.jobTitle}
-            overview={jobData.companyOverview}
             description={jobData.jobDescription}
             requirements={jobData.requirements}
             skills={jobData.skills}

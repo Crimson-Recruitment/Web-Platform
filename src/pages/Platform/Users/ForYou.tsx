@@ -101,20 +101,24 @@ function ForYou() {
           ) : (
             jobsList.length != 0 &&
             jobsList
-              .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
+              .sort(
+                (a, b) =>
+                  new Date(a.timestamp).getTime() -
+                  new Date(b.timestamp).getTime(),
+              )
               .map((job, index) => {
                 return (
                   <UserJobCard
                     key={index}
                     title={job.jobTitle}
                     description={job.jobDescription}
-                    timestamp={job.timestamp}
+                    timestamp={new Date(job.timestamp)}
                     benefits={job.benefits}
-                    maxSalary={job.maxSalary}
-                    minSalary={job.minSalary}
+                    maxSalary={job.maxSalary.toString()}
+                    minSalary={job.minSalary.toString()}
                     location={job.location}
                     dialog={handleDialogOpen}
-                    more={() => jobHandler(job.id, index)}
+                    more={() => jobHandler(job.id!, index)}
                   />
                 );
               })
@@ -141,7 +145,6 @@ function ForYou() {
             <>
               <JobDescription
                 jobTitle={jobsList[current].jobTitle}
-                overview={jobsList[current].companyOverview}
                 description={jobsList[current].jobDescription}
                 requirements={jobsList[current].requirements}
                 skills={jobsList[current].skills}

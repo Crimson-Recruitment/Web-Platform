@@ -1,5 +1,4 @@
 const userInitState = {
-  location: "",
   profession: "",
   skills: [],
   cv: null,
@@ -12,8 +11,6 @@ export const userRegisterReducer = (
   action: any,
 ) => {
   switch (action.type) {
-    case "CHANGE_LOCATION":
-      return { ...state, location: action.payload };
     case "SET_PROFESSION":
       return { ...state, profession: action.payload };
     case "SET_SKILLS":
@@ -30,7 +27,6 @@ export const userRegisterReducer = (
 };
 
 const companyInitState = {
-  location: "",
   category: "",
   primaryPhoneNumber: "",
   secondaryPhoneNumber: "",
@@ -42,8 +38,6 @@ export const companyRegisterReducer = (
   action: any,
 ) => {
   switch (action.type) {
-    case "CHANGE_LOCATION":
-      return { ...state, location: action.payload };
     case "SET_COMPANY_TYPE":
       return { ...state, category: action.payload };
     case "SET_LOGO":

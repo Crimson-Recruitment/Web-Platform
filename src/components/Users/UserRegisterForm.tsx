@@ -45,6 +45,7 @@ export default function UserRegisterForm() {
   const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const user = useSelector((state: any) => state.userRegister);
+  const location = useSelector((state: any) => state.location);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -131,6 +132,11 @@ export default function UserRegisterForm() {
       setOpen(true);
       setLoading(false);
       return;
+    } else if (location.location == "") {
+      setMessage("You haven't entered your location!");
+      setOpen(true);
+      setLoading(false);
+      return;
     }
     try {
       checkImageSize(user.profileImage);
@@ -147,7 +153,7 @@ export default function UserRegisterForm() {
       cv: "cv string",
       jobTitle: user.profession.label,
       skills: user.skills.map((skill: any) => skill.label),
-      location: user.location,
+      location: location.location,
       phoneNumber: user.phoneNumber,
     };
     let res = await userRegister(newValues);
