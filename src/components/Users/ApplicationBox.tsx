@@ -59,7 +59,7 @@ export default function ApplicationBox(props: {
             <br />
             <span className="text-red-700">Confirm submission.</span>
           </DialogContentText>
-          {needCoverLetter ? (
+          {needCoverLetter === true ? (
             <>
               <DialogTitle>
                 A cover letter is required for this job.

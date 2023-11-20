@@ -38,7 +38,23 @@ export const jobType = [
   { value: "volunteering", label: "Volunteering" },
 ];
 
-export const industryProfessions = {
+
+
+interface IndustryProfessions {
+  Technology: string[];
+  Healthcare: string[];
+  Finance: string[];
+  Education: string[];
+  Marketing: string[];
+  Construction: string[];
+  Entertainment: string[];
+  Hospitality: string[];
+  Transportation: string[];
+  Retail: string[];
+  [key: string]: string[]; // Index signature allowing any string key
+}
+
+export const industryProfessions:IndustryProfessions = {
   Technology: [
     "Software Developer",
     "Software Engineer",
