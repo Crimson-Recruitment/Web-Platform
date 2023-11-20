@@ -216,8 +216,8 @@ function CompanyJobs() {
     dispatch({ type: "SET_LOADING", payload: false });
   };
 
-  const editJob = (id:any) => {
-    navigate(`/edit-job/${id}`)
+  const editJob = (id: any) => {
+    navigate(`/edit-job/${id}`);
   };
 
   return (

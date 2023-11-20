@@ -48,7 +48,6 @@ export const createJobReducer = (
   }
 };
 
-
 const editJobInitialState = {
   requirements: [],
   benefits: [],
@@ -63,10 +62,7 @@ const editJobInitialState = {
   message: { type: null, message: null },
 };
 
-export const editJobReducer = (
-  state = editJobInitialState,
-  action: any,
-) => {
+export const editJobReducer = (state = editJobInitialState, action: any) => {
   switch (action.type) {
     case "SET_JOB_TYPE":
       return { ...state, jobType: action.payload };
@@ -93,7 +89,10 @@ export const editJobReducer = (
     case "SET_HIDE_SALARY_EDIT":
       return { ...state, hideSalaryEdit: !state.hideSalaryEdit };
     case "SET_REQUEST_COVER_LETTER_EDIT":
-      return { ...state, requestCoverLetterEdit: !state.requestCoverLetterEdit };
+      return {
+        ...state,
+        requestCoverLetterEdit: !state.requestCoverLetterEdit,
+      };
 
     default:
       return state;
@@ -101,17 +100,17 @@ export const editJobReducer = (
 };
 
 const jobsInitState = {
-  loading:false,
-  jobs: []
-}
+  loading: false,
+  jobs: [],
+};
 
-export const jobsReducer = (state=jobsInitState, action:any) => {
+export const jobsReducer = (state = jobsInitState, action: any) => {
   switch (action.type) {
     case "SET_JOBS_LOADING":
-      return {...state, loading: action.payload};
+      return { ...state, loading: action.payload };
     case "SET_JOBS":
-      return {...state, jobs: action.payload};
+      return { ...state, jobs: action.payload };
     default:
       return state;
   }
-}
+};

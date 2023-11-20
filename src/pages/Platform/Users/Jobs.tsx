@@ -11,12 +11,11 @@ import UserJobCard from "../../../components/Users/UserJobCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllJobs } from "../../../core/api";
 
-
 function Jobs() {
   const [current, setCurrent] = React.useState<number>(0);
   const navigate = useNavigate();
   const [open, setOpen] = React.useState<boolean | undefined>();
-  const state = useSelector((state:any) => state.jobs);
+  const state = useSelector((state: any) => state.jobs);
   const dispatch = useDispatch();
 
   const handleClose = (
@@ -93,11 +92,11 @@ function Jobs() {
             state.jobs.length != 0 &&
             state.jobs
               .sort(
-                (a:any, b:any) =>
+                (a: any, b: any) =>
                   new Date(a.timestamp).getTime() -
                   new Date(b.timestamp).getTime(),
               )
-              .map((job:JobsModel, index:number) => {
+              .map((job: JobsModel, index: number) => {
                 return (
                   <UserJobCard
                     key={index}

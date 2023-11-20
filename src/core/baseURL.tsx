@@ -18,11 +18,12 @@ export const AxiosCompanyInstance = axios.create({
   },
 });
 
-const token:string|undefined = sessionStorage.getItem("companyToken") !== undefined? 
-sessionStorage.getItem("companyToken")!:
-sessionStorage.getItem("userToken") !== undefined?
-sessionStorage.getItem("userToken")!:
-undefined
+const token: string | undefined =
+  sessionStorage.getItem("companyToken") !== undefined
+    ? sessionStorage.getItem("companyToken")!
+    : sessionStorage.getItem("userToken") !== undefined
+      ? sessionStorage.getItem("userToken")!
+      : undefined;
 export const AxiosInstance = axios.create({
   headers: {
     Authorization: `${token}`,

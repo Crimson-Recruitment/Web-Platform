@@ -15,7 +15,7 @@ const allReducers = combineReducers({
   createJobs: createJobReducer,
   editJob: editJobReducer,
   location: locationReducer,
-  jobs: jobsReducer
+  jobs: jobsReducer,
 });
 
 const store = createStore(allReducers);

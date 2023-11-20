@@ -45,9 +45,12 @@ function App() {
         ) : null}
         {sessionStorage.getItem("companyToken") ? (
           <>
-            <Route path="/edit-job/:id" element={<EditJob/>}/>
+            <Route path="/edit-job/:id" element={<EditJob />} />
             <Route path="/company-home" element={<CompanyHome />} />
-            <Route path="/company-applications/:id" element={<CompanyApplicationDetails/>}/>
+            <Route
+              path="/company-applications/:id"
+              element={<CompanyApplicationDetails />}
+            />
           </>
         ) : null}
         <Route path="*" element={<PageNotFound />} />

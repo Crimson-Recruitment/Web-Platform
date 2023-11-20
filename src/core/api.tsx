@@ -143,7 +143,7 @@ export const getCompanyJobs = async () => {
   }
 };
 
-export const updateJob = async (job: JobsModel,id: any) => {
+export const updateJob = async (job: JobsModel, id: any) => {
   try {
     const response = await AxiosCompanyInstance.post(
       `${baseUrl}/jobs/update-job/${id}`,
@@ -164,14 +164,11 @@ export const updateJob = async (job: JobsModel,id: any) => {
 
 export const getAllJobs = async () => {
   try {
-    const response = await AxiosInstance.get(
-      `${baseUrl}/jobs/all`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await AxiosInstance.get(`${baseUrl}/jobs/all`, {
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
     if (response?.status == 200) {
       return response.data;
     }

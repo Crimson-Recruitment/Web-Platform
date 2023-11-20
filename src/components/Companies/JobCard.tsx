@@ -63,7 +63,15 @@ function JobCard(props: {
         >
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>{description.length > 100 ? `${description.substring(0, 100)}...` : description}</Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ marginBottom: 2 }}
+        >
+          {description.length > 100
+            ? `${description.substring(0, 100)}...`
+            : description}
+        </Typography>
 
         <Typography
           variant="body2"
