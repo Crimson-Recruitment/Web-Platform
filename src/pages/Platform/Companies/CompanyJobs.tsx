@@ -88,7 +88,7 @@ function CompanyJobs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleChange = (event: any, newValue: any) => {
+  const handleChange = (event: any, newValue: number) => {
     dispatch({ type: "SET_VALUE", payload: newValue });
   };
 
@@ -172,7 +172,6 @@ function CompanyJobs() {
         console.error("Error fetching data:", error);
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
-        console.log(state.jobsList);
       }
     };
 

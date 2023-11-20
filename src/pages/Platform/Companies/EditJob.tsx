@@ -131,11 +131,11 @@ export const EditJob = () => {
         });
         dispatch({ type: "SET_LOADING", payload: false });
         return;
-      } else if (state.location == "") {
-        handleClick({ type: "error", message: "Please enter the job location!" });
-        dispatch({ type: "SET_LOADING", payload: false });
-        return;
-      }
+      } else if (location.location == "") {
+      handleClick({ type: "error", message: "Please enter the job location!" });
+      dispatch({ type: "SET_LOADING", payload: false });
+      return;
+    }
       const job: JobsModel = {
         ...values,
         skills: state.selectedSkills.map((skill: any) => skill.label),
@@ -164,6 +164,9 @@ export const EditJob = () => {
         dispatch({ type: "SET_REQUIREMENTS", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].requirements });
         dispatch({type:"SET_BENEFITS", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].benefits });
         dispatch({type:"SET_HIDE_SALARY_EDIT", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].hideSalary});
+        dispatch({ type: "SET_JOB_TYPE", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].jobType });
+        dispatch({type:"SET_FIELD", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].field });
+        dispatch({type:"SET_HIDE_LOCATION_TYPE", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].locationType});
         dispatch({type:"SET_REQUEST_COVER_LETTER_EDIT", payload: jobs.jobsList.filter((val:any) => val.id == id)[0].requestCoverLetter});
         dispatch({type:"SET_SELECTED_SKILLS", payload: skills.filter((skill) => jobs.jobsList.filter((val:any) => val.id == id)[0].skills?.includes(skill.label)) });
     },[])
@@ -238,18 +241,17 @@ export const EditJob = () => {
                       id="jobType"
                       options={jobType}
                       getOptionLabel={(option) => option.label || ""}
-                      inputValue={getValues().jobType}
+                      inputValue={state.jobType}
+                      onChange={(_,value) => {
+                        console.log(value);
+                        dispatch({type:"SET_JOB_TYPE", payload:value})
+                      }}
                       renderInput={(params) => (
                         <>
                           <TextField
                             {...params}
                             label="Job Type"
                             variant="outlined"
-                            error={!!errors["jobType"]}
-                            helperText={
-                              errors["jobType"] ? errors["jobType"].message : ""
-                            }
-                            {...register("jobType")}
                           />
                         </>
                       )}
@@ -272,7 +274,10 @@ export const EditJob = () => {
                         { value: "hybrid", label: "Hybrid" },
                       ]}
                       getOptionLabel={(option) => option.label || ""}
-                      inputValue={getValues().locationType}
+                      inputValue={state.locationType}
+                      onChange={(_,value) => {
+                        dispatch({type:"SET_LOCATION_TYPE", payload:value})
+                      }}
                       renderInput={(params) => (
                         <>
                           <TextField
@@ -304,7 +309,10 @@ export const EditJob = () => {
                       id="selectedType"
                       options={industries}
                       getOptionLabel={(option) => option.label || ""}
-                      inputValue={getValues().field}
+                      inputValue={state.field}
+                      onChange={(_,value) => {
+                        dispatch({type:"SET_FIELD", payload:value})
+                      }}
                       renderInput={(params) => (
                         <>
                           <TextField

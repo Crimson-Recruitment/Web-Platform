@@ -2,7 +2,7 @@ const createJobInitialState = {
   requirements: [],
   benefits: [],
   loading: false,
-  selectedSkills: null,
+  selectedSkills: [],
   jobsList: [],
   open: false,
   hideSalary: false,
@@ -53,11 +53,13 @@ const editJobInitialState = {
   requirements: [],
   benefits: [],
   loading: false,
-  selectedSkills: null,
+  selectedSkills: [],
+  jobType: "",
+  field:"",
+  locationType:"",
   open: false,
   hideSalaryEdit: false,
   requestCoverLetterEdit: false,
-  value: 0,
   message: { type: null, message: null },
 };
 
@@ -66,6 +68,12 @@ export const editJobReducer = (
   action: any,
 ) => {
   switch (action.type) {
+    case "SET_JOB_TYPE":
+      return { ...state, jobType: action.payload };
+    case "SET_FIELD":
+      return { ...state, field: action.payload };
+    case "SET_LOCATION_TYPE":
+      return { ...state, locationType: action.payload };
     case "SET_SELECTED_SKILLS":
       return { ...state, selectedSkills: action.payload };
 
@@ -80,10 +88,6 @@ export const editJobReducer = (
 
     case "SET_OPEN":
       return { ...state, open: action.payload };
-
-    case "SET_VALUE":
-      return { ...state, value: action.payload };
-
     case "SET_MESSAGE":
       return { ...state, message: action.payload };
     case "SET_HIDE_SALARY_EDIT":

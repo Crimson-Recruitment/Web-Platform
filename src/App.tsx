@@ -10,7 +10,7 @@ import Register from "./pages/Authentication/Register";
 import ContactUs from "./pages/ContactUs";
 import Home from "./pages/Home";
 import PageNotFound from "./pages/PageNotFound";
-import CompanyApplications from "./pages/Platform/Companies/CompanyApplications";
+import CompanyApplicationDetails from "./pages/Platform/Companies/CompanyApplicationDetails";
 import CompanyHome from "./pages/Platform/Companies/CompanyHome";
 import CompanyView from "./pages/Platform/Companies/CompanyView";
 import { EditJob } from "./pages/Platform/Companies/EditJob";
@@ -19,7 +19,6 @@ import UserHome from "./pages/Platform/Users/UserHome";
 import UserView from "./pages/Platform/Users/UserView";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
-import CompanyApplicationDetails from "./pages/Platform/Companies/CompanyApplicationDetails";
 
 function App() {
   const cookie = new Cookies();
