@@ -107,6 +107,7 @@ function Jobs() {
                     maxSalary={job.maxSalary.toString()}
                     minSalary={job.minSalary.toString()}
                     location={job.location}
+                    hideSalary={job.hideSalary}
                     dialog={handleDialogOpen}
                     more={() => jobHandler(job.id!, index)}
                   />

@@ -18,6 +18,7 @@ function UserJobCard(props: {
   maxSalary: string;
   location: string;
   dialog: any;
+  hideSalary: any;
   more: any;
 }) {
   const {
@@ -29,6 +30,7 @@ function UserJobCard(props: {
     minSalary,
     location,
     dialog,
+    hideSalary,
     more,
   } = props;
   const time = (new Date().getTime() - timestamp.getTime()) / 1000;
@@ -88,7 +90,22 @@ function UserJobCard(props: {
             color="text.secondary"
             sx={{ marginBottom: 1 }}
           >
-            Salary: ${minSalary} - ${maxSalary}
+            {hideSalary === true ? (
+              <div className="flex">
+                <span
+                  className="text-center me-3"
+                  style={{
+                    width: "80px",
+                    height: "20px",
+                    backgroundColor: "gray",
+                  }}
+                >
+                  Hidden
+                </span>
+              </div>
+            ) : (
+              `Salary: ${minSalary} to ${maxSalary}`
+            )}
           </Typography>
           <Typography
             variant="body2"

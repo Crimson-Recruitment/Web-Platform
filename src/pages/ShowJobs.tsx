@@ -95,6 +95,28 @@ export default function ShowJobs() {
                           <Typography gutterBottom variant="h5" component="h2">
                             {card.jobTitle}
                           </Typography>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ marginBottom: 1 }}
+                          >
+                            {card.hideSalary === true ? (
+                              <div className="flex">
+                                <span
+                                  className="text-center me-3"
+                                  style={{
+                                    width: "80px",
+                                    height: "20px",
+                                    backgroundColor: "gray",
+                                  }}
+                                >
+                                  Hidden
+                                </span>
+                              </div>
+                            ) : (
+                              `Salary: ${card.minSalary} to ${card.maxSalary}`
+                            )}
+                          </Typography>
                           <Typography>
                             {card.jobDescription.length > 200
                               ? `${card.jobDescription.substring(0, 200)}...`
@@ -102,7 +124,24 @@ export default function ShowJobs() {
                           </Typography>
                         </CardContent>
                         <CardActions>
-                          <Button onClick={() => setDialog(true)} size="small">
+                          <Button
+                            onClick={() => {
+                              if (
+                                sessionStorage.getItem("userToken") !==
+                                undefined
+                              ) {
+                                navigate("/user-home");
+                              } else if (
+                                sessionStorage.getItem("companyToken") !=
+                                undefined
+                              ) {
+                                navigate("company-home");
+                              } else {
+                                setDialog(true);
+                              }
+                            }}
+                            size="small"
+                          >
                             View More
                           </Button>
                         </CardActions>
@@ -126,7 +165,12 @@ export default function ShowJobs() {
             </Grid>
           </Container>
         )}
-        <Dialog open={dialog} onClose={() => setDialog(false)}>
+        <Dialog
+          open={dialog}
+          onClose={() => {
+            setDialog(false);
+          }}
+        >
           <DialogTitle>Login to apply</DialogTitle>
           <DialogContent>
             <p>

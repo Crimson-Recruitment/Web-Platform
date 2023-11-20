@@ -83,7 +83,15 @@ function ForYou() {
         dispatch({ type: "SET_JOBS_LOADING", payload: true });
 
         const jobArray: any[] = await getAllJobs();
-        const arr = jobArray.filter((val:JobsModel) => val.jobTitle.split(/\s+/).some(word => JSON.parse(sessionStorage.getItem("user")!).jobTitle.includes(word)))
+        const arr = jobArray.filter((val: JobsModel) =>
+          val.jobTitle
+            .split(/\s+/)
+            .some((word) =>
+              JSON.parse(sessionStorage.getItem("user")!).jobTitle.includes(
+                word,
+              ),
+            ),
+        );
         dispatch({ type: "SET_JOBS", payload: arr });
       } catch (error) {
         // Handle errors as needed
@@ -117,11 +125,11 @@ function ForYou() {
             state.jobs.length != 0 &&
             state.jobs
               .sort(
-                (a:any, b:any) =>
+                (a: any, b: any) =>
                   new Date(a.timestamp).getTime() -
                   new Date(b.timestamp).getTime(),
               )
-              .map((job:JobsModel, index:number) => {
+              .map((job: JobsModel, index: number) => {
                 return (
                   <UserJobCard
                     key={index}
@@ -133,6 +141,7 @@ function ForYou() {
                     minSalary={job.minSalary.toString()}
                     location={job.location}
                     dialog={handleDialogOpen}
+                    hideSalary={job.hideSalary}
                     more={() => jobHandler(job.id!, index)}
                   />
                 );
