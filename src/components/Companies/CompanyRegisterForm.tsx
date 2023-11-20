@@ -50,7 +50,7 @@ export default function CompanyRegisterForm() {
       .min(1, "Field is required!"),
     reenter_password: string().min(1, "Field is required!"),
     overview: string()
-      .min(300, "Enter atleast 300 characters!")
+      .min(200, "Enter atleast 200 characters!")
       .max(2000, "Max limit 2000 characters!"),
   }).refine((obj) => obj.password === obj.reenter_password, {
     message: "Passwords do not match!",

@@ -92,7 +92,7 @@ export default function UserRegisterForm() {
       .max(16, "You must enter at most 16 characters!"),
     reenter_password: string().min(1, "Field is required!"),
     bio: string()
-      .min(300, "Enter atleast 300 characters!")
+      .min(200, "Enter atleast 200 characters!")
       .max(2000, "Max characters reached!"),
   }).refine((obj) => obj.password === obj.reenter_password, {
     message: "Passwords do not match!",

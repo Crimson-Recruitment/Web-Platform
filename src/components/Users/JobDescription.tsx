@@ -106,7 +106,7 @@ function JobDescription(props: {
           Salary (Annual in USD)
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {hideSalary === "on" ? (
+          {hideSalary === true ? (
             <div className="flex">
               <span
                 className="text-center me-3"
