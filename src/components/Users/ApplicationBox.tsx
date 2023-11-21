@@ -12,6 +12,8 @@ import {
   Snackbar,
   SnackbarCloseReason,
 } from "@mui/material";
+import { ApplicationsModel } from "../../Models/ApplicationsModel";
+import { ApplicationApplyModel } from "../../Models/ApplicationApplyModel";
 
 export default function ApplicationBox(props: {
   needCoverLetter: any;
@@ -44,8 +46,19 @@ export default function ApplicationBox(props: {
     setOpen(false);
   };
 
-  const submitHandler = async () => {
+  const submitHandler = async (e:any) => {
     setLoading(true);
+    let val: any = document.getElementById("coverLetter");
+    if(val.value == "") {
+      handleClick({message:"Please add a cover letter!", type:"error"})
+      return;
+    }
+    if (val.value.length < 200) {
+      handleClick({message:"Please enter atleast 200 characters!", type:"error"})
+      return;
+    }
+    let application: ApplicationApplyModel = {coverLetter:val.value}
+    console.log(application);
     setLoading(false);
   };
 
@@ -67,6 +80,7 @@ export default function ApplicationBox(props: {
               <TextField
                 required
                 id="coverLetter"
+                name="coverLetter"
                 multiline
                 rows={4}
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
