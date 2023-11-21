@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
 import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
 import { JobsModel } from "../../../Models/JobsModel";
-import { jobs } from "../../../Data/DummyData";
 import ApplicationJobCard from "../../../components/Companies/ApplicationJobCard";
+import { getCompanyJobs } from "../../../core/api";
 
 function CompanyApplications() {
-  const [applications, setApplications] = useState<Array<JobsModel>>([]);
+  const [jobs, setJobs] = useState<Array<JobsModel>>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
   const [calendarAccess, setCalendarAccess] = useState(false);
@@ -38,16 +38,19 @@ function CompanyApplications() {
     }
   };
 
-  const updateHandler = async (applicationId: number, status: string) => {};
-
   useEffect(() => {
-    setApplications(jobs);
+    (async() => {
+      const jobArray = await getCompanyJobs();
+      setJobs(jobArray);
+      setLoading(false);
+    })()
+    
   }, []);
 
   return (
     <Box>
       <div className="xs:min-h-[120vh]  min-h-[120vh] ms-2">
-        {!loading ? (
+        {loading ? (
           <div className="flex justify-center mt-12">
             <GridLoader
               height="130"
@@ -60,16 +63,16 @@ function CompanyApplications() {
               visible={true}
             />
           </div>
-        ) : applications !== null ? (
+        ) : jobs !== null ? (
           <>
-            {jobs.map((application: JobsModel, index: number) => {
+            {jobs.map((job: JobsModel, index: number) => {
               return (
                 <div role="button" onClick={() => expandedHandler(index)}>
                   <ApplicationJobCard
-                    title={application.jobTitle}
-                    timestamp={application.timestamp}
+                    title={job.jobTitle}
+                    timestamp={job.timestamp}
                     applications={() =>
-                      navigate(`/company-applications/${application.id}`)
+                      navigate(`/company-applications/${job.id}`)
                     }
                   />
                 </div>

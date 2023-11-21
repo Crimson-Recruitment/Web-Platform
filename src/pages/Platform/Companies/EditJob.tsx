@@ -120,9 +120,7 @@ export const EditJob = () => {
     resolver: zodResolver(validationSchema),
     defaultValues: {
       ...jobs.jobsList.filter((val: any) => val.id == id)[0],
-      expiryDate: new Date(
-        jobs.jobsList.filter((val: any) => val.id == id)[0].expiryDate,
-      ).toISOString(),
+      expiryDate: "",
     },
   });
 
@@ -135,7 +133,7 @@ export const EditJob = () => {
       });
       dispatch({ type: "SET_LOADING", payload: false });
       return;
-    } else if (state.location == "") {
+    } else if (location.location == "") {
       handleClick({ type: "error", message: "Please enter the job location!" });
       dispatch({ type: "SET_LOADING", payload: false });
       return;
@@ -191,7 +189,8 @@ export const EditJob = () => {
             .skills?.includes(skill.label),
       ),
     });
-  }, []);
+    console.log(state)
+  }, [benefit]);
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -555,7 +554,7 @@ export const EditJob = () => {
                         <Switch
                           checked={state.hideSalaryEdit}
                           onChange={() =>
-                            dispatch({ type: "SET_HIDE_SALARY_EDIT" })
+                            dispatch({ type: "SET_HIDE_SALARY_EDIT", payload:!state.hideSalaryEdit })
                           }
                           name="hideSalary"
                         />
@@ -636,7 +635,7 @@ export const EditJob = () => {
                         <Switch
                           checked={state.requestCoverLetterEdit}
                           onChange={() =>
-                            dispatch({ type: "SET_REQUEST_COVER_LETTER_EDIT" })
+                            dispatch({ type: "SET_REQUEST_COVER_LETTER_EDIT", payload:!state.requestCoverLetterEdit })
                           }
                           name="requestCoverLetter"
                         />

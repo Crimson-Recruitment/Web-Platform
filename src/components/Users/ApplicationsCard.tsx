@@ -61,9 +61,6 @@ const ApplicationCard = (props: {
       >
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom>
-            Applicant: {applicant}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
             Job: {jobName}
           </Typography>
           <Typography variant="body2" color="text.secondary">

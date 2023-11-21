@@ -210,7 +210,7 @@ function CompanyJobs() {
       let mes: string = res?.data?.message;
       handleClick({
         type: "error",
-        message: (mes.indexOf(":") + 1).toString(),
+        message: mes,
       });
     }
     dispatch({ type: "SET_LOADING", payload: false });

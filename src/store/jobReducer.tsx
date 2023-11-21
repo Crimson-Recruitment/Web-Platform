@@ -87,11 +87,11 @@ export const editJobReducer = (state = editJobInitialState, action: any) => {
     case "SET_MESSAGE":
       return { ...state, message: action.payload };
     case "SET_HIDE_SALARY_EDIT":
-      return { ...state, hideSalaryEdit: !state.hideSalaryEdit };
+      return { ...state, hideSalaryEdit: action.payload };
     case "SET_REQUEST_COVER_LETTER_EDIT":
       return {
         ...state,
-        requestCoverLetterEdit: !state.requestCoverLetterEdit,
+        requestCoverLetterEdit: action.payload,
       };
 
     default:

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
 import ApplicationsCard from "../../../components/Users/ApplicationsCard";
 import { applications as dApplications } from "../../../Data/DummyData";
+import { getUserApplications } from "../../../core/applicationApi";
 
 function Applications() {
   const [applications, setApplications] = useState<Array<ApplicationsModel>>(
@@ -14,6 +15,7 @@ function Applications() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const user:any = JSON.parse(sessionStorage.getItem("user")!)
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -27,7 +29,10 @@ function Applications() {
   };
 
   useEffect(() => {
-    setApplications(dApplications);
+    (async()=> {
+      let applications = await getUserApplications();
+      setApplications(applications);
+    })()
   }, []);
   return (
     <Box>
@@ -48,14 +53,14 @@ function Applications() {
         applications !== null &&
         applications.length > 0 && (
           <>
-            {applications.map((application: ApplicationsModel) => (
+            {applications.map((application:any) => (
               <ApplicationsCard
-                key={application.id} // Don't forget to add a unique key for each element in the array
-                applicant={application.firstName}
-                jobName={application.jobName}
-                timeOfApplication={application.timeOfApplication}
-                applicationStatus={application.applicationStatus}
-                resumePath={application.resume}
+                key={application.user.id} // Don't forget to add a unique key for each element in the array
+                applicant={application.user.firstName}
+                jobName={application.job.jobTitle}
+                timeOfApplication={new Date(application.timeStamp).toDateString()}
+                applicationStatus={application.status}
+                resumePath={application.user.cv}
               />
             ))}
           </>

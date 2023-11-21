@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { ApplicationsModel } from "../../Models/ApplicationsModel";
 import { ApplicationApplyModel } from "../../Models/ApplicationApplyModel";
+import { createApplication } from "../../core/applicationApi";
 
 export default function ApplicationBox(props: {
   needCoverLetter: any;
@@ -48,17 +49,31 @@ export default function ApplicationBox(props: {
 
   const submitHandler = async (e:any) => {
     setLoading(true);
-    let val: any = document.getElementById("coverLetter");
-    if(val.value == "") {
-      handleClick({message:"Please add a cover letter!", type:"error"})
-      return;
-    }
-    if (val.value.length < 200) {
-      handleClick({message:"Please enter atleast 200 characters!", type:"error"})
-      return;
-    }
-    let application: ApplicationApplyModel = {coverLetter:val.value}
+    if(needCoverLetter) {
+      let val: any = document.getElementById("coverLetter");
+      if(val.value == "") {
+        handleClick({message:"Please add a cover letter!", type:"error"})
+        return;
+      }
+      if (val.value.length < 200) {
+        handleClick({message:"Please enter atleast 200 characters!", type:"error"})
+        return;
+      }
+      let application: ApplicationApplyModel = {coverLetter:val.value, timeStamp:new Date().toISOString()}
     console.log(application);
+    let res = await createApplication(application, jobId);
+    if (res.status == 200) {
+      handleClick({message:"You have applied to the job, cheers!", type:"success"});
+      setOpen(false);
+    } else {
+      handleClick({message:`Error: ${res?.data?.message}`, type:"error"});
+    }
+    } else {
+      let application: ApplicationApplyModel = {coverLetter:"", timeStamp:new Date().toISOString()};
+      console.log(application)
+    }
+  
+    
     setLoading(false);
   };
 

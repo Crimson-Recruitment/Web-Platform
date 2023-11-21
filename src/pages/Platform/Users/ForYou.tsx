@@ -51,7 +51,8 @@ function ForYou() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const state = useSelector((state: any) => state.jobs);
   const dispatch = useDispatch();
-  const handleDialogOpen = () => {
+  const handleDialogOpen = (index:number) => {
+    setCurrent(index);
     setDialogOpen(true);
   };
 
@@ -140,7 +141,7 @@ function ForYou() {
                     maxSalary={job.maxSalary.toString()}
                     minSalary={job.minSalary.toString()}
                     location={job.location}
-                    dialog={handleDialogOpen}
+                    dialog={() => handleDialogOpen(index)}
                     hideSalary={job.hideSalary}
                     more={() => jobHandler(job.id!, index)}
                   />
@@ -186,10 +187,10 @@ function ForYou() {
       </Grid>
       {state.jobs.length != 0 ? (
         <ApplicationBox
-          jobId={!!state.jobs[current].id}
-          jobName={!!state.jobs[current].jobTitle}
-          companyId={!!state.jobs[current].companyId}
-          needCoverLetter={!!state.jobs[current].requestCoverLetter}
+          jobId={state.jobs[current].id}
+          jobName={state.jobs[current].jobTitle}
+          companyId={state.jobs[current].companyId}
+          needCoverLetter={state.jobs[current].requestCoverLetter}
           isOpen={dialogOpen}
           onClose={handleDialogClose}
         />
