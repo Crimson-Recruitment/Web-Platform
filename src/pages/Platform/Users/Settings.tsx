@@ -160,38 +160,6 @@ const Settings = () => {
                           {...register("email")}
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          fullWidth
-                          label="Password"
-                          type="password"
-                          id="password"
-                          error={!!errors["password"]}
-                          helperText={
-                            errors["password"] ? errors["password"].message : ""
-                          }
-                          {...register("password")}
-                          autoComplete="new-password"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          fullWidth
-                          label="Re-Enter Password"
-                          type="password"
-                          id="reenter_password"
-                          error={!!errors["reenter_password"]}
-                          helperText={
-                            errors["reenter_password"]
-                              ? errors["reenter_password"].message
-                              : ""
-                          }
-                          {...register("reenter_password")}
-                          autoComplete="new-password"
-                        />
-                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>

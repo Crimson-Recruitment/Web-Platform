@@ -16,9 +16,11 @@ import Avatar from "@mui/material/Avatar";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import { Menu, MenuItem } from "@mui/material";
+import { userModel } from "../../../Models/UserModel";
 
 const Profile = () => {
   const skills = ["JavaScript", "React.js", "Node.js", "HTML", "CSS"];
+  const profile:userModel = JSON.parse(sessionStorage.getItem("user")!);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -94,7 +96,7 @@ const Profile = () => {
               >
                 <Avatar
                   alt="Bonnie image"
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  src={profile.profileImage}
                   sx={{ width: 150, height: 150, mb: 3, boxShadow: 8 }}
                 />
                 <Typography
@@ -104,10 +106,10 @@ const Profile = () => {
                   fontWeight="medium"
                   color="text.primary"
                 >
-                  Bonnie Green
+                  {profile.firstName} {profile.lastName}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Visual Designer
+                  {profile.jobTitle}
                 </Typography>
                 <Box display="flex" mt={4} justifyContent="center">
                   <Button variant="outlined" color="primary">
@@ -130,7 +132,7 @@ const Profile = () => {
                     Full Name
                   </Typography>
                   <Typography variant="body1" color="textPrimary">
-                    Johnatan Smith
+                  {profile.firstName} {profile.lastName}
                   </Typography>
                 </Box>
                 <hr />
@@ -143,7 +145,7 @@ const Profile = () => {
                     Email
                   </Typography>
                   <Typography variant="body1" color="textPrimary">
-                    example@example.com
+                    {profile.email}
                   </Typography>
                 </Box>
                 <hr />
@@ -156,20 +158,7 @@ const Profile = () => {
                     Phone
                   </Typography>
                   <Typography variant="body1" color="textPrimary">
-                    (097) 234-5678
-                  </Typography>
-                </Box>
-                <hr />
-                <Box>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    Mobile
-                  </Typography>
-                  <Typography variant="body1" color="textPrimary">
-                    (098) 765-4321
+                    {profile.phoneNumber}
                   </Typography>
                 </Box>
                 <hr />
@@ -182,14 +171,14 @@ const Profile = () => {
                     Address
                   </Typography>
                   <Typography variant="body1" color="textPrimary">
-                    Bay Area, San Francisco, CA
+                    {profile.location}
                   </Typography>
                 </Box>
               </CardContent>
             </Card>
 
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6}>
                 <Card
                   variant="outlined"
                   sx={{ mb: 4, maxWidth: { md: 400, xs: "100%" } }}
@@ -199,7 +188,7 @@ const Profile = () => {
                       Skills
                     </Typography>
                     <List>
-                      {skills.map((skill, index) => (
+                      {profile.skills.map((skill, index) => (
                         <ListItem key={index} disablePadding>
                           <ListItemText primary={skill} />
                         </ListItem>
@@ -208,22 +197,18 @@ const Profile = () => {
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6}>
                 <Card
                   variant="outlined"
                   sx={{ mb: 4, maxWidth: { md: 400, xs: "100%" } }}
                 >
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
-                      Skills
+                      About
                     </Typography>
-                    <List>
-                      {skills.map((skill, index) => (
-                        <ListItem key={index} disablePadding>
-                          <ListItemText primary={skill} />
-                        </ListItem>
-                      ))}
-                    </List>
+                    <Typography component="pre" variant="body1" className="font-italic mb-1" sx={{ whiteSpace: "pre-wrap" }}>
+                      {profile.bio}
+                    </Typography>
                   </CardContent>
                 </Card>
               </Grid>

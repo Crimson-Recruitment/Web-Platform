@@ -1,4 +1,4 @@
-import { CardMedia } from "@mui/material";
+import { Avatar, CardMedia } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,10 +8,12 @@ import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Person, peopleData } from "../../../Data/DummyData";
+import { CompanyModel } from "../../../Models/companyModel";
 
 const CompanyProfile = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
+  const profile:CompanyModel = JSON.parse(sessionStorage.getItem("company")!);
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -57,27 +59,27 @@ const CompanyProfile = () => {
                     width: "200px",
                   }}
                 >
-                  <CardMedia
-                    component="img"
+                  <Avatar
                     alt="Profile Image"
-                    height="300"
-                    image="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
-                    style={{
+                    src={profile.profileImage}
+                    sx={{
                       width: "200px",
+                      height:"200px",
                       zIndex: "1",
-                      borderRadius: "10px",
+                      borderRadius: 0,
                     }}
                   />
                   <Box sx={{ marginLeft: "16px", marginTop: "16px" }}>
                     <Typography variant="h6" color="white">
-                      Beauty Delights
+                      {profile.companyName}
                     </Typography>
                     <Typography
                       variant="body1"
-                      sx={{ marginBottom: "10px" }}
+                      component={"pre"}
+                      sx={{ marginBottom: "10px",  }}
                       color="lightgray"
                     >
-                      New York, USA
+                      {profile.location}
                     </Typography>
                   </Box>
                 </Box>
@@ -88,14 +90,8 @@ const CompanyProfile = () => {
                     About
                   </Typography>
                   <Box sx={{ bgcolor: "#f8f9fa", p: 4 }}>
-                    <Typography variant="body1" className="font-italic mb-1">
-                      Web Developer
-                    </Typography>
-                    <Typography variant="body1" className="font-italic mb-1">
-                      Lives in New York
-                    </Typography>
-                    <Typography variant="body1" className="font-italic mb-0">
-                      Photographer
+                    <Typography component="pre" variant="body1" className="font-italic mb-1" sx={{ whiteSpace: "pre-wrap" }}>
+                      {profile.overview}
                     </Typography>
                   </Box>
                 </Box>
