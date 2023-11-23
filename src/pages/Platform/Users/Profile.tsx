@@ -48,45 +48,8 @@ const Profile = () => {
           >
             <Box width="100%" maxWidth="sm" bgcolor="white" borderRadius={8}>
               <Box display="flex" justifyContent="flex-end" p={4}>
-                <Button
-                  id="dropdownButton"
-                  aria-controls="dropdown"
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                  variant="outlined"
-                  color="primary"
-                  sx={{
-                    "&:hover": {
-                      bgcolor: "primary.light",
-                    },
-                  }}
-                >
-                  <span style={{ display: "none" }}>Open dropdown</span>
-                  <svg
-                    className="w-5 h-5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 16 3"
-                  >
-                    <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                  </svg>
-                </Button>
-                <Menu
-                  id="dropdown"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  transformOrigin={{ vertical: "top", horizontal: "right" }}
-                >
-                  <MenuItem onClick={handleClose}>Edit</MenuItem>
-                  <MenuItem onClick={handleClose}>Export Data</MenuItem>
-                  <MenuItem onClick={handleClose} sx={{ color: "red.600" }}>
-                    Delete
-                  </MenuItem>
-                </Menu>
+            
+        
               </Box>
               <Box
                 display="flex"

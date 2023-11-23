@@ -1,12 +1,21 @@
 import {
+  Alert,
+  Autocomplete,
+  AutocompleteInputChangeReason,
   Avatar,
   Box,
+  Checkbox,
+  FormLabel,
   List,
   ListItemButton,
   ListItemText,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -21,29 +30,60 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import MuiPhoneNumber from "material-ui-phone-number";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LocationSearchInput from "../../../components/LocationInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
+import { StyledDropzone, StyledIcon, StyledLabel } from "../../../Styles/form";
+import { professionList, skills } from "../../../Data/UserProfessions";
+import { checkDocumentSize, checkImageSize } from "../../../Functions/utils";
+import { updateUser } from "../../../core/userApi";
+import { UserUpdateModel } from "../../../Models/UserUpdateModel";
 
 const Settings = () => {
   const [tabValue, setTabValue] = React.useState("account");
+  const user = useSelector((state: any) => state.userRegister);
+  const location = useSelector((state: any) => state.location);
+  const dispatch = useDispatch();
+  const profile = JSON.parse(sessionStorage.getItem("user")!);
+  const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const validationSchema = object({
     firstName: string().min(1, "Field is required!"),
     lastName: string().min(1, "Field is required!"),
-    email: string().email("Email is invalid!").min(1, "Field is required!"),
-    password: string()
-      .min(5, "You must enter atleast 5 characters!")
-      .max(16, "You must enter at most 16 characters!"),
-    reenter_password: string(),
-    profession: string().min(1, "Field is required!"),
-    location: string().min(1, "Field is required!"),
-  }).refine(
-    (obj) => obj.password == obj.reenter_password,
-    "Passwords do not match!",
-  );
+    email: string().email("Email is invalid!"),
+    bio: string()
+    .min(200, "Enter atleast 200 characters!")
+    .max(2000, "Max characters reached!"),
+  })
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        dispatch({
+          type: "SET_PROFILE_IMAGE",
+          payload: reader.result as string,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<{}>,
+    value: string,
+    reason: AutocompleteInputChangeReason,
+  ) => {
+    if (value.length !== 0) {
+      dispatch({ type: "SET_PROFESSION", payload: value });
+    }
+  };
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
 
@@ -56,6 +96,42 @@ const Settings = () => {
   const handleTabChange = (event: any, newValue: string) => {
     setTabValue(newValue);
   };
+
+  const onSubmitHandler:SubmitHandler<SignUpSchemaType> =async (values) => {
+    console.log(user.profession);
+    if (user.phoneNumber == "") {
+      setMessage("You haven't entered your phone number!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    } else if (user.profession == null) {
+      setMessage("You haven't entered your profession!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    } else if (location.location == "") {
+      setMessage("You haven't entered your location!");
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+    try {
+      checkImageSize(user.profileImage);
+    } catch (e: any) {
+      setMessage(e.message);
+      setOpen(true);
+    }
+    let val :UserUpdateModel = {...values,skills:user.skills.map((skill: any) => skill.label), location:location.location, profileImage:"image", jobTitle:user.profession.label,phoneNumber:user.phoneNumber};
+    let res = await updateUser(val);
+    if(res.result == "success") {
+      navigate(0);
+    }
+    sessionStorage.setItem("user",JSON.stringify(res.user))
+    setMessage("Couldn't update user, try again later!");
+      setOpen(true);
+      setLoading(false);
+   
+  }
 
   const manageViews = (value: string) => {
     switch (value) {
@@ -73,9 +149,9 @@ const Settings = () => {
           >
             <CardHeader title="Public info" />
             <CardContent>
-              <form>
+              <Box component="form" noValidate={true} onSubmit={handleSubmit(onSubmitHandler)}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
+                  <Grid item xs={12} md={5}>
                     <Box
                       sx={{
                         display: "flex",
@@ -83,21 +159,50 @@ const Settings = () => {
                         alignItems: "center",
                       }}
                     >
-                      <Avatar
-                        src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                        sx={{ height: "150px", width: "150px" }}
-                      />
-                      <div className="mt-2">
-                        <span className="btn btn-primary">
-                          <input
-                            type="file"
-                            className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                          />
-                        </span>
-                      </div>
+                <>
+              {user.profileImage ? (
+                <div className="flex justify-center mb-5">
+                  <Avatar
+                    alt="Uploaded Image"
+                    src={user.profileImage}
+                    sx={{ height: "200px", width: "200px" }}
+                  />
+                </div>
+              ) : (
+                <StyledDropzone>
+                  <StyledLabel htmlFor="dropzone-file">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <StyledIcon
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        {/* ... Your SVG path */}
+                      </StyledIcon>
+                      <p className="mb-2 text-sm text-gray-500">
+                        <span className="font-semibold">Click to upload</span>{" "}
+                        or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        JPEG, PNG, or JPG (3mbs max)
+                      </p>
+                    </div>
+                  </StyledLabel>
+                </StyledDropzone>
+              )}
+              <input
+                onChange={handleFileChange}
+                required={user.profileImage !== null ? false : true}
+                id="dropzone-file"
+                type="file"
+                accept=".jpeg, .png, .jpg"
+                className="block mt-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+              />
+            </>
                     </Box>
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item md={7}>
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>
                         <TextField
@@ -131,16 +236,69 @@ const Settings = () => {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <MuiPhoneNumber
-                          required={true}
-                          onChange={() => null}
+                <FormControl fullWidth margin="normal">
+                  <Autocomplete
+                    id="profession"
+                    options={professionList}
+                    getOptionLabel={(option) => option.label || ""}
+                    inputValue={user.profession?.label || ""}
+                    onInputChange={handleInputChange}
+                    onChange={(_, value) =>
+                      dispatch({ type: "SET_PROFESSION", payload: value })
+                    }
+                    renderInput={(params) => (
+                      <>
+                        <TextField
+                          {...params}
+                          label="Profession"
                           variant="outlined"
-                          id="phonenumber"
-                          label="Phone Number"
-                          name="phonenumber"
-                          fullWidth
-                          defaultCountry={"ug"}
                         />
+                      </>
+                    )}
+                  />
+                </FormControl>
+                <Grid item xs={12}>
+                      <Autocomplete
+                multiple
+                id="skills"
+                options={skills}
+                getOptionLabel={(option) => option.label || ""}
+                value={user.skills} // Replace with your actual selected values state
+                onChange={(_, values) =>
+                  dispatch({ type: "SET_SKILLS", payload: values })
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Skills" variant="outlined" />
+                )}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                      checkedIcon={<CheckBoxIcon fontSize="small" />}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.label}
+                  </li>
+                )}
+              />
+                      </Grid>
+              
+                      </Grid>
+                      <Grid item xs={12}>
+                      <MuiPhoneNumber
+                    required={true}
+                    value={user.phoneNumber}
+                    onChange={(val) =>
+                      dispatch({ type: "SET_PHONENUMBER", payload: val })
+                    }
+                    variant="outlined"
+                    id="phonenumber"
+                    label="Phone Number"
+                    name="phonenumber"
+                    fullWidth
+                    defaultCountry={"ug"}
+                  />
                       </Grid>
                       <Grid item xs={12}>
                         <LocationSearchInput />
@@ -160,6 +318,22 @@ const Settings = () => {
                           {...register("email")}
                         />
                       </Grid>
+                      <Grid item xs={12}>
+                        <FormLabel htmlFor="about">About</FormLabel>
+                      <TextField
+                  required
+                  id="about"
+                  multiline
+                  rows={4}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
+                  placeholder="Describe yourself,..."
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors["bio"]}
+                  helperText={errors["bio"] ? errors["bio"].message : ""}
+                  {...register("bio")}
+                />
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -171,7 +345,7 @@ const Settings = () => {
                 >
                   Save changes
                 </Button>
-              </form>
+              </Box>
             </CardContent>
           </Card>
         );
@@ -189,7 +363,7 @@ const Settings = () => {
           >
             <CardHeader title="Password" />
             <CardContent>
-              <form>
+              <Box component="form">
                 <FormControl fullWidth margin="normal">
                   <InputLabel htmlFor="inputPasswordCurrent">
                     Current password
@@ -219,7 +393,7 @@ const Settings = () => {
                 >
                   Save changes
                 </Button>
-              </form>
+              </Box>
             </CardContent>
           </Card>
         );
@@ -325,6 +499,11 @@ const Settings = () => {
           <div className="tab-content">{manageViews(tabValue)}</div>
         </Grid>
       </Grid>
+      <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity="error" sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
