@@ -62,14 +62,14 @@ export default function Login() {
       window.location.href = "/user-home";
     } else {
       let mes: string = res?.data?.message;
-      setMessage(mes.slice(mes.indexOf(":") + 1));
+      setMessage(mes?.slice(mes.indexOf(":") + 1) || "Unknown error occured!");
       setOpen(true);
     }
     setLoading(false);
   };
 
   return (
-    <Grid container component="main" sx={{ minHeight: { lg: "90vh" } }}>
+    <Grid container component="main" sx={{ minHeight: "90vh" }}>
       <CssBaseline />
       <Grid item md={4} component={Paper} elevation={6} square>
         <Box

@@ -63,7 +63,7 @@ export default function CompanyLogin() {
       window.location.href = "/company-home";
     } else {
       let mes: string = res?.data?.message;
-      setMessage(mes.slice(mes.indexOf(":") + 1));
+      setMessage(mes.slice(mes?.indexOf(":") + 1) || "Unknown error occured!");
       setOpen(true);
     }
     setLoading(false);
