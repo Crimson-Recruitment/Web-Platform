@@ -18,6 +18,8 @@ export const userLogin = async ({
       {
         headers: {
           "Content-Type": "application/json",
+          "AllowedOrigins":"*",
+          "Access-Control-Allow-Origin":"*"
         },
       },
     );
@@ -164,7 +166,7 @@ export const updateJob = async (job: JobsModel, id: any) => {
 
 export const getAllJobs = async () => {
   try {
-    const response = await AxiosInstance.get(`${baseUrl}/jobs/all`, {
+    const response = await axios.get(`${baseUrl}/jobs/all`, {
       headers: {
         "Content-Type": "application/json",
       },
