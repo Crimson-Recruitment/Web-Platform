@@ -99,10 +99,10 @@ const HomeHero = () => {
                     fontSize: "25px",
                   }}
                 >
-                  Discover your path to professional greatness with Jade. As a
+                  Discover your path to professional greatness with Crimson. As a
                   leading recruitment company, we connect talented individuals
                   with exceptional opportunities. Let us be your trusted partner
-                  in achieving your career goals. Join Jade today and unlock
+                  in achieving your career goals. Join Crimson today and unlock
                   your potential for success.
                 </Typography>
               </Box>

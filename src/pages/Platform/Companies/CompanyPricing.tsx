@@ -99,7 +99,7 @@ export default function CompanyPricing() {
         >
           We offer flexible pricing options designed to cater to your unique
           hiring needs. Whether you're a startup, a small business, or an
-          established enterprise, Jade Recruitment has a plan that fits just
+          established enterprise, Crimson Recruitment has a plan that fits just
           right, empowering you to build your dream team without breaking the
           bank.
         </Typography>
