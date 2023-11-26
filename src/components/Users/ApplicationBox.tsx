@@ -47,33 +47,44 @@ export default function ApplicationBox(props: {
     setOpen(false);
   };
 
-  const submitHandler = async (e:any) => {
+  const submitHandler = async (e: any) => {
     setLoading(true);
-    if(needCoverLetter) {
+    if (needCoverLetter) {
       let val: any = document.getElementById("coverLetter");
-      if(val.value == "") {
-        handleClick({message:"Please add a cover letter!", type:"error"})
+      if (val.value == "") {
+        handleClick({ message: "Please add a cover letter!", type: "error" });
         return;
       }
       if (val.value.length < 200) {
-        handleClick({message:"Please enter atleast 200 characters!", type:"error"})
+        handleClick({
+          message: "Please enter atleast 200 characters!",
+          type: "error",
+        });
         return;
       }
-      let application: ApplicationApplyModel = {coverLetter:val.value, timeStamp:new Date().toISOString()}
-    console.log(application);
-    let res = await createApplication(application, jobId);
-    if (res.status == 200) {
-      handleClick({message:"You have applied to the job, cheers!", type:"success"});
-      setOpen(false);
+      let application: ApplicationApplyModel = {
+        coverLetter: val.value,
+        timeStamp: new Date().toISOString(),
+      };
+      console.log(application);
+      let res = await createApplication(application, jobId);
+      if (res.status == 200) {
+        handleClick({
+          message: "You have applied to the job, cheers!",
+          type: "success",
+        });
+        setOpen(false);
+      } else {
+        handleClick({ message: `Error: ${res?.data?.message}`, type: "error" });
+      }
     } else {
-      handleClick({message:`Error: ${res?.data?.message}`, type:"error"});
+      let application: ApplicationApplyModel = {
+        coverLetter: "",
+        timeStamp: new Date().toISOString(),
+      };
+      console.log(application);
     }
-    } else {
-      let application: ApplicationApplyModel = {coverLetter:"", timeStamp:new Date().toISOString()};
-      console.log(application)
-    }
-  
-    
+
     setLoading(false);
   };
 

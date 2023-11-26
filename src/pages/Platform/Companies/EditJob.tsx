@@ -189,7 +189,7 @@ export const EditJob = () => {
             .skills?.includes(skill.label),
       ),
     });
-    console.log(state)
+    console.log(state);
   }, [benefit]);
   return (
     <Box
@@ -554,7 +554,10 @@ export const EditJob = () => {
                         <Switch
                           checked={state.hideSalaryEdit}
                           onChange={() =>
-                            dispatch({ type: "SET_HIDE_SALARY_EDIT", payload:!state.hideSalaryEdit })
+                            dispatch({
+                              type: "SET_HIDE_SALARY_EDIT",
+                              payload: !state.hideSalaryEdit,
+                            })
                           }
                           name="hideSalary"
                         />
@@ -635,7 +638,10 @@ export const EditJob = () => {
                         <Switch
                           checked={state.requestCoverLetterEdit}
                           onChange={() =>
-                            dispatch({ type: "SET_REQUEST_COVER_LETTER_EDIT", payload:!state.requestCoverLetterEdit })
+                            dispatch({
+                              type: "SET_REQUEST_COVER_LETTER_EDIT",
+                              payload: !state.requestCoverLetterEdit,
+                            })
                           }
                           name="requestCoverLetter"
                         />

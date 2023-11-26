@@ -51,7 +51,7 @@ function ForYou() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const state = useSelector((state: any) => state.jobs);
   const dispatch = useDispatch();
-  const handleDialogOpen = (index:number) => {
+  const handleDialogOpen = (index: number) => {
     setCurrent(index);
     setDialogOpen(true);
   };

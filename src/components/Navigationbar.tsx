@@ -149,7 +149,18 @@ function NavigationBar() {
                   color="inherit"
                   sx={{ p: 0 }}
                 >
-                  <Avatar alt="Remy Sharp" src={""} />
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={
+                      sessionStorage.getItem("user")
+                        ? JSON.parse(sessionStorage.getItem("user")!)
+                            .profileImage
+                        : sessionStorage.getItem("company")
+                          ? JSON.parse(sessionStorage.getItem("company")!)
+                              .profileImage
+                          : ""
+                    }
+                  />
                 </IconButton>
               </Tooltip>
               <Menu

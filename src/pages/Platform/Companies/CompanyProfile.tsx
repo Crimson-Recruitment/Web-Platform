@@ -13,7 +13,7 @@ import { CompanyModel } from "../../../Models/companyModel";
 const CompanyProfile = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
-  const profile:CompanyModel = JSON.parse(sessionStorage.getItem("company")!);
+  const profile: CompanyModel = JSON.parse(sessionStorage.getItem("company")!);
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -64,7 +64,7 @@ const CompanyProfile = () => {
                     src={profile.profileImage}
                     sx={{
                       width: "200px",
-                      height:"200px",
+                      height: "200px",
                       zIndex: "1",
                       borderRadius: 0,
                     }}
@@ -76,7 +76,7 @@ const CompanyProfile = () => {
                     <Typography
                       variant="body1"
                       component={"pre"}
-                      sx={{ marginBottom: "10px",  }}
+                      sx={{ marginBottom: "10px" }}
                       color="lightgray"
                     >
                       {profile.location}
@@ -90,7 +90,12 @@ const CompanyProfile = () => {
                     About
                   </Typography>
                   <Box sx={{ bgcolor: "#f8f9fa", p: 4 }}>
-                    <Typography component="pre" variant="body1" className="font-italic mb-1" sx={{ whiteSpace: "pre-wrap" }}>
+                    <Typography
+                      component="pre"
+                      variant="body1"
+                      className="font-italic mb-1"
+                      sx={{ whiteSpace: "pre-wrap" }}
+                    >
                       {profile.overview}
                     </Typography>
                   </Box>

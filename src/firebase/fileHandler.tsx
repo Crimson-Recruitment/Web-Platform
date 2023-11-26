@@ -1,14 +1,23 @@
 import { db } from "./config";
-import { uploadBytes, getDownloadURL, ref, deleteObject } from "firebase/storage";
+import {
+  uploadBytes,
+  getDownloadURL,
+  ref,
+  deleteObject,
+} from "firebase/storage";
 
 interface StorageResult {
   code: number | null;
   val: any;
 }
 
-export default class Storage {
-  getFileUrl = async (id: string, imageData: Uint8Array): Promise<StorageResult> => {
+export default class FirebaseStorage {
+  static getFileUrl = async (
+    id: string,
+    imageData: any,
+  ): Promise<StorageResult> => {
     let result: StorageResult = { code: null, val: null };
+    console.log(id);
     const storageRef = ref(db, id);
 
     try {
@@ -22,7 +31,7 @@ export default class Storage {
     return result;
   };
 
-  deleteFile = async (id: string): Promise<StorageResult> => {
+  static deleteFile = async (id: string): Promise<StorageResult> => {
     let result: StorageResult = { code: null, val: null };
     const storageRef = ref(db, id);
 

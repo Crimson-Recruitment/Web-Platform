@@ -22,11 +22,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string, z } from "zod";
 import { industries } from "../../Data/CompanyIndustries";
-import { checkImageSize } from "../../Functions/utils";
+import { checkImageSize, generateRandomString } from "../../Functions/utils";
 import { CompanyModel } from "../../Models/companyModel";
 import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
 import { companyRegister } from "../../core/api";
 import LocationSearchInput from "../LocationInput";
+import FirebaseStorage from "../../firebase/fileHandler";
 
 const steps = ["Contact info", "Company details", "Company Logo"];
 
@@ -128,9 +129,35 @@ export default function CompanyRegisterForm() {
       setLoading(false);
       return;
     }
+    const base64Data = company.profileImage.replace(
+      /^data:image\/(png|jpeg|jpg);base64,/,
+      "",
+    );
+
+    const binaryString = atob(base64Data);
+
+    // Convert binary data to ArrayBuffer
+    const arrayBuffer = new ArrayBuffer(binaryString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < binaryString.length; i++) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
+
+    let ranString = generateRandomString();
+
+    let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
+    let picUrl: string = "";
+    if (pic.code == 0) {
+      picUrl = pic.val;
+    } else {
+      setMessage(pic.val.message);
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
     let newValues: CompanyModel = {
       ...values,
-      profileImage: "image string",
+      profileImage: picUrl,
       location: location.location,
       category: company.category.label,
       primaryPhoneNumber: company.primaryPhoneNumber,

@@ -38,7 +38,7 @@ function Jobs() {
   };
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
-  const handleDialogOpen = (index:number) => {
+  const handleDialogOpen = (index: number) => {
     setCurrent(index);
     setDialogOpen(true);
   };

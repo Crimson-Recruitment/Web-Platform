@@ -20,7 +20,7 @@ import { userModel } from "../../../Models/UserModel";
 
 const Profile = () => {
   const skills = ["JavaScript", "React.js", "Node.js", "HTML", "CSS"];
-  const profile:userModel = JSON.parse(sessionStorage.getItem("user")!);
+  const profile: userModel = JSON.parse(sessionStorage.getItem("user")!);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -47,10 +47,7 @@ const Profile = () => {
             }}
           >
             <Box width="100%" maxWidth="sm" bgcolor="white" borderRadius={8}>
-              <Box display="flex" justifyContent="flex-end" p={4}>
-            
-        
-              </Box>
+              <Box display="flex" justifyContent="flex-end" p={4}></Box>
               <Box
                 display="flex"
                 flexDirection="column"
@@ -75,7 +72,11 @@ const Profile = () => {
                   {profile.jobTitle}
                 </Typography>
                 <Box display="flex" mt={4} justifyContent="center">
-                  <Button variant="outlined" color="primary">
+                  <Button
+                    variant="outlined"
+                    onClick={() => window.open(profile.cv + ".pdf", "_blank")}
+                    color="primary"
+                  >
                     View Resume
                   </Button>
                 </Box>
@@ -95,7 +96,7 @@ const Profile = () => {
                     Full Name
                   </Typography>
                   <Typography variant="body1" color="textPrimary">
-                  {profile.firstName} {profile.lastName}
+                    {profile.firstName} {profile.lastName}
                   </Typography>
                 </Box>
                 <hr />
@@ -169,7 +170,12 @@ const Profile = () => {
                     <Typography variant="h6" gutterBottom>
                       About
                     </Typography>
-                    <Typography component="pre" variant="body1" className="font-italic mb-1" sx={{ whiteSpace: "pre-wrap" }}>
+                    <Typography
+                      component="pre"
+                      variant="body1"
+                      className="font-italic mb-1"
+                      sx={{ whiteSpace: "pre-wrap" }}
+                    >
                       {profile.bio}
                     </Typography>
                   </CardContent>

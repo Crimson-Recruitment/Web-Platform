@@ -1,5 +1,5 @@
 export interface ApplicationApplyModel {
-    coverLetter?: string;
-    status?: string;
-    timeStamp: string;
+  coverLetter?: string;
+  status?: string;
+  timeStamp: string;
 }

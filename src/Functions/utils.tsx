@@ -27,3 +27,39 @@ export function checkDocumentSize(document: File): void {
     throw new Error("Resume size exceeds 2 megabytes.");
   }
 }
+
+export function generateRandomString(): string {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+
+  for (let i = 0; i < 8; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
+
+export async function fileToUint8Array(file: File): Promise<Uint8Array> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const result = event.target?.result;
+
+      if (result instanceof ArrayBuffer) {
+        const uint8Array = new Uint8Array(result);
+        resolve(uint8Array);
+      } else {
+        reject(new Error("Failed to read file as ArrayBuffer."));
+      }
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+}

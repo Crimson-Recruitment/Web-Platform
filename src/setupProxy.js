@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/api/v1",
     createProxyMiddleware({
-      target: "http://localhost:8081",
+      target: "https://di344jdqvl.execute-api.us-east-1.amazonaws.com/prod/",
       changeOrigin: true,
     }),
   );

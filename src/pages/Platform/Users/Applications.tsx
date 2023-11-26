@@ -15,7 +15,7 @@ function Applications() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const user:any = JSON.parse(sessionStorage.getItem("user")!)
+  const user: any = JSON.parse(sessionStorage.getItem("user")!);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -29,10 +29,10 @@ function Applications() {
   };
 
   useEffect(() => {
-    (async()=> {
+    (async () => {
       let applications = await getUserApplications();
       setApplications(applications);
-    })()
+    })();
   }, []);
   return (
     <Box>
@@ -53,12 +53,14 @@ function Applications() {
         applications !== null &&
         applications.length > 0 && (
           <>
-            {applications.map((application:any) => (
+            {applications.map((application: any) => (
               <ApplicationsCard
                 key={application.user.id} // Don't forget to add a unique key for each element in the array
                 applicant={application.user.firstName}
                 jobName={application.job.jobTitle}
-                timeOfApplication={new Date(application.timeStamp).toDateString()}
+                timeOfApplication={new Date(
+                  application.timeStamp,
+                ).toDateString()}
                 applicationStatus={application.status}
                 resumePath={application.user.cv}
               />

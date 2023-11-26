@@ -35,7 +35,13 @@ import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
 import LocationSearchInput from "../LocationInput";
 import { userModel } from "../../Models/UserModel";
 import { userRegister } from "../../core/api";
-import { checkDocumentSize, checkImageSize } from "../../Functions/utils";
+import {
+  checkDocumentSize,
+  checkImageSize,
+  fileToUint8Array,
+  generateRandomString,
+} from "../../Functions/utils";
+import FirebaseStorage from "../../firebase/fileHandler";
 
 const steps = ["Contact info", "User details", "Profile Image"];
 
@@ -147,14 +153,58 @@ export default function UserRegisterForm() {
       setLoading(false);
       return;
     }
+    const base64Data = user.profileImage.replace(
+      /^data:image\/(png|jpeg|jpg);base64,/,
+      "",
+    );
+
+    const binaryString = atob(base64Data);
+
+    // Convert binary data to ArrayBuffer
+    const arrayBuffer = new ArrayBuffer(binaryString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < binaryString.length; i++) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
+
+    let resumeUintArray: Uint8Array = await fileToUint8Array(user.cv);
+
+    let ranString = generateRandomString();
+
+    let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
+    let picUrl: string = "";
+    if (pic.code == 0) {
+      picUrl = pic.val;
+    } else {
+      setMessage(pic.val.message);
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+
+    let resVal: any = await FirebaseStorage.getFileUrl(
+      `${ranString}-resume`,
+      resumeUintArray,
+    );
+    let resUrl: string = "";
+    if (resVal.code == 0) {
+      resUrl = resVal.val;
+    } else {
+      setMessage(resVal.val.message);
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+
     let newValues: userModel = {
       ...values,
-      profileImage: "image string",
-      cv: "cv string",
+      profileImage: picUrl,
+      cv: resUrl,
       jobTitle: user.profession.label,
       skills: user.skills.map((skill: any) => skill.label),
       location: location.location,
       phoneNumber: user.phoneNumber,
+      hash: ranString,
     };
     let res = await userRegister(newValues);
     if (res?.status == 200) {
@@ -386,7 +436,7 @@ export default function UserRegisterForm() {
                   id="resume"
                   type="file"
                   inputProps={{
-                    accept: ".pdf,.doc,.docx",
+                    accept: ".pdf",
                   }}
                   onChange={(val: React.ChangeEvent<HTMLInputElement>) =>
                     dispatch({

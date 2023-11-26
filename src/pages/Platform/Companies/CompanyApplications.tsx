@@ -39,12 +39,11 @@ function CompanyApplications() {
   };
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       const jobArray = await getCompanyJobs();
       setJobs(jobArray);
       setLoading(false);
-    })()
-    
+    })();
   }, []);
 
   return (

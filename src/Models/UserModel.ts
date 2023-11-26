@@ -10,4 +10,5 @@ export interface userModel {
   jobTitle: string;
   bio: string;
   password: string;
+  hash: string;
 }
