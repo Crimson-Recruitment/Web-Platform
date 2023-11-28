@@ -19,7 +19,7 @@ export const userLogin = async ({
         headers: {
           "Content-Type": "application/json",
           "AllowedOrigins":"*",
-          "Access-Control-Allow-Origin":"*"
+          "Access-Control-Allow-Origin":"http://localhost:3000"
         },
       },
     );
