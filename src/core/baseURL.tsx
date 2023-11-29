@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseUrl = "https://crimson.eu-north-1.elasticbeanstalk.com/api/v1";
+export const baseUrl = "https://crimson.onrender.com/api/v1";
 //export const baseUrl = "http://localhost:8081/api/v1";
 
 export const AxiosUserInstance = axios.create({
