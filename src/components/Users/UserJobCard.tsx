@@ -17,6 +17,7 @@ function UserJobCard(props: {
   minSalary: string;
   maxSalary: string;
   location: string;
+  otherSite?: string;
   dialog: any;
   hideSalary: any;
   more: any;
@@ -28,6 +29,7 @@ function UserJobCard(props: {
     benefits,
     maxSalary,
     minSalary,
+    otherSite,
     location,
     dialog,
     hideSalary,
@@ -51,7 +53,7 @@ function UserJobCard(props: {
   };
   useEffect(() => {
     timeHandler();
-  }, [new Date().getTime(), def]);
+  }, []);
   return (
     <div>
       <Card
@@ -126,9 +128,19 @@ function UserJobCard(props: {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={dialog} sx={{ color: "#2196f3" }}>
-            Apply Now
-          </Button>
+          {otherSite ? (
+            <Button
+              size="small"
+              onClick={() => window.open(otherSite, "_blank")}
+              sx={{ color: "#2196f3" }}
+            >
+              Go to Application
+            </Button>
+          ) : (
+            <Button size="small" onClick={dialog} sx={{ color: "#2196f3" }}>
+              Apply Now
+            </Button>
+          )}
           <Button size="small" onClick={more} sx={{ color: "#757575" }}>
             Learn More
           </Button>

@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div className="items-center mb-4 sm:mb-0">
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
               Crimson Recruitment
             </span>
           </div>
@@ -36,7 +36,7 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <hr className="my-6 border-gray-200 sm:mx-auto" />
         <span className="block text-sm text-white sm:text-center ">
           © 2023 Crimson Recruitment. All Rights Reserved.
         </span>

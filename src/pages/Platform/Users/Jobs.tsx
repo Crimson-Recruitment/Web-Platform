@@ -1,18 +1,33 @@
-import { Alert, Box, Button, Grid, Snackbar } from "@mui/material";
-import CardActions from "@mui/material/CardActions";
+import { Search } from "@mui/icons-material";
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
 import { Grid as GridLoader } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { JobsModel } from "../../../Models/JobsModel";
 import "../../../Styles/jobs.css";
 import ApplicationBox from "../../../components/Users/ApplicationBox";
 import JobDescription from "../../../components/Users/JobDescription";
 import UserJobCard from "../../../components/Users/UserJobCard";
-import { useDispatch, useSelector } from "react-redux";
 import { getAllJobs } from "../../../core/api";
+import { industries, jobType } from "../../../Data/CompanyIndustries";
 
 function Jobs() {
   const [current, setCurrent] = React.useState<number>(0);
+  const [search, setSearch] = React.useState<string>("");
+  const [category, setCategory] = React.useState<string>("None");
+  const [jobTimeType, setJobTimeType] = React.useState<string>("None");
   const navigate = useNavigate();
   const [open, setOpen] = React.useState<boolean | undefined>();
   const state = useSelector((state: any) => state.jobs);
@@ -66,16 +81,105 @@ function Jobs() {
 
     fetchData();
   }, []);
+
+  const filteredJobs = state.jobs.filter(
+    (val: JobsModel) =>
+      val.jobTitle.includes(search) &&
+      (jobTimeType !== "None"
+        ? val.jobType.replace(/\s+/g, "_").toLowerCase() ===
+          jobTimeType.toLowerCase()
+        : true) &&
+      (category !== "None"
+        ? val.field.replace(/\s+/g, "_").toLowerCase() ===
+          category.toLowerCase()
+        : true),
+  );
+
+  const currentJob = filteredJobs[current];
   return (
     <Box>
       <Grid container>
         <Grid className="min-h-[100vh]" item xs={12} md={6}>
-          <Box className="search-box">
-            <input type="text" placeholder="Search..." />
-            <Button type="submit">
-              <i className="fas fa-search"></i>
-            </Button>
-          </Box>
+          <Grid container>
+            <Grid item xs={12} md={6}>
+              <Box className="search-box m-3">
+                <input
+                  type="text"
+                  id="search"
+                  placeholder="Search..."
+                  onChange={(val) => setSearch(val.target.value)}
+                />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    let ser: any = document.getElementById("search");
+                    setSearch(ser?.value);
+                  }}
+                >
+                  <Search />
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth sx={{ marginTop: "10px" }}>
+                    <InputLabel
+                      sx={{ marginLeft: { xs: "20px" } }}
+                      id="demo-simple-select-label"
+                    >
+                      Category
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      placeholder="Category..."
+                      value={category}
+                      sx={{ marginX: { xs: "20px" } }}
+                      label="Age"
+                      onChange={(val) => setCategory(val.target.value)}
+                    >
+                      {industries.map((val: any) => {
+                        return (
+                          <MenuItem value={val.value}>{val.label}</MenuItem>
+                        );
+                      })}
+                      <MenuItem value="None">None</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth sx={{ marginTop: "10px" }}>
+                    <InputLabel
+                      sx={{ marginLeft: { xs: "20px" } }}
+                      id="demo-simple-select-label"
+                    >
+                      Job Type
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      placeholder="Category..."
+                      value={jobTimeType}
+                      sx={{ marginX: { xs: "20px" } }}
+                      label="Job Type"
+                      onChange={(val) => {
+                        setJobTimeType(val.target.value);
+                        console.log(val.target.value);
+                      }}
+                    >
+                      {jobType.map((val: any) => {
+                        return (
+                          <MenuItem value={val.value}>{val.label}</MenuItem>
+                        );
+                      })}
+                      <MenuItem value="None">None</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
           {state.loading ? (
             <div className="flex justify-center mt-12">
               <GridLoader
@@ -90,8 +194,8 @@ function Jobs() {
               />
             </div>
           ) : (
-            state.jobs.length != 0 &&
-            state.jobs
+            state.jobs.length !== 0 &&
+            filteredJobs
               .sort(
                 (a: any, b: any) =>
                   new Date(a.timestamp).getTime() -
@@ -110,6 +214,7 @@ function Jobs() {
                     location={job.location}
                     hideSalary={job.hideSalary}
                     dialog={() => handleDialogOpen(index)}
+                    otherSite={job.otherSite}
                     more={() => jobHandler(job.id!, index)}
                   />
                 );
@@ -133,26 +238,29 @@ function Jobs() {
           }}
           md={5.9}
         >
-          {state.jobs.length != 0 && current !== -1 ? (
+          {state.jobs.length !== 0 && current !== -1 ? (
             <>
               <JobDescription
-                jobTitle={state.jobs[current].jobTitle}
-                description={state.jobs[current].jobDescription}
-                requirements={state.jobs[current].requirements}
-                skills={state.jobs[current].skills}
-                minSalary={state.jobs[current].minSalary}
-                maxSalary={state.jobs[current].maxSalary}
-                location={state.jobs[current].location}
-                type={state.jobs[current].jobType}
-                hideSalary={state.jobs[current].hideSalary}
-                benefits={state.jobs[current].benefits}
-                otherDetails={state.jobs[current].otherDetails}
+                jobTitle={currentJob.jobTitle}
+                description={currentJob.jobDescription}
+                requirements={currentJob.requirements}
+                skills={currentJob.skills}
+                minSalary={currentJob.minSalary}
+                maxSalary={currentJob.maxSalary}
+                location={currentJob.location}
+                overview={currentJob.company.overview}
+                company={currentJob.company.companyName}
+                companyId={currentJob.company.id}
+                type={currentJob.jobType}
+                hideSalary={currentJob.hideSalary}
+                benefits={currentJob.benefits}
+                otherDetails={currentJob.otherDetails}
               />
             </>
           ) : null}
         </Grid>
       </Grid>
-      {state.jobs.length != 0 ? (
+      {state.jobs.length !== 0 ? (
         <ApplicationBox
           jobId={state.jobs[current].id}
           jobName={state.jobs[current].jobTitle}

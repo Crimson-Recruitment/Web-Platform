@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { LinkTwoTone } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import { Button, CardActions } from "@mui/material";
+import { useEffect, useState } from "react";
 
 function JobDescription(props: {
   jobTitle: any;
@@ -14,8 +15,11 @@ function JobDescription(props: {
   location: any;
   minSalary: any;
   maxSalary: any;
+  overview: string;
   hideSalary: any;
+  companyId: number;
   otherDetails: any;
+  company: string;
 }) {
   const {
     jobTitle,
@@ -23,10 +27,13 @@ function JobDescription(props: {
     description,
     requirements,
     skills,
+    overview,
+    company,
     benefits,
     location,
     minSalary,
     maxSalary,
+    companyId,
     hideSalary,
     otherDetails,
   } = props;
@@ -71,9 +78,29 @@ function JobDescription(props: {
           {jobTitle}
         </Typography>
         <Typography variant="h6" component="div">
+          Company
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          {company}
+        </Typography>
+        <Typography variant="h6" component="div">
+          Link to profile
+        </Typography>
+        <Box
+          component="a"
+          color="darkred"
+          href={`/company-view/${companyId}`}
+          sx={{ mb: 1.5 }}
+        >
+          <LinkTwoTone /> Company Profile
+        </Box>
+
+        <Typography variant="h6" component="div">
           Company Overview
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          {overview}
+        </Typography>
         <Typography variant="h6" component="div">
           Job type
         </Typography>

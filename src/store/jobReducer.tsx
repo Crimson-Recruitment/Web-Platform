@@ -7,6 +7,7 @@ const createJobInitialState = {
   open: false,
   hideSalary: false,
   requestCoverLetter: false,
+  redirectToOtherWebsite: false,
   value: 0,
   message: { type: null, message: null },
 };
@@ -42,6 +43,11 @@ export const createJobReducer = (
       return { ...state, hideSalary: !state.hideSalary };
     case "SET_REQUEST_COVER_LETTER":
       return { ...state, requestCoverLetter: !state.requestCoverLetter };
+    case "SET_REDIRECT_TO_OTHER_WEBSITE":
+      return {
+        ...state,
+        redirectToOtherWebsite: !state.redirectToOtherWebsite,
+      };
 
     default:
       return state;

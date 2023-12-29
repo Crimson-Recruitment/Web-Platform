@@ -58,6 +58,9 @@ function JobView() {
             requirements={jobData.requirements}
             skills={jobData.skills}
             minSalary={jobData.minSalary}
+            overview={jobData.company!.overview}
+            company={jobData.company!.companyName}
+            companyId={jobData.company!.id!}
             maxSalary={jobData.maxSalary}
             location={jobData.location}
             type={jobData.jobType}

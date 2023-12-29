@@ -5,7 +5,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Alert,
   Autocomplete,
-  AutocompleteInputChangeReason,
   Button,
   Checkbox,
   Container,
@@ -27,20 +26,19 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Grid as GridLoader } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { number, object, string, z } from "zod";
+import { useNavigate } from "react-router-dom";
+import { object, string, z } from "zod";
 import { industries, jobType } from "../../../Data/CompanyIndustries";
-import { jobs } from "../../../Data/DummyData";
 import { skills } from "../../../Data/UserProfessions";
 import { JobsModel } from "../../../Models/JobsModel";
 import JobCard from "../../../components/Companies/JobCard";
 import LocationSearchInput from "../../../components/LocationInput";
 import { getCompanyJobs, postJob } from "../../../core/api";
-import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props: {
   [x: string]: any;
@@ -126,6 +124,7 @@ function CompanyJobs() {
       .max(2000, "Max limit 2000 characters!"),
     field: string().min(1, "Field is required!"),
     locationType: string().min(1, "Field is required!"),
+    otherSite: string(),
     expiryDate: string()
       .min(1, "Field is required!")
       .refine((val) => {
@@ -676,6 +675,51 @@ function CompanyJobs() {
                   </List>
                 </Grid>
                 <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={state.redirectToOtherWebsite}
+                        onChange={() =>
+                          dispatch({ type: "SET_REDIRECT_TO_OTHER_WEBSITE" })
+                        }
+                        name="redirectToOtherWebsite"
+                      />
+                    }
+                    label={`Redirect to another website?`}
+                  />
+                </Grid>
+                <Grid
+                  sx={{
+                    display: state.redirectToOtherWebsite ? "block" : "none",
+                  }}
+                  xs={12}
+                  item
+                >
+                  <label
+                    htmlFor="otherSite"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Other website URL
+                  </label>
+                  <TextField
+                    fullWidth
+                    type="text"
+                    margin="normal"
+                    variant="outlined"
+                    error={!!errors["otherSite"]}
+                    helperText={
+                      errors["otherSite"] ? errors["otherSite"].message : ""
+                    }
+                    {...register("otherSite")}
+                  />
+                </Grid>
+                <Grid
+                  sx={{
+                    display: state.redirectToOtherWebsite ? "none" : "block",
+                  }}
+                  item
+                  xs={12}
+                >
                   <FormControlLabel
                     control={
                       <Switch

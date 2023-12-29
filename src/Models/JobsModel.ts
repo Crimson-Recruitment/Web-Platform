@@ -1,11 +1,15 @@
+import { CompanyModel } from "./companyModel";
+
 export interface JobsModel {
   id?: number;
   jobTitle: string;
   jobType: string;
   locationType: string;
+  otherSite?: string;
   field: string;
   jobDescription: string;
   location: string;
+  company?: CompanyModel;
   requirements: string[];
   expiryDate: string;
   minSalary: number; // Assuming nullable salary values

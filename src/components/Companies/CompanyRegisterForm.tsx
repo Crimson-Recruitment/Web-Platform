@@ -50,6 +50,7 @@ export default function CompanyRegisterForm() {
       .max(16, "You must enter at most 16 characters!")
       .min(1, "Field is required!"),
     reenter_password: string().min(1, "Field is required!"),
+    website: string(),
     overview: string()
       .min(200, "Enter atleast 200 characters!")
       .max(2000, "Max limit 2000 characters!"),
@@ -121,36 +122,36 @@ export default function CompanyRegisterForm() {
       setLoading(false);
       return;
     }
-    try {
-      checkImageSize(company.logo);
-    } catch (e: any) {
-      setMessage(e.message);
-      setOpen(true);
-      setLoading(false);
-      return;
-    }
-    const base64Data = company.profileImage.replace(
+    // try {
+    //   checkImageSize(company.logo);
+    // } catch (e: any) {
+    //   setMessage(e.message);
+    //   setOpen(true);
+    //   setLoading(false);
+    //   return;
+    // }
+    /*const base64Data = company.profileImage.replace(
       /^data:image\/(png|jpeg|jpg);base64,/,
       "",
-    );
-
-    const binaryString = atob(base64Data);
+    );*/
+    //const binaryString = atob(base64Data);
 
     // Convert binary data to ArrayBuffer
-    const arrayBuffer = new ArrayBuffer(binaryString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < binaryString.length; i++) {
-      uint8Array[i] = binaryString.charCodeAt(i);
-    }
+    // const arrayBuffer = new ArrayBuffer(binaryString.length);
+    // const uint8Array = new Uint8Array(arrayBuffer);
+    // for (let i = 0; i < binaryString.length; i++) {
+    //   uint8Array[i] = binaryString.charCodeAt(i);
+    // }
 
     let ranString = generateRandomString();
 
-    let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
+    //let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
     let picUrl: string = "";
-    if (pic.code == 0) {
-      picUrl = pic.val;
+    //if (pic.code == 0) {
+    if (true) {
+      //picUrl = pic.val;
     } else {
-      setMessage(pic.val.message);
+      //setMessage(pic.val.message);
       setOpen(true);
       setLoading(false);
       return;
@@ -378,6 +379,25 @@ export default function CompanyRegisterForm() {
                     errors["overview"] ? errors["overview"].message : ""
                   }
                   {...register("overview")}
+                />
+              </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="overview"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Company Website (Website URL)
+                </label>
+                <TextField
+                  id="overview"
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors["website"]}
+                  helperText={
+                    errors["website"] ? errors["website"].message : ""
+                  }
+                  {...register("website")}
                 />
               </div>
             </>

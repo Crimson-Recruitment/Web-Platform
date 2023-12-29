@@ -61,7 +61,7 @@ export default function ShowJobs() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box component="main" sx={{ minHeight: "100vh"  }}>
+      <Box component="main" sx={{ minHeight: "100vh" }}>
         {state.loading ? (
           <div className="flex justify-center mt-12">
             <GridLoader

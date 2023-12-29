@@ -18,8 +18,8 @@ export const userLogin = async ({
       {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin":"https://crimsonrecruit.com",
-          "Access-Control-Allow-Methods":"GET"
+          "Access-Control-Allow-Origin": "https://crimsonrecruit.com",
+          "Access-Control-Allow-Methods": "GET",
         },
       },
     );
@@ -42,8 +42,8 @@ export const userRegister = async (user: userModel) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin":"https://crimsonrecruit.com",
-          "Access-Control-Allow-Methods":"GET"
+          "Access-Control-Allow-Origin": "https://crimsonrecruit.com",
+          "Access-Control-Allow-Methods": "GET",
         },
       },
     );
@@ -72,9 +72,9 @@ export const companyLogin = async ({
       {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin":"https://crimsonrecruit.com",
-          "Access-Control-Allow-Methods":"GET",
-          "withCredentials" : true
+          "Access-Control-Allow-Origin": "https://crimsonrecruit.com",
+          "Access-Control-Allow-Methods": "GET",
+          withCredentials: true,
         },
       },
     );
@@ -97,8 +97,8 @@ export const companyRegister = async (user: CompanyModel) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin":"https://crimsonrecruit.com",
-          "Access-Control-Allow-Methods":"GET"
+          "Access-Control-Allow-Origin": "https://crimsonrecruit.com",
+          "Access-Control-Allow-Methods": "GET",
         },
       },
     );
