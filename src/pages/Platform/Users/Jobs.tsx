@@ -248,12 +248,12 @@ function Jobs() {
           ) : null}
         </Grid>
       </Grid>
-      {state.jobs.length !== 0 ? (
+      {filteredJobs.length !== 0 ? (
         <ApplicationBox
-          jobId={state.jobs[current].id}
-          jobName={state.jobs[current].jobTitle}
-          companyId={state.jobs[current].companyId}
-          needCoverLetter={state.jobs[current].requestCoverLetter}
+          jobId={currentJob.id}
+          jobName={currentJob.jobTitle}
+          companyId={currentJob.companyId}
+          needCoverLetter={currentJob.requestCoverLetter}
           isOpen={dialogOpen}
           onClose={handleDialogClose}
         />

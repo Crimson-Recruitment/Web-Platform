@@ -1,18 +1,12 @@
-import * as React from "react";
+import { Alert, AlertColor, Snackbar } from "@mui/material";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Alert,
-  AlertColor,
-  Snackbar,
-  SnackbarCloseReason,
-} from "@mui/material";
-import { ApplicationsModel } from "../../Models/ApplicationsModel";
+import TextField from "@mui/material/TextField";
+import * as React from "react";
 import { ApplicationApplyModel } from "../../Models/ApplicationApplyModel";
 import { createApplication } from "../../core/applicationApi";
 
@@ -98,7 +92,7 @@ export default function ApplicationBox(props: {
             <br />
             <span className="text-red-700">Confirm submission.</span>
           </DialogContentText>
-          {needCoverLetter === true ? (
+          {needCoverLetter ? (
             <>
               <DialogTitle>
                 A cover letter is required for this job.

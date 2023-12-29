@@ -58,3 +58,25 @@ export const getCompanyApplications = async () => {
     return e.response;
   }
 };
+
+export const setApplicationStatus = async (
+  state: { status: string },
+  id: number,
+) => {
+  try {
+    const response = await AxiosCompanyInstance.post(
+      `${baseUrl}/applications/update-application/${id}`,
+      JSON.stringify(state),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};

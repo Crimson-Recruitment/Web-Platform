@@ -6,7 +6,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
 import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
 import Loader from "../../../components/Loader";
-import { getCompanyApplications } from "../../../core/applicationApi";
+import {
+  getCompanyApplications,
+  setApplicationStatus,
+} from "../../../core/applicationApi";
 
 function CompanyApplicationDetails() {
   const { id } = useParams();
@@ -31,13 +34,13 @@ function CompanyApplicationDetails() {
   };
 
   const expandedHandler = (index: number) => {
-    if (expanded == index) {
+    if (expanded === index) {
       setExpanded(null);
     } else {
       setExpanded(index);
     }
   };
-  const updateHandler = async (applicationId: number, status: string) => {};
+
   useEffect(() => {
     (async () => {
       let applications = await getCompanyApplications();
@@ -62,14 +65,16 @@ function CompanyApplicationDetails() {
           <>
             {applications.map((application: any, index: number) => {
               return (
-                <div role="button" onClick={() => expandedHandler(index)}>
+                <div>
                   <CompanyApplicationCard
                     applicant={application.user.firstName}
+                    id={parseInt(application.id!)}
                     timeOfApplication={new Date(
                       application.timeStamp,
                     ).toDateString()}
                     jobName={application.job.jobTitle}
                     applicationStatus={application.status}
+                    expanded={() => expandedHandler(index)}
                   />
                   <Grid
                     sx={
@@ -114,14 +119,33 @@ function CompanyApplicationDetails() {
                           <Typography sx={{ mb: 1.5 }} color="text.secondary">
                             {application.job.jobTitle}
                           </Typography>
-                          <Typography variant="h6">Link to Profile</Typography>
+                          <Typography variant="h6">
+                            Link to Profile
+                            <br />{" "}
+                            <small>
+                              (Clicking this automatically starts the review
+                              process)
+                            </small>
+                          </Typography>
 
                           <Button
-                            onClick={() => {
+                            onClick={async () => {
+                              if (
+                                application.status === "Approved" ||
+                                application.status === "Rejected"
+                              ) {
+                              } else {
+                                await setApplicationStatus(
+                                  { status: "Reviewing" },
+                                  parseInt(application.id!),
+                                );
+                              }
+
                               window.open(
                                 `/user-view/${application.user.id}`,
                                 "_blank",
                               );
+                              navigate(0);
                             }}
                           >
                             Check out Profile
@@ -129,19 +153,30 @@ function CompanyApplicationDetails() {
                         </Grid>
                         <Grid item xs={12} md={7}>
                           <Typography variant="h6">
-                            Download Resume:{" "}
+                            Download Resume: <br />
                             <small>
-                              (This automatically starts the review process)
+                              (Clicking this automatically starts the review
+                              process)
                             </small>
                           </Typography>
 
                           <Button
-                            onClick={() => {
+                            onClick={async () => {
+                              if (
+                                application.status === "Approved" ||
+                                application.status === "Rejected"
+                              ) {
+                              } else {
+                                await setApplicationStatus(
+                                  { status: "Reviewing" },
+                                  parseInt(application.id!),
+                                );
+                              }
                               window.open(
                                 `${application.user.cv}.pdf`,
                                 "_blank",
                               );
-                              updateHandler(application.id, "Reviewing");
+                              navigate(0);
                             }}
                           >
                             Download Resume
@@ -158,30 +193,6 @@ function CompanyApplicationDetails() {
                             </>
                           ) : null}
                         </Grid>
-                        <Button
-                          onClick={() =>
-                            updateHandler(application.id, "Success")
-                          }
-                          variant="contained"
-                          color="success"
-                        >
-                          Recruit
-                        </Button>
-
-                        <Button onClick={async () => null} variant="contained">
-                          Schedule Meeting
-                          <br />
-                          Logged in
-                        </Button>
-
-                        <Button
-                          onClick={() =>
-                            updateHandler(application.id, "Rejected")
-                          }
-                          color="error"
-                        >
-                          Reject Application
-                        </Button>
                       </Grid>
                     ) : null}
                   </Grid>

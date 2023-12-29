@@ -2,12 +2,16 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import Options from "./Options";
+import { Button, Grid } from "@mui/material";
 
 interface CompanyApplicationCardProps {
   applicant: string;
   jobName: string;
   timeOfApplication: string;
   applicationStatus: string;
+  id: number;
+  expanded: any;
 }
 
 const cardStyle: React.CSSProperties = {
@@ -28,7 +32,14 @@ const secondaryTextStyle: React.CSSProperties = {
 const CompanyApplicationCard: React.FC<CompanyApplicationCardProps> = (
   props,
 ) => {
-  const { applicant, jobName, timeOfApplication, applicationStatus } = props;
+  const {
+    applicant,
+    jobName,
+    timeOfApplication,
+    applicationStatus,
+    id,
+    expanded,
+  } = props;
 
   return (
     <Card style={cardStyle}>
@@ -45,6 +56,19 @@ const CompanyApplicationCard: React.FC<CompanyApplicationCardProps> = (
         <Typography style={secondaryTextStyle}>
           Application Status: {applicationStatus}
         </Typography>
+        <Grid container spacing={2} marginTop={1}>
+          {applicationStatus === "Approved" ||
+          applicationStatus === "Rejected" ? null : (
+            <Grid item>
+              <Options id={id} />
+            </Grid>
+          )}
+          <Grid item>
+            <Button variant="outlined" onClick={expanded}>
+              View Details
+            </Button>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );
