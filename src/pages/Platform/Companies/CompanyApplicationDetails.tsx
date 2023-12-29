@@ -117,7 +117,7 @@ function CompanyApplicationDetails() {
                           </Typography>
                           <Typography variant="h6">Job Title:</Typography>
                           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            {application.job.jobTitle}
+                            {application.user.jobTitle}
                           </Typography>
                           <Typography variant="h6">
                             Link to Profile
@@ -132,7 +132,8 @@ function CompanyApplicationDetails() {
                             onClick={async () => {
                               if (
                                 application.status === "Approved" ||
-                                application.status === "Rejected"
+                                application.status === "Rejected" ||
+                                application.status === "Reviewing"
                               ) {
                               } else {
                                 await setApplicationStatus(
@@ -164,7 +165,8 @@ function CompanyApplicationDetails() {
                             onClick={async () => {
                               if (
                                 application.status === "Approved" ||
-                                application.status === "Rejected"
+                                application.status === "Rejected" ||
+                                application.status === "Reviewing"
                               ) {
                               } else {
                                 await setApplicationStatus(
