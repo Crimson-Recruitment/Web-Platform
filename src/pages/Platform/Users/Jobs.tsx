@@ -238,7 +238,7 @@ function Jobs() {
           }}
           md={5.9}
         >
-          {state.jobs.length !== 0 && current !== -1 ? (
+          {filteredJobs.length > 0  ? (
             <>
               <JobDescription
                 jobTitle={currentJob.jobTitle}
