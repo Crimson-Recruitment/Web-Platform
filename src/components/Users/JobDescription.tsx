@@ -89,6 +89,7 @@ function JobDescription(props: {
         <Box
           component="a"
           color="darkred"
+          target="_blank"
           href={`/company-view/${companyId}`}
           sx={{ mb: 1.5 }}
         >

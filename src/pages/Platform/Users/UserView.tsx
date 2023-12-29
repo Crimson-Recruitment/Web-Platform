@@ -1,9 +1,9 @@
 import { Email, PhoneInTalk } from "@mui/icons-material";
 import { Button, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Grid as GridLoader } from "react-loader-spinner";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { userModel } from "../../../Models/UserModel";
+import Loader from "../../../components/Loader";
 
 function UserView() {
   const [loading, setLoading] = useState(true);
@@ -15,18 +15,7 @@ function UserView() {
   return (
     <div className="min-h-screen">
       {loading ? (
-        <div className="flex items-center justify-center mt-12">
-          <GridLoader
-            height="130"
-            width="130"
-            color="#4fa94d"
-            ariaLabel="grid-loading"
-            radius="12.5"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
+        <Loader />
       ) : userData != null ? (
         <section className="pt-16 bg-blueGray-50">
           <div className="w-full lg:w-4/12 px-4 mx-auto">

@@ -2,11 +2,10 @@ import { Alert, AlertColor, Box, Grid, Snackbar } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
 import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
-import { applications as dApplications } from "../../../Data/DummyData";
+import Loader from "../../../components/Loader";
 import { getCompanyApplications } from "../../../core/applicationApi";
 
 function CompanyApplicationDetails() {
@@ -58,18 +57,7 @@ function CompanyApplicationDetails() {
           Go Back
         </Button>
         {!loading ? (
-          <div className="flex justify-center mt-12">
-            <GridLoader
-              height="130"
-              width="130"
-              color="#4fa94d"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div>
+          <Loader />
         ) : applications !== null ? (
           <>
             {applications.map((application: any, index: number) => {

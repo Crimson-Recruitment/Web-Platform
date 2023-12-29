@@ -1,13 +1,9 @@
-import { Alert, AlertColor, Box, Grid, Snackbar } from "@mui/material";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Alert, AlertColor, Box, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import { ApplicationsModel } from "../../../Models/ApplicationsModel";
-import CompanyApplicationCard from "../../../components/Companies/CompanyApplicationCard";
 import { JobsModel } from "../../../Models/JobsModel";
 import ApplicationJobCard from "../../../components/Companies/ApplicationJobCard";
+import Loader from "../../../components/Loader";
 import { getCompanyJobs } from "../../../core/api";
 
 function CompanyApplications() {
@@ -50,18 +46,7 @@ function CompanyApplications() {
     <Box>
       <div className="xs:min-h-[120vh]  min-h-[120vh] ms-2">
         {loading ? (
-          <div className="flex justify-center mt-12">
-            <GridLoader
-              height="130"
-              width="130"
-              color="#4fa94d"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div>
+          <Loader />
         ) : jobs !== null ? (
           <>
             {jobs.map((job: JobsModel, index: number) => {

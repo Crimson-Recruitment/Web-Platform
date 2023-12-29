@@ -1,10 +1,9 @@
 import { Alert, Box, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { ApplicationsModel } from "../../../Models/ApplicationsModel";
+import Loader from "../../../components/Loader";
 import ApplicationsCard from "../../../components/Users/ApplicationsCard";
-import { applications as dApplications } from "../../../Data/DummyData";
 import { getUserApplications } from "../../../core/applicationApi";
 
 function Applications() {
@@ -37,18 +36,7 @@ function Applications() {
   return (
     <Box>
       {!loading ? (
-        <div className="flex justify-center mt-12">
-          <GridLoader
-            height="130"
-            width="130"
-            color="#4fa94d"
-            ariaLabel="grid-loading"
-            radius="12.5"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
+        <Loader />
       ) : (
         applications !== null &&
         applications.length > 0 && (

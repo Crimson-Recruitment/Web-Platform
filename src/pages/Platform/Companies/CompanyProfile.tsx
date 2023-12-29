@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Person, peopleData } from "../../../Data/DummyData";
 import { CompanyModel } from "../../../Models/companyModel";
+import { LinkTwoTone } from "@mui/icons-material";
 
 const CompanyProfile = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -45,44 +46,66 @@ const CompanyProfile = () => {
               <Box
                 sx={{
                   bgcolor: "#000",
-                  height: "270px",
+                  height: "310px",
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "200px",
-                  }}
-                >
-                  <Avatar
-                    alt="Profile Image"
-                    src={profile.profileImage}
-                    sx={{
-                      width: "200px",
-                      height: "200px",
-                      zIndex: "1",
-                      borderRadius: 0,
-                    }}
-                  />
-                  <Box sx={{ marginLeft: "16px", marginTop: "16px" }}>
-                    <Typography variant="h6" color="white">
-                      {profile.companyName}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      component={"pre"}
-                      sx={{ marginBottom: "10px" }}
-                      color="lightgray"
+                <Grid container>
+                  <Grid item xs={4}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "200px",
+                      }}
                     >
-                      {profile.location}
-                    </Typography>
-                  </Box>
-                </Box>
+                      <Avatar
+                        alt="Profile Image"
+                        src={profile.profileImage}
+                        sx={{
+                          width: "200px",
+                          height: "200px",
+                          zIndex: "1",
+                          borderRadius: 0,
+                        }}
+                      />
+                      <Box sx={{ marginLeft: "16px", marginTop: "16px" }}>
+                        <Typography width="100%" variant="h6" color="white">
+                          {profile.companyName}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          component={"pre"}
+                          sx={{ marginBottom: "10px" }}
+                          color="lightgray"
+                        >
+                          {profile.location}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={8} marginTop={4}>
+                    {profile.website ? (
+                      <>
+                        <Typography variant="h6" color="lightgrey">
+                          Company Website:
+                        </Typography>
+                        <Box
+                          component="a"
+                          color="lightblue"
+                          href={profile.website}
+                          target="_blank"
+                          sx={{ mb: 1.5 }}
+                        >
+                          <LinkTwoTone /> Visit Website
+                        </Box>
+                      </>
+                    ) : null}
+                  </Grid>
+                </Grid>
               </Box>
               <CardContent className="text-black p-4">
                 <Box sx={{ mb: 5 }}>

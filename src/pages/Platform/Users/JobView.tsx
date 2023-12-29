@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import JobDescription from "../../../components/Users/JobDescription";
-import { Grid as GridLoader } from "react-loader-spinner";
-import { Button, CardActions } from "@mui/material";
-import ApplicationBox from "../../../components/Users/ApplicationBox";
 import { ArrowBack } from "@mui/icons-material";
+import { Button, CardActions } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { JobsModel } from "../../../Models/JobsModel";
+import Loader from "../../../components/Loader";
+import ApplicationBox from "../../../components/Users/ApplicationBox";
+import JobDescription from "../../../components/Users/JobDescription";
 
 function JobView() {
   const [loading, setLoading] = useState(true);
@@ -38,18 +38,7 @@ function JobView() {
       ) : null}
 
       {loading ? (
-        <div className="flex items-center justify-center mt-12">
-          <GridLoader
-            height="130"
-            width="130"
-            color="#4fa94d"
-            ariaLabel="grid-loading"
-            radius="12.5"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
+        <Loader />
       ) : jobData != null ? (
         <>
           <JobDescription

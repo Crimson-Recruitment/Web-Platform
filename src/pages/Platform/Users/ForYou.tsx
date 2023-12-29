@@ -2,7 +2,6 @@ import { Alert, Grid, Snackbar, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import * as React from "react";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { JobsModel } from "../../../Models/JobsModel";
@@ -11,6 +10,7 @@ import ApplicationBox from "../../../components/Users/ApplicationBox";
 import JobDescription from "../../../components/Users/JobDescription";
 import UserJobCard from "../../../components/Users/UserJobCard";
 import { getAllJobs } from "../../../core/api";
+import Loader from "../../../components/Loader";
 
 function CustomTabPanel(props: {
   [x: string]: any;
@@ -110,18 +110,7 @@ function ForYou() {
       <Grid container>
         <Grid className="min-h-[100vh]" item xs={12} md={6}>
           {!loading ? (
-            <div className="flex justify-center mt-12">
-              <GridLoader
-                height="130"
-                width="130"
-                color="#4fa94d"
-                ariaLabel="grid-loading"
-                radius="12.5"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            </div>
+            <Loader />
           ) : (
             state.jobs.length != 0 &&
             state.jobs

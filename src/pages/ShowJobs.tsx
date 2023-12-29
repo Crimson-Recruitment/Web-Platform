@@ -1,19 +1,24 @@
-import { Box, Pagination } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Link,
+  Pagination,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import * as React from "react";
-import { JobsModel } from "../Models/JobsModel";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllJobs } from "../core/api";
-import { Dialog, DialogTitle, DialogContent, Link } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import { getAllJobs } from "../core/api";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -63,18 +68,7 @@ export default function ShowJobs() {
     <ThemeProvider theme={defaultTheme}>
       <Box component="main" sx={{ minHeight: "100vh" }}>
         {state.loading ? (
-          <div className="flex justify-center mt-12">
-            <GridLoader
-              height="130"
-              width="130"
-              color="#4fa94d"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div>
+          <Loader />
         ) : (
           <Container sx={{ py: 8 }} maxWidth="xl">
             {/* End hero unit */}

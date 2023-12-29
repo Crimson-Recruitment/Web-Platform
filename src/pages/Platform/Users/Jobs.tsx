@@ -9,19 +9,18 @@ import {
   MenuItem,
   Select,
   Snackbar,
-  Typography,
 } from "@mui/material";
 import * as React from "react";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { industries, jobType } from "../../../Data/CompanyIndustries";
 import { JobsModel } from "../../../Models/JobsModel";
 import "../../../Styles/jobs.css";
+import Loader from "../../../components/Loader";
 import ApplicationBox from "../../../components/Users/ApplicationBox";
 import JobDescription from "../../../components/Users/JobDescription";
 import UserJobCard from "../../../components/Users/UserJobCard";
 import { getAllJobs } from "../../../core/api";
-import { industries, jobType } from "../../../Data/CompanyIndustries";
 
 function Jobs() {
   const [current, setCurrent] = React.useState<number>(0);
@@ -181,18 +180,7 @@ function Jobs() {
             </Grid>
           </Grid>
           {state.loading ? (
-            <div className="flex justify-center mt-12">
-              <GridLoader
-                height="130"
-                width="130"
-                color="#4fa94d"
-                ariaLabel="grid-loading"
-                radius="12.5"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            </div>
+            <Loader />
           ) : (
             state.jobs.length !== 0 &&
             filteredJobs
@@ -238,7 +226,7 @@ function Jobs() {
           }}
           md={5.9}
         >
-          {filteredJobs.length > 0  ? (
+          {filteredJobs.length > 0 ? (
             <>
               <JobDescription
                 jobTitle={currentJob.jobTitle}

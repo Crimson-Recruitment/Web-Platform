@@ -29,7 +29,6 @@ import PropTypes from "prop-types";
 import React, { useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Grid as GridLoader } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { object, string, z } from "zod";
@@ -37,6 +36,7 @@ import { industries, jobType } from "../../../Data/CompanyIndustries";
 import { skills } from "../../../Data/UserProfessions";
 import { JobsModel } from "../../../Models/JobsModel";
 import JobCard from "../../../components/Companies/JobCard";
+import Loader from "../../../components/Loader";
 import LocationSearchInput from "../../../components/LocationInput";
 import { getCompanyJobs, postJob } from "../../../core/api";
 
@@ -233,18 +233,7 @@ function CompanyJobs() {
       </Box>
       <CustomTabPanel value={state.value} index={0}>
         {state.loading ? (
-          <div className="flex justify-center mt-12">
-            <GridLoader
-              height="130"
-              width="130"
-              color="#4fa94d"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div>
+          <Loader />
         ) : state.jobsList ? (
           state.jobsList
             .sort(
