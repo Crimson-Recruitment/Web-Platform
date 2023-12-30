@@ -6,6 +6,7 @@ export const baseUrl = "http://localhost:8081/api/v1";
 export const AxiosUserInstance = axios.create({
   headers: {
     Authorization: `${sessionStorage.getItem("userToken")}`,
+    "Access-Control-Allow-Origin": true,
     Accept: "application/json",
   },
 });
@@ -13,6 +14,7 @@ export const AxiosUserInstance = axios.create({
 export const AxiosCompanyInstance = axios.create({
   headers: {
     Authorization: `${sessionStorage.getItem("companyToken")}`,
+    "Access-Control-Allow-Origin": true,
     Accept: "application/json",
   },
 });

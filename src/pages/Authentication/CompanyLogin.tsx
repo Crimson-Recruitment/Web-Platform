@@ -21,7 +21,6 @@ import { companyLogin } from "../../core/api";
 const defaultTheme = createTheme();
 export default function CompanyLogin() {
   const [loading, setLoading] = React.useState(false);
-  const cookie = new Cookies();
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
@@ -37,13 +36,8 @@ export default function CompanyLogin() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(validationSchema) });
-
-  React.useEffect(() => {
-    if (isSubmitSuccessful) {
-    }
-  }, [isSubmitSuccessful]);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,

@@ -46,7 +46,7 @@ function JobCard(props: {
   };
   useEffect(() => {
     timeHandler();
-  }, [new Date().getTime(), def]);
+  }, []);
   return (
     <Card
       sx={{

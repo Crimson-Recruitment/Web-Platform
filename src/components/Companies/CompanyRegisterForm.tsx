@@ -22,18 +22,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string, z } from "zod";
 import { industries } from "../../Data/CompanyIndustries";
-import { checkImageSize, generateRandomString } from "../../Functions/utils";
+import { generateRandomString } from "../../Functions/utils";
 import { CompanyModel } from "../../Models/companyModel";
 import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
 import { companyRegister } from "../../core/api";
 import LocationSearchInput from "../LocationInput";
-import FirebaseStorage from "../../firebase/fileHandler";
 
 const steps = ["Contact info", "Company details", "Company Logo"];
 
 export default function CompanyRegisterForm() {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set<number>());
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -106,17 +104,17 @@ export default function CompanyRegisterForm() {
 
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     setLoading(true);
-    if (company.primaryPhoneNumber == "") {
+    if (company.primaryPhoneNumber === "") {
       setMessage("You haven't entered your primary phone number!");
       setOpen(true);
       setLoading(false);
       return;
-    } else if (company.category == "") {
+    } else if (company.category === "") {
       setMessage("You haven't entered a Company type!");
       setOpen(true);
       setLoading(false);
       return;
-    } else if (location.location == "") {
+    } else if (location.location === "") {
       setMessage("You haven't entered your location!");
       setOpen(true);
       setLoading(false);
@@ -166,7 +164,7 @@ export default function CompanyRegisterForm() {
     };
     console.log(newValues);
     let res = await companyRegister(newValues);
-    if (res?.status == 200) {
+    if (res?.status === 200) {
       window.location.href = "/company-home";
     } else {
       let mes: string = res?.data?.message;
@@ -177,7 +175,7 @@ export default function CompanyRegisterForm() {
   };
 
   const handleNext = () => {
-    if (activeStep == steps.length - 1) {
+    if (activeStep === steps.length - 1) {
       navigate("/company-home");
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -185,15 +183,6 @@ export default function CompanyRegisterForm() {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
   };
 
   return (
@@ -226,7 +215,7 @@ export default function CompanyRegisterForm() {
           onSubmit={handleSubmit(onSubmitHandler)}
           sx={{ marginTop: 8 }}
         >
-          {activeStep == 0 ? (
+          {activeStep === 0 ? (
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
@@ -329,7 +318,7 @@ export default function CompanyRegisterForm() {
                 <Grid item></Grid>
               </Grid>
             </>
-          ) : activeStep == 1 ? (
+          ) : activeStep === 1 ? (
             <>
               <label
                 htmlFor="profession"
