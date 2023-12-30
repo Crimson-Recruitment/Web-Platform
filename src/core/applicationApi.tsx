@@ -1,4 +1,5 @@
 import { ApplicationApplyModel } from "../Models/ApplicationApplyModel";
+import { IMeetingInfo } from "../Models/MeetingInfoModel";
 import { AxiosCompanyInstance, AxiosUserInstance, baseUrl } from "./baseURL";
 
 export const createApplication = async (
@@ -15,7 +16,7 @@ export const createApplication = async (
         },
       },
     );
-    if (response?.status == 200) {
+    if (response?.status === 200) {
       return response;
     }
   } catch (e: any) {
@@ -33,7 +34,7 @@ export const getUserApplications = async () => {
         },
       },
     );
-    if (response?.status == 200) {
+    if (response?.status === 200) {
       return response.data;
     }
   } catch (e: any) {
@@ -51,7 +52,7 @@ export const getCompanyApplications = async () => {
         },
       },
     );
-    if (response?.status == 200) {
+    if (response?.status === 200) {
       return response.data;
     }
   } catch (e: any) {
@@ -73,10 +74,29 @@ export const setApplicationStatus = async (
         },
       },
     );
-    if (response?.status == 200) {
+    if (response?.status === 200) {
       return response.data;
     }
   } catch (e: any) {
     return e.response;
   }
 };
+
+export const scheduleMeeting = async (meetingInfo:IMeetingInfo, id:number) => {
+  try {
+    const response = await AxiosCompanyInstance.post(
+      `${baseUrl}/meeting/schedule-meeting/${id}`,
+      JSON.stringify(meetingInfo),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status === 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}

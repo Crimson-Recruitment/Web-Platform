@@ -20,15 +20,19 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { timeZones } from "../../Data/Meeting";
 import LocationInput from "../LocationInput";
+import { IMeetingInfo } from "../../Models/MeetingInfoModel";
+import { scheduleMeeting } from "../../core/applicationApi";
 
 const steps = ["Select Meeting Type", "Schedule Meeting"];
 
 export default function MeetingDialogBox({
   open,
   handleClose,
+  applicationId,
 }: {
   open: boolean;
   handleClose: () => void;
+  applicationId: number;
 }) {
   const location = useSelector((state: any) => state.location);
   const state = useSelector((state: any) => state.schedule);
@@ -48,10 +52,13 @@ export default function MeetingDialogBox({
 
   const onSubmitHandler = async () => {
     dispatch({ type: "SET_SCHEDULE_SEND", payload: true });
-    await new Promise((res) => setTimeout(res, 2000));
     if (new Date(state.startTime) < new Date()) {
       console.log("Start Date has to be later than today!");
+      dispatch({ type: "SET_SCHEDULE_SEND", payload: false });
+      return;
     }
+    let meeting: IMeetingInfo = state;
+    await scheduleMeeting(meeting, applicationId);
     console.log(state);
     dispatch({ type: "SET_SCHEDULE_SEND", payload: false });
   };
