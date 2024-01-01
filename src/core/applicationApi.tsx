@@ -100,3 +100,39 @@ export const scheduleMeeting = async (meetingInfo:IMeetingInfo, id:number) => {
     return e.response;
   }
 }
+
+export const getCode = async (accessToken:string, code:string) => {
+  try {
+    const response = await AxiosCompanyInstance.post(
+      `${baseUrl}/meeting/get-code?accessCode=${accessToken.trim()}&code=${code.trim()}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status === 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}
+
+export const getRefreshToken = async () => {
+  try {
+    const response = await AxiosCompanyInstance.get(
+      `${baseUrl}/meeting/refresh-token`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status === 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}

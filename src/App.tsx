@@ -19,6 +19,7 @@ import UserHome from "./pages/Platform/Users/UserHome";
 import UserView from "./pages/Platform/Users/UserView";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
+import ZoomConnectSuccess from "./pages/ZoomConnectSuccess";
 
 function App() {
   const cookie = new Cookies();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/company-view/:id" element={<CompanyView />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/jobs/:id" element={<JobView />} />
+        <Route path="/zoom-success" element={<ZoomConnectSuccess />} />
         {sessionStorage.getItem("userToken") ? (
           <>
             <Route path="/user-home" element={<UserHome />} />
