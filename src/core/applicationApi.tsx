@@ -82,7 +82,10 @@ export const setApplicationStatus = async (
   }
 };
 
-export const scheduleMeeting = async (meetingInfo:IMeetingInfo, id:number) => {
+export const scheduleMeeting = async (
+  meetingInfo: IMeetingInfo,
+  id: number,
+) => {
   try {
     const response = await AxiosCompanyInstance.post(
       `${baseUrl}/meeting/schedule-meeting/${id}`,
@@ -99,9 +102,9 @@ export const scheduleMeeting = async (meetingInfo:IMeetingInfo, id:number) => {
   } catch (e: any) {
     return e.response;
   }
-}
+};
 
-export const getCode = async (accessToken:string, code:string) => {
+export const getCode = async (accessToken: string, code: string) => {
   try {
     const response = await AxiosCompanyInstance.post(
       `${baseUrl}/meeting/get-code?accessCode=${accessToken.trim()}&code=${code.trim()}`,
@@ -117,7 +120,7 @@ export const getCode = async (accessToken:string, code:string) => {
   } catch (e: any) {
     return e.response;
   }
-}
+};
 
 export const getRefreshToken = async () => {
   try {
@@ -135,4 +138,4 @@ export const getRefreshToken = async () => {
   } catch (e: any) {
     return e.response;
   }
-}
+};

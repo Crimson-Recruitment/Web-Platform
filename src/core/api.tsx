@@ -186,7 +186,6 @@ export const getAllJobs = async () => {
   }
 };
 
-
 export const getJobById = async () => {
   try {
     const response = await axios.get(`${baseUrl}/jobs/all`, {
@@ -200,9 +199,9 @@ export const getJobById = async () => {
   } catch (e: any) {
     return e.response;
   }
-}
+};
 
-export const getUserById = async() => {
+export const getUserById = async () => {
   try {
     const response = await axios.get(`${baseUrl}/jobs/all`, {
       headers: {
@@ -215,9 +214,9 @@ export const getUserById = async() => {
   } catch (e: any) {
     return e.response;
   }
-}
+};
 
-export const getCompanyById = async(id:number) => {
+export const getCompanyById = async (id: number) => {
   try {
     const response = await axios.get(`${baseUrl}/company-info/${id}`, {
       headers: {
@@ -230,4 +229,4 @@ export const getCompanyById = async(id:number) => {
   } catch (e: any) {
     return e.response;
   }
-}
+};

@@ -174,7 +174,6 @@ export default function UserRegisterForm() {
     let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
     let picUrl: string = "";
     if (pic.code == 0) {
-    
       picUrl = pic.val;
     } else {
       //setMessage(pic.val.message);

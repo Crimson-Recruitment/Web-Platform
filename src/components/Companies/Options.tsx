@@ -113,7 +113,11 @@ export default function Options({ id }: { id: number }) {
         >
           Reject Application
         </MenuItem>
-        <MeetingDialogBox open={dialog} handleClose={handleDialogClose} applicationId={id} />
+        <MeetingDialogBox
+          open={dialog}
+          handleClose={handleDialogClose}
+          applicationId={id}
+        />
       </StyledMenu>
     </div>
   );

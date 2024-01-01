@@ -44,7 +44,7 @@ function JobDescription(props: {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const threshold = 1200;
-      if(window.innerWidth < 900) {
+      if (window.innerWidth < 900) {
         setInitialOffset(0);
         setIsFixed(false);
       } else {

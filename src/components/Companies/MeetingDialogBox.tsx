@@ -282,14 +282,25 @@ export default function MeetingDialogBox({
                             )}
                           />
                         </FormControl>
-                        <Button fullWidth color="info" variant="contained" onClick={async () => {
-                          if(JSON.parse(sessionStorage.getItem("company")!).zoomAccessToken !== null) {
-                            let data = await getRefreshToken();
-                            console.log(data);
-                          } else {
-                            window.open("https://zoom.us/oauth/authorize?response_type=code&client_id=MdO1TJWIRyvU8kP2Wwcg&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fzoom-success", "_blank")
-                          }
-                          }}>
+                        <Button
+                          fullWidth
+                          color="info"
+                          variant="contained"
+                          onClick={async () => {
+                            if (
+                              JSON.parse(sessionStorage.getItem("company")!)
+                                .zoomAccessToken !== null
+                            ) {
+                              let data = await getRefreshToken();
+                              console.log(data);
+                            } else {
+                              window.open(
+                                "https://zoom.us/oauth/authorize?response_type=code&client_id=MdO1TJWIRyvU8kP2Wwcg&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fzoom-success",
+                                "_blank",
+                              );
+                            }
+                          }}
+                        >
                           Connect Zoom
                         </Button>
                       </Box>
