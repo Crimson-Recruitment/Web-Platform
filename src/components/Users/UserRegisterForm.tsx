@@ -171,11 +171,11 @@ export default function UserRegisterForm() {
 
     let ranString = generateRandomString();
 
-    //let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
+    let pic: any = await FirebaseStorage.getFileUrl(`${ranString}`, uint8Array);
     let picUrl: string = "";
-    //if (pic.code == 0) {
-    if (true) {
-      //picUrl = pic.val;
+    if (pic.code == 0) {
+    
+      picUrl = pic.val;
     } else {
       //setMessage(pic.val.message);
       setOpen(true);
@@ -183,16 +183,15 @@ export default function UserRegisterForm() {
       return;
     }
 
-    /* let resVal: any = await FirebaseStorage.getFileUrl(
+    let resVal: any = await FirebaseStorage.getFileUrl(
       `${ranString}-resume`,
       resumeUintArray,
-    );*/
+    );
     let resUrl: string = "";
-    //if (resVal.code == 0) {
-    if (true) {
-      //resUrl = resVal.val;
+    if (resVal.code == 0) {
+      resUrl = resVal.val;
     } else {
-      //setMessage(resVal.val.message);
+      setMessage(resVal.val.message);
       setOpen(true);
       setLoading(false);
       return;

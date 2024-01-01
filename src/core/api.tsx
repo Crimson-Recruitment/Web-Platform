@@ -185,3 +185,49 @@ export const getAllJobs = async () => {
     return e.response;
   }
 };
+
+
+export const getJobById = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/jobs/all`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}
+
+export const getUserById = async() => {
+  try {
+    const response = await axios.get(`${baseUrl}/jobs/all`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}
+
+export const getCompanyById = async(id:number) => {
+  try {
+    const response = await axios.get(`${baseUrl}/company-info/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}

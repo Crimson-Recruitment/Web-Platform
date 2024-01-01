@@ -44,12 +44,17 @@ function JobDescription(props: {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const threshold = 1200;
-      if (scrollPosition > threshold && !isFixed) {
-        setInitialOffset(scrollPosition);
-        setIsFixed(true);
-      } else if (scrollPosition <= threshold && isFixed) {
+      if(window.innerWidth < 900) {
         setInitialOffset(0);
         setIsFixed(false);
+      } else {
+        if (scrollPosition > threshold && !isFixed) {
+          setInitialOffset(scrollPosition);
+          setIsFixed(true);
+        } else if (scrollPosition <= threshold && isFixed) {
+          setInitialOffset(0);
+          setIsFixed(false);
+        }
       }
     };
 
@@ -83,7 +88,7 @@ function JobDescription(props: {
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {company}
         </Typography>
-        <Typography variant="h6" component="div">
+        {/* <Typography variant="h6" component="div">
           Link to profile
         </Typography>
         <Box
@@ -94,7 +99,7 @@ function JobDescription(props: {
           sx={{ mb: 1.5 }}
         >
           <LinkTwoTone /> Company Profile
-        </Box>
+        </Box> */}
 
         <Typography variant="h6" component="div">
           Company Overview
