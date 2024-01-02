@@ -189,7 +189,6 @@ export const EditJob = () => {
             .skills?.includes(skill.label),
       ),
     });
-    console.log(state);
   }, [benefit]);
   return (
     <Box

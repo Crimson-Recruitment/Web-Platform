@@ -24,14 +24,10 @@ const ApplicationCard = (props: {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const handleViewResume = () => {
-    // Add logic to view the resume (e.g., open a modal or navigate to a new page)
-    console.log("View Resume:", resumePath);
     closeMenu();
   };
 
   const handleChatWithRecruiter = () => {
-    // Add logic to start a chat with the recruiter
-    console.log("Chat with Recruiter");
     closeMenu();
   };
 

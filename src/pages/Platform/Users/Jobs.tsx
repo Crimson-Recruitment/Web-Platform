@@ -67,7 +67,6 @@ function Jobs() {
         dispatch({ type: "SET_JOBS_LOADING", payload: true });
 
         const jobArray = await getAllJobs();
-        console.log(jobArray);
 
         dispatch({ type: "SET_JOBS", payload: jobArray });
       } catch (error) {
@@ -164,7 +163,6 @@ function Jobs() {
                       label="Job Type"
                       onChange={(val) => {
                         setJobTimeType(val.target.value);
-                        console.log(val.target.value);
                       }}
                     >
                       {jobType.map((val: any) => {

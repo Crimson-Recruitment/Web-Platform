@@ -142,9 +142,7 @@ const Settings = () => {
   const passwordChangeHandler: SubmitHandler<PasswordSchemaType> = async (
     values,
   ) => {
-    console.log(values);
     let res = await changePassword(values);
-    console.log(res);
     if (res.result == "success") {
       setMessage("Successfully updated password!");
       setSev("success");

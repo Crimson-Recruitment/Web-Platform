@@ -34,7 +34,6 @@ function JobView() {
   useEffect(() => {
     let job: JobsModel[] = state.jobs.filter((j: JobsModel) => j.id == id);
     setJobData(job[0]);
-    console.log(job);
     setLoading(false);
   });
 

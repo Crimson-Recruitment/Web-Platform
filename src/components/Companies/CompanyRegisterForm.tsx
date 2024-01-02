@@ -129,13 +129,14 @@ export default function CompanyRegisterForm() {
       setLoading(false);
       return;
     }
-    const base64Data = company.profileImage.replace(
+    const base64Data = company.logo.replace(
       /^data:image\/(png|jpeg|jpg);base64,/,
       "",
     );
+
     const binaryString = atob(base64Data);
 
-    //Convert binary data to ArrayBuffer
+    // Convert binary data to ArrayBuffer
     const arrayBuffer = new ArrayBuffer(binaryString.length);
     const uint8Array = new Uint8Array(arrayBuffer);
     for (let i = 0; i < binaryString.length; i++) {

@@ -17,7 +17,6 @@ export default class FirebaseStorage {
     imageData: any,
   ): Promise<StorageResult> => {
     let result: StorageResult = { code: null, val: null };
-    console.log(id);
     const storageRef = ref(db, id);
 
     try {
