@@ -163,7 +163,6 @@ export default function CompanyRegisterForm() {
       primaryPhoneNumber: company.primaryPhoneNumber,
       secondaryPhoneNumber: company.secondaryPhoneNumber,
     };
-    console.log(newValues);
     let res = await companyRegister(newValues);
     if (res?.status === 200) {
       window.location.href = "/company-home";

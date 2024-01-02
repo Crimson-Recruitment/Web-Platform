@@ -60,7 +60,6 @@ export default function ApplicationBox(props: {
         coverLetter: val.value,
         timeStamp: new Date().toISOString(),
       };
-      console.log(application);
       let res = await createApplication(application, jobId);
       if (res.status == 200) {
         handleClick({
@@ -76,7 +75,6 @@ export default function ApplicationBox(props: {
         coverLetter: "",
         timeStamp: new Date().toISOString(),
       };
-      console.log(application);
     }
 
     setLoading(false);

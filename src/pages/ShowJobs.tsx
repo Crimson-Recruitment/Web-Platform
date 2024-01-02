@@ -39,8 +39,6 @@ export default function ShowJobs() {
         dispatch({ type: "SET_JOBS_LOADING", payload: true });
 
         const jobArray = await getAllJobs();
-        //jobArray = Array.from({ length: 3 }, () => jobArray).flat()
-        console.log(jobArray);
         setPages(Math.ceil(jobArray.length / pageSize));
         if (index + 1 < pages) {
           setPagination({ from: index * pageSize, to: pageSize });
