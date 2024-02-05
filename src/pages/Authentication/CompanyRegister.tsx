@@ -30,7 +30,7 @@ export default function CompanyRegister() {
           sx={{
             objectFit: "cover",
             objectPosition: "center",
-            height: "120vh",
+            height: "200%",
             display: { xs: "none", md: "block" },
           }}
         />

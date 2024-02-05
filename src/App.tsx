@@ -20,6 +20,7 @@ import UserView from "./pages/Platform/Users/UserView";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
 import ZoomConnectSuccess from "./pages/ZoomConnectSuccess";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   const cookie = new Cookies();
@@ -49,6 +50,9 @@ function App() {
           <>
             <Route path="/edit-job/:id" element={<EditJob />} />
             <Route path="/company-home" element={<CompanyHome />} />
+            {sessionStorage.getItem("company") ? JSON.parse(sessionStorage.getItem("company")!).email === "crimsonco@gmail.com" ?
+            <Route path="/admin" element={<AdminDashboard />} />:null:null
+          }
             <Route
               path="/company-applications/:id"
               element={<CompanyApplicationDetails />}

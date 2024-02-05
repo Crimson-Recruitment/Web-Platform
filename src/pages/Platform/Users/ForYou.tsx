@@ -165,8 +165,8 @@ function ForYou() {
                 minSalary={state.jobs[current].minSalary}
                 maxSalary={state.jobs[current].maxSalary}
                 location={state.jobs[current].location}
-                overview={state.jobs[current].company.overview}
-                company={state.jobs[current].company.companyName}
+                overview={state.jobs[current].companyOverview}
+                company={state.jobs[current].companyName}
                 companyId={state.jobs[current].company.id}
                 type={state.jobs[current].jobType}
                 hideSalary={state.jobs[current].hideSalary}
