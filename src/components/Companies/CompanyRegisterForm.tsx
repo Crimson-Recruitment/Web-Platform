@@ -436,7 +436,15 @@ export default function CompanyRegisterForm() {
           <Typography
             style={{
               marginTop: "10px",
-              backgroundColor:  errors.website || errors.companyName || errors.email || errors.overview || errors.password || errors.reenter_password ?"#FFEBEB":"white", // Pale red background, // Pale red background
+              backgroundColor:
+                errors.website ||
+                errors.companyName ||
+                errors.email ||
+                errors.overview ||
+                errors.password ||
+                errors.reenter_password
+                  ? "#FFEBEB"
+                  : "white", // Pale red background, // Pale red background
               color: "#FF0000", // Red font color
               padding: "8px",
               borderRadius: "4px",
@@ -444,7 +452,8 @@ export default function CompanyRegisterForm() {
           >
             {errors["companyName"] ? (
               <pre>
-                {"Error in form! \nCompany Name: " + errors["companyName"].message}
+                {"Error in form! \nCompany Name: " +
+                  errors["companyName"].message}
               </pre>
             ) : (
               ""

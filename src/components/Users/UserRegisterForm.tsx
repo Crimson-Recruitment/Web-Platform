@@ -535,11 +535,18 @@ export default function UserRegisterForm() {
           <Typography
             style={{
               marginTop: "10px",
-              backgroundColor: errors.firstName || errors.lastName || errors.email || errors.bio || errors.password || errors.reenter_password ?"#FFEBEB":"white", // Pale red background
+              backgroundColor:
+                errors.firstName ||
+                errors.lastName ||
+                errors.email ||
+                errors.bio ||
+                errors.password ||
+                errors.reenter_password
+                  ? "#FFEBEB"
+                  : "white", // Pale red background
               color: "#FF0000", // Red font color
               padding: "8px",
               borderRadius: "4px",
-
             }}
           >
             {errors["firstName"] ? (
@@ -609,7 +616,10 @@ export default function UserRegisterForm() {
               </Button>
             ) : (
               <Button
-                onClick={(val) => {console.log(errors);handleNext(val)}}
+                onClick={(val) => {
+                  console.log(errors);
+                  handleNext(val);
+                }}
                 sx={{
                   color: "white",
                   mt: 3,

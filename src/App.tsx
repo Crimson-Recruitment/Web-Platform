@@ -50,9 +50,12 @@ function App() {
           <>
             <Route path="/edit-job/:id" element={<EditJob />} />
             <Route path="/company-home" element={<CompanyHome />} />
-            {sessionStorage.getItem("company") ? JSON.parse(sessionStorage.getItem("company")!).email === "crimsonco@gmail.com" ?
-            <Route path="/admin" element={<AdminDashboard />} />:null:null
-          }
+            {sessionStorage.getItem("company") ? (
+              JSON.parse(sessionStorage.getItem("company")!).email ===
+              "crimsonco@gmail.com" ? (
+                <Route path="/admin" element={<AdminDashboard />} />
+              ) : null
+            ) : null}
             <Route
               path="/company-applications/:id"
               element={<CompanyApplicationDetails />}
