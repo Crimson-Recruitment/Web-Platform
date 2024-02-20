@@ -198,8 +198,6 @@ function CompanyJobs() {
       location: location.location,
       timestamp: new Date().toISOString(),
       benefits: state.benefits,
-      companyName: JSON.parse(sessionStorage.getItem("company")!).companyName,
-      companyOverview: JSON.parse(sessionStorage.getItem("company")!).overview,
       requirements: state.requirements,
       requestCoverLetter: state.requestCoverLetter,
       hideSalary: state.hideSalary,

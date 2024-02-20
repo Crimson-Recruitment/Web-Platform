@@ -27,6 +27,11 @@ export const userPages = [
     icon: <FilePresentIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
+    pageName: "My Meetings",
+    section: "meetings",
+    icon: <FilePresentIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
+  },
+  {
     pageName: "Settings",
     section: "settings",
     icon: <Settings sx={{ fontSize: "35px", marginRight: "5px" }} />,

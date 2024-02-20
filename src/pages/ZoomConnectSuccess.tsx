@@ -2,7 +2,7 @@ import { Box, Container, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Loader from "../components/Loader";
-import { getCode } from "../core/applicationApi";
+import { getCode } from "../core/meetingsApi";
 
 function ZoomConnectSuccess() {
   const location = useLocation();

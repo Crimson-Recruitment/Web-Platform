@@ -29,19 +29,19 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { ZodError, object, string, z } from "zod";
+import { object, string, z } from "zod";
 import { professionList, skills } from "../../Data/UserProfessions";
+import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
+import LocationSearchInput from "../LocationInput";
+import { userModel } from "../../Models/UserModel";
+import { userRegister } from "../../core/api";
 import {
   checkDocumentSize,
   checkImageSize,
   fileToUint8Array,
   generateRandomString,
 } from "../../Functions/utils";
-import { userModel } from "../../Models/UserModel";
-import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
-import { userRegister } from "../../core/api";
 import FirebaseStorage from "../../firebase/fileHandler";
-import LocationSearchInput from "../LocationInput";
 
 const steps = ["Contact info", "User details", "Profile Image"];
 
@@ -121,21 +121,7 @@ export default function UserRegisterForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleZodError = (error: ZodError) => {
-    // Your custom logic to display or log the error message
-    console.error("ZodError:", error.errors);
-  };
-
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
-    try {
-      // Your async form submission logic
-    } catch (error) {
-      if (error instanceof ZodError) {
-        handleZodError(error);
-      } else {
-        console.error("Unexpected error:", error);
-      }
-    }
     setLoading(true);
     if (user.phoneNumber == "") {
       setMessage("You haven't entered your phone number!");
@@ -532,63 +518,6 @@ export default function UserRegisterForm() {
               />
             </>
           )}
-          <Typography
-            style={{
-              marginTop: "10px",
-              backgroundColor:
-                errors.firstName ||
-                errors.lastName ||
-                errors.email ||
-                errors.bio ||
-                errors.password ||
-                errors.reenter_password
-                  ? "#FFEBEB"
-                  : "white", // Pale red background
-              color: "#FF0000", // Red font color
-              padding: "8px",
-              borderRadius: "4px",
-            }}
-          >
-            {errors["firstName"] ? (
-              <pre>
-                {"Error in form! \nFirstName: " + errors["firstName"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-            {errors["lastName"] ? (
-              <pre>
-                {"Error in form! \nLastName: " + errors["lastName"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-            {errors["bio"] ? (
-              <pre>{"Error in form! \nBio: " + errors["bio"].message}</pre>
-            ) : (
-              ""
-            )}
-            {errors["password"] ? (
-              <pre>
-                {"Error in form! \nPassword: " + errors["password"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-            {errors["email"] ? (
-              <pre>{"Error in form! \nEmail: " + errors["email"].message}</pre>
-            ) : (
-              ""
-            )}
-            {errors["reenter_password"] ? (
-              <pre>
-                {"Error in form! \nRe-enter Password: " +
-                  errors["reenter_password"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-          </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
@@ -616,10 +545,7 @@ export default function UserRegisterForm() {
               </Button>
             ) : (
               <Button
-                onClick={(val) => {
-                  console.log(errors);
-                  handleNext(val);
-                }}
+                onClick={handleNext}
                 sx={{
                   color: "white",
                   mt: 3,

@@ -234,8 +234,8 @@ function Jobs() {
                 minSalary={currentJob.minSalary}
                 maxSalary={currentJob.maxSalary}
                 location={currentJob.location}
-                overview={currentJob.companyOverview}
-                company={currentJob.companyName}
+                overview={currentJob.company.overview}
+                company={currentJob.company.companyName}
                 companyId={currentJob.company.id}
                 type={currentJob.jobType}
                 hideSalary={currentJob.hideSalary}

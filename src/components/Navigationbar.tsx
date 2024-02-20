@@ -205,14 +205,6 @@ function NavigationBar() {
                       </MenuItem>
                     ))
                   : null}
-                {sessionStorage.getItem("company") ? (
-                  JSON.parse(sessionStorage.getItem("company")!).email ===
-                  "crimsonco@gmail.com" ? (
-                    <MenuItem onClick={() => navigate("/admin")}>
-                      Go to Admin Dashboard
-                    </MenuItem>
-                  ) : null
-                ) : null}
                 <MenuItem onClick={() => logout()}>Logout</MenuItem>
               </Menu>
             </Box>

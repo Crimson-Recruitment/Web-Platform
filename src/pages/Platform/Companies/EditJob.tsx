@@ -145,8 +145,6 @@ export const EditJob = () => {
       location: location.location,
       timestamp: new Date().toISOString(),
       benefits: state.benefits,
-      companyName: JSON.parse(sessionStorage.getItem("company")!).companyName,
-      companyOverview: JSON.parse(sessionStorage.getItem("company")!).overview,
       requirements: state.requirements,
       requestCoverLetter: state.requestCoverLetterEdit,
       hideSalary: state.hideSalaryEdit,

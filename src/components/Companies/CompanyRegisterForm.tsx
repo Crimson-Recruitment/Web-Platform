@@ -26,8 +26,8 @@ import { checkImageSize, generateRandomString } from "../../Functions/utils";
 import { CompanyModel } from "../../Models/companyModel";
 import { StyledDropzone, StyledIcon, StyledLabel } from "../../Styles/form";
 import { companyRegister } from "../../core/api";
-import FirebaseStorage from "../../firebase/fileHandler";
 import LocationSearchInput from "../LocationInput";
+import FirebaseStorage from "../../firebase/fileHandler";
 
 const steps = ["Contact info", "Company details", "Company Logo"];
 
@@ -433,64 +433,6 @@ export default function CompanyRegisterForm() {
               />
             </>
           )}
-          <Typography
-            style={{
-              marginTop: "10px",
-              backgroundColor:
-                errors.website ||
-                errors.companyName ||
-                errors.email ||
-                errors.overview ||
-                errors.password ||
-                errors.reenter_password
-                  ? "#FFEBEB"
-                  : "white", // Pale red background, // Pale red background
-              color: "#FF0000", // Red font color
-              padding: "8px",
-              borderRadius: "4px",
-            }}
-          >
-            {errors["companyName"] ? (
-              <pre>
-                {"Error in form! \nCompany Name: " +
-                  errors["companyName"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-            {errors["overview"] ? (
-              <pre>
-                {"Error in form! \nOverview: " + errors["overview"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-            {errors["website"] ? (
-              <pre>{"Error in form! \nBio: " + errors["website"].message}</pre>
-            ) : (
-              ""
-            )}
-            {errors["password"] ? (
-              <pre>
-                {"Error in form! \nPassword: " + errors["password"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-            {errors["email"] ? (
-              <pre>{"Error in form! \nEmail: " + errors["email"].message}</pre>
-            ) : (
-              ""
-            )}
-            {errors["reenter_password"] ? (
-              <pre>
-                {"Error in form! \nRe-enter Password: " +
-                  errors["reenter_password"].message}
-              </pre>
-            ) : (
-              ""
-            )}
-          </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"

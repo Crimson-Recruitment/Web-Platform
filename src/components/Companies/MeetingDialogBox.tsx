@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { timeZones } from "../../Data/Meeting";
 import LocationInput from "../LocationInput";
 import { IMeetingInfo } from "../../Models/MeetingInfoModel";
-import { getRefreshToken, scheduleMeeting } from "../../core/applicationApi";
+import { getRefreshToken, scheduleMeeting } from "../../core/meetingsApi";
 
 const steps = ["Select Meeting Type", "Schedule Meeting"];
 

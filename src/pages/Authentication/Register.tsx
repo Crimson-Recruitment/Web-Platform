@@ -30,7 +30,7 @@ export default function Register() {
           sx={{
             objectFit: "cover",
             objectPosition: "center",
-            height: "145vh",
+            height: "120vh",
             display: { xs: "none", md: "block" },
           }}
         />

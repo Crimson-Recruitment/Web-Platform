@@ -1,9 +1,11 @@
 import CompanyApplications from "../pages/Platform/Companies/CompanyApplications";
+import CompanyMeetings from "../pages/Platform/Companies/CompanyMeetings";
 import CompanyJobs from "../pages/Platform/Companies/CompanyJobs";
 import CompanyPricing from "../pages/Platform/Companies/CompanyPricing";
 import CompanyProfile from "../pages/Platform/Companies/CompanyProfile";
 import CompanySettings from "../pages/Platform/Companies/CompanySettings";
 import Applications from "../pages/Platform/Users/Applications";
+import Meetings from "../pages/Platform/Users/Meetings";
 import ForYou from "../pages/Platform/Users/ForYou";
 import Jobs from "../pages/Platform/Users/Jobs";
 import Profile from "../pages/Platform/Users/Profile";
@@ -22,6 +24,8 @@ export const userDashboardReducer = (state = userInitState, action: any) => {
       return { ...state, currentPage: <Profile /> };
     case "applications":
       return { ...state, currentPage: <Applications /> };
+    case "meetings":
+      return { ...state, currentPage: <Meetings /> };
     case "settings":
       return { ...state, currentPage: <Settings /> };
     case "jobs":
@@ -48,6 +52,8 @@ export const companyDashboardReducer = (
       return { ...state, currentPage: <CompanyProfile /> };
     case "company-applications":
       return { ...state, currentPage: <CompanyApplications /> };
+    case "company-meetings":
+      return { ...state, currentPage: <CompanyMeetings /> };
     case "company-settings":
       return { ...state, currentPage: <CompanySettings /> };
     case "company-pricing":

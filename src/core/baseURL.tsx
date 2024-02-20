@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//export const baseUrl = "https://services.crimsonrecruit.com/api/v1";
+// export const baseUrl = "https://services.crimsonrecruit.com/api/v1";
 export const baseUrl = "http://localhost:8081/api/v1";
 
 export const AxiosUserInstance = axios.create({

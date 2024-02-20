@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./Styles/index.css";
+import "primeicons/primeicons.css";
 import App from "./App";
 import store from "./store/store";
 import { Provider } from "react-redux";

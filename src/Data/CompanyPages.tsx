@@ -11,13 +11,18 @@ export const companyPages = [
     icon: <BusinessIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
-    pageName: "You Jobs",
+    pageName: "Your Jobs",
     section: "company-jobs",
     icon: <WorkIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Applications",
     section: "company-applications",
+    icon: <ArticleIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
+  },
+  {
+    pageName: "Meetings",
+    section: "company-meetings",
     icon: <ArticleIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
