@@ -1,22 +1,21 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
+import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Link, useNavigate } from "react-router-dom";
-import { userPages } from "../Data/UserPages";
-import { companyPages } from "../Data/CompanyPages";
-import logo from "../assets/images/logo.png";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
 import { useDispatch } from "react-redux";
-import { Logout } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+import { companyPages } from "../Data/CompanyPages";
+import { userPages } from "../Data/UserPages";
+import logo from "../assets/images/logo.png";
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -179,7 +178,7 @@ function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {sessionStorage.getItem("account") == "user"
+                {sessionStorage.getItem("account") === "user"
                   ? userPages.map((page) => (
                       <MenuItem
                         key={page.section}
@@ -192,7 +191,7 @@ function NavigationBar() {
                       </MenuItem>
                     ))
                   : null}
-                {sessionStorage.getItem("account") == "company"
+                {sessionStorage.getItem("account") === "company"
                   ? companyPages.map((page) => (
                       <MenuItem
                         key={page.section}

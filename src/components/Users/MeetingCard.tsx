@@ -1,26 +1,8 @@
 import React, { useState } from "react";
-
-interface MeetingRecruiter {
-  name: string;
-  company: string;
-  phone: string;
-  email: string;
-}
-
-interface MeetingCardOptions {
-  isOnline: boolean;
-  agenda: string;
-  topic: string;
-  startTime: number;
-  endTime: number;
-  duration: number;
-  recruiter: MeetingRecruiter;
-  meetingLink?: string;
-  meetingLocation?: string;
-}
+import { IMeetingInfo } from "../../Models/MeetingInfoModel";
 
 interface MeetingCardProps {
-  meeting: MeetingCardOptions;
+  meeting: IMeetingInfo;
 }
 
 const MeetingCard: React.FC<MeetingCardProps> = ({ meeting }) => {
@@ -34,9 +16,9 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting }) => {
     <div className="flex flex-col rounded-xl border border-gray-200 shadow p-1 w-full">
       <div className="flex flex-row p-3 items-center">
         <span className="text-xl font-bold">{meeting.agenda}</span>
-        {meeting.isOnline ? (
+        {meeting.meetingType === "online" ? (
           <div className="ml-auto bg-blue-500/30 text-blue-500 font-semibold p-1 px-2 rounded-lg text-xs">
-            <span>ONLINE</span>
+            <span>{meeting.meetingType}</span>
           </div>
         ) : (
           <div className="ml-auto bg-orange-500/30 text-orange-500 font-semibold p-1 px-2 rounded-lg text-xs">
@@ -46,16 +28,16 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting }) => {
       </div>
       <div className="flex flex-col p-3 text-gray-500 border-t">
         <span className="font-bold">{meeting.topic}</span>
-        <span>8:00AM - 8:30AM</span>
+        <span>{new Date(meeting.startTime).toLocaleString()}</span>
       </div>
       <div className="flex flex-row p-3 gap-2 items-center border-t">
         <div className="w-12 aspect-square bg-red-500 rounded-full"></div>
         <div className="flex flex-col w-full">
           <span className="font-bold text-gray-600">
-            {meeting.recruiter.name}
+            {meeting.contactEmail}
           </span>
           <span className="text-xs text-gray-400 font-semibold">
-            {meeting.recruiter.company}
+            {meeting.contactPhoneNumber}
           </span>
         </div>
         <div className="flex flex-row gap-1 items-center ml-auto">
@@ -106,7 +88,7 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting }) => {
           </button>
         </div>
       </div>
-      {meeting.isOnline ? (
+      {meeting.meetingType === "online" ? (
         <div className="flex flex-col p-3 border-t">
           <div className="flex flex-row gap-2 items-center">
             <svg
@@ -133,71 +115,72 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ meeting }) => {
               </g>
             </svg>
             <span className="text-blue-500 underline text-sm">
-              {meeting.meetingLink}
+              {meeting.joinUrl}
             </span>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col p-3 border-t">
-          <div className="flex flex-row gap-2 items-center">
-            <svg
-              width="24px"
-              height="24px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
-                  stroke="#000000"
-                  stroke-width="1.5"
+        <>
+          <div className="flex flex-col p-3 border-t">
+            <div className="flex flex-row gap-2 items-center">
+              <svg
+                width="24px"
+                height="24px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                ></path>{" "}
-                <path
-                  d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
-                  stroke="#000000"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>{" "}
-              </g>
-            </svg>
-            <span className="text-blue-500 underline text-sm">
-              {meeting.meetingLocation}
-            </span>
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  {" "}
+                  <path
+                    d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
+                    stroke="#000000"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>{" "}
+                  <path
+                    d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
+                    stroke="#000000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>{" "}
+                </g>
+              </svg>
+              <span className="text-blue-500 underline text-sm">
+                {meeting.streetName}
+              </span>
+            </div>
           </div>
-        </div>
+          <div className="flex flex-col p-3 border-t">
+            <span className="font-bold">Other Details</span>
+            <div
+              className={
+                readMore
+                  ? "flex flex-col h-12 overflow-y-hidden"
+                  : "flex flex-col h-full overflow-y-hidden"
+              }
+            >
+              <span className="text-xs text-gray-500">
+                {meeting.otherDetails}
+              </span>
+            </div>
+            <button
+              onClick={toggleReadMore}
+              className="text-blue-700 font-bold text-sm w-fit p-0"
+            >
+              Read More
+            </button>
+          </div>
+        </>
       )}
-      <div className="flex flex-col p-3 border-t">
-        <span className="font-bold">Other Details</span>
-        <div
-          className={
-            readMore
-              ? "flex flex-col h-12 overflow-y-hidden"
-              : "flex flex-col h-full overflow-y-hidden"
-          }
-        >
-          <span className="text-xs text-gray-500">
-            Lorem ipsum dolore et is ipmnum colores fit men denit ut mis. Frixa
-            tol modo est fit meein de fitir most alphway
-          </span>
-        </div>
-        <button
-          onClick={toggleReadMore}
-          className="text-blue-700 font-bold text-sm w-fit p-0"
-        >
-          Read More
-        </button>
-      </div>
     </div>
   );
 };

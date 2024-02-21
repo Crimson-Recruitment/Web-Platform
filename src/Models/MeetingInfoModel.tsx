@@ -4,6 +4,7 @@ export interface IMeetingInfo {
   contactPhoneNumber: string;
   contactEmail: string;
   meetingType: string;
+  joinUrl: string;
   scheduleSend: boolean;
   duration: number;
   agenda: string;

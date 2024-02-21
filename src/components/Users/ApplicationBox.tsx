@@ -66,7 +66,8 @@ export default function ApplicationBox(props: {
           message: "You have applied to the job, cheers!",
           type: "success",
         });
-        setOpen(false);
+        await new Promise((res) => setTimeout(res, 1000));
+        onClose();
       } else {
         handleClick({ message: `Error: ${res?.data?.message}`, type: "error" });
       }
@@ -75,6 +76,17 @@ export default function ApplicationBox(props: {
         coverLetter: "",
         timeStamp: new Date().toISOString(),
       };
+
+      let res = await createApplication(application, jobId);
+      if (res.status == 200) {
+        handleClick({
+          message: "You have applied to the job, cheers!",
+          type: "success",
+        });
+        onClose();
+      } else {
+        handleClick({ message: `Error: ${res?.data?.message}`, type: "error" });
+      }
     }
 
     setLoading(false);

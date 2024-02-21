@@ -1,26 +1,8 @@
 import React, { useState } from "react";
+import { IMeetingInfo } from "../../Models/MeetingInfoModel";
 
 interface CompanyMeetingCardProps {
-  meeting: CompanyMeetingCardOptions; // TODO: replace with an object
-}
-
-interface CompanyMeetingCardOptions {
-  id?: string;
-  isOnline: boolean;
-  agenda: string;
-  topic: string;
-  startTime: number;
-  endTime: number;
-  duration: number;
-  applicant: CompanyMeetingApplicant;
-  meetingLink?: string;
-  meetingLocation?: string;
-  otherDetails: string;
-}
-
-interface CompanyMeetingApplicant {
-  id?: string;
-  name: string;
+  meeting: IMeetingInfo; // TODO: replace with an object
 }
 
 const MeetingMenu = () => {
@@ -78,15 +60,16 @@ const CompanyMeetingCard: React.FC<CompanyMeetingCardProps> = ({ meeting }) => {
       <div className="flex flex-row p-3 items-center gap-2">
         <span className="text-lg font-bold">{meeting.agenda}</span>
         <div className="flex flex-row gap-2 ml-auto items-center">
-          {meeting.isOnline ? (
+          {meeting.meetingType === "online" ? (
             <div className="px-4 py-2 bg-blue-500/20 text-blue-500 rounded-lg text-sm">
-              <span>Online</span>
+              <span>{meeting.meetingType}</span>
             </div>
           ) : (
-            <div className="px-4 py-2 bg-orange-500/20 text-orange-500 rounded-lg text-sm">
-              <span>Physical</span>
+            <div className="px-4 py-2 bg-blue-500/20 text-red-500 rounded-lg text-sm">
+              <span>{meeting.meetingType}</span>
             </div>
           )}
+
           <button
             onClick={toggleMeetingMenuVisible}
             className="bg-gray-200 aspect-square grid place-items-center rounded-full relative"
@@ -99,14 +82,13 @@ const CompanyMeetingCard: React.FC<CompanyMeetingCardProps> = ({ meeting }) => {
       <div className="flex flex-col p-3 text-gray-500 border-t">
         <span className="font-bold">{meeting.topic}</span>
         <div className="flex flex-row gap-2 items-center">
-          <span className="font-semibold text-sm">12-03-2024</span>
-          <span className="text-sm">8:00AM - 8:30AM</span>
+          <span>{new Date(meeting.startTime).toLocaleString()}</span>
         </div>
       </div>
       <div className="flex flex-row p-3 gap-2 items-center border-t">
         <div className="aspect-square bg-red-500 rounded-full w-12"></div>
         <div className="flex flex-col">
-          <span>{meeting.applicant.name}</span>
+          <span>{meeting.topic}</span>
         </div>
         <div className="flex flex-row items-center ml-auto">
           <button className="text-gray-500">
@@ -141,52 +123,54 @@ const CompanyMeetingCard: React.FC<CompanyMeetingCardProps> = ({ meeting }) => {
         </div>
       </div>
       <div className="flex flex-col p-3 border-t">
-        {meeting.isOnline ? (
-          <div className="flex flex-row gap-2 items-center">
-            <i className="pi pi-link text-gray-500"></i>
+        {meeting.meetingType === "online" ? (
+          <div className="items-center">
             <button
               onClick={onMeetingLinkClicked}
               className="text-blue-500 underline text-sm"
             >
-              {meeting.meetingLink}
+              {meeting.joinUrl}
             </button>
           </div>
         ) : (
-          <div className="flex flex-row gap-2 items-center">
-            <i className="pi pi-map-marker text-gray-500"></i>
-            <button
-              onClick={onMeetingLocationClicked}
-              className="text-blue-500 underline text-sm"
-            >
-              {meeting.meetingLocation}
-            </button>
-          </div>
+          <>
+            <div className="flex flex-row gap-2 items-center">
+              <i className="pi pi-map-marker text-gray-500"></i>
+              <button
+                onClick={onMeetingLocationClicked}
+                className="text-blue-500 underline text-sm"
+              >
+                {meeting.streetName}
+              </button>
+            </div>
+            <div className="flex flex-col border-t p-3">
+              <div className="flex flex-row items-center">
+                <span>Other Details</span>
+              </div>
+              <div className="flex flex-col text-sm">
+                <div
+                  className={
+                    readMore
+                      ? "flex flex-col h-full overflow-hidden"
+                      : "flex flex-col h-12 overflow-hidden"
+                  }
+                >
+                  <span className="text-xs text-gray-400">
+                    {meeting.otherDetails}
+                  </span>
+                </div>
+                <button
+                  onClick={toggleReadMore}
+                  className="text-blue-700 font-bold text-sm w-fit p-0 focus:outline-none"
+                >
+                  Read More
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </div>
-      <div className="flex flex-col border-t p-3">
-        <div className="flex flex-row items-center">
-          <span>Other Details</span>
-        </div>
-        <div className="flex flex-col text-sm">
-          <div
-            className={
-              readMore
-                ? "flex flex-col h-full overflow-hidden"
-                : "flex flex-col h-12 overflow-hidden"
-            }
-          >
-            <span className="text-xs text-gray-400">
-              {meeting.otherDetails}
-            </span>
-          </div>
-          <button
-            onClick={toggleReadMore}
-            className="text-blue-700 font-bold text-sm w-fit p-0 focus:outline-none"
-          >
-            Read More
-          </button>
-        </div>
-      </div>
+
       <div className="flex flex-row p-3 gap-2 items-center border-t">
         <button className="flex flex-row justify-between gap-2 items-center p-2 text-sm text-red-500 bg-red-500/30 rounded-lg w-full">
           Cancel Meeting
