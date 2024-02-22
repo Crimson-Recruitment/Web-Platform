@@ -45,8 +45,9 @@ export default function ApplicationBox(props: {
     setLoading(true);
     if (needCoverLetter) {
       let val: any = document.getElementById("coverLetter");
-      if (val.value == "") {
+      if (val.value === "") {
         handleClick({ message: "Please add a cover letter!", type: "error" });
+        setLoading(false);
         return;
       }
       if (val.value.length < 200) {
@@ -54,6 +55,7 @@ export default function ApplicationBox(props: {
           message: "Please enter atleast 200 characters!",
           type: "error",
         });
+        setLoading(false);
         return;
       }
       let application: ApplicationApplyModel = {
@@ -61,12 +63,12 @@ export default function ApplicationBox(props: {
         timeStamp: new Date().toISOString(),
       };
       let res = await createApplication(application, jobId);
-      if (res.status == 200) {
+      if (res.status === 200) {
         handleClick({
           message: "You have applied to the job, cheers!",
           type: "success",
         });
-        setOpen(false);
+        onClose();
       } else {
         handleClick({ message: `Error: ${res?.data?.message}`, type: "error" });
       }
@@ -75,6 +77,16 @@ export default function ApplicationBox(props: {
         coverLetter: "",
         timeStamp: new Date().toISOString(),
       };
+      let res = await createApplication(application, jobId);
+      if (res.status === 200) {
+        handleClick({
+          message: "You have applied to the job, cheers!",
+          type: "success",
+        });
+        onClose();
+      } else {
+        handleClick({ message: `Error: ${res?.data?.message}`, type: "error" });
+      }
     }
 
     setLoading(false);

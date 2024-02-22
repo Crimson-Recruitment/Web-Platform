@@ -46,6 +46,7 @@ function CompanyApplicationDetails() {
       let applications = await getCompanyApplications();
       let arr = applications.filter((val: any) => val.job.id == id);
       setApplications(arr);
+      console.log(arr);
     })();
   }, []);
 
@@ -75,6 +76,7 @@ function CompanyApplicationDetails() {
                     jobName={application.job.jobTitle}
                     applicationStatus={application.status}
                     expanded={() => expandedHandler(index)}
+                    meeting={application.meetings}
                   />
                   <Grid
                     sx={

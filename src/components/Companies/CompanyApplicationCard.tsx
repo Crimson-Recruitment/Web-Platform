@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Options from "./Options";
 import { Button, Grid } from "@mui/material";
+import { IMeetingInfo } from "../../Models/MeetingInfoModel";
+import MeetingDetails from "../MeetingDetails";
 
 interface CompanyApplicationCardProps {
   applicant: string;
@@ -12,6 +14,7 @@ interface CompanyApplicationCardProps {
   applicationStatus: string;
   id: number;
   expanded: any;
+  meeting: IMeetingInfo;
 }
 
 const cardStyle: React.CSSProperties = {
@@ -39,7 +42,13 @@ const CompanyApplicationCard: React.FC<CompanyApplicationCardProps> = (
     applicationStatus,
     id,
     expanded,
+    meeting,
   } = props;
+  const [meetingDetails, setMeetingDetails] = useState<boolean>(false);
+
+  const openMeetingDetails = () => {
+    setMeetingDetails(true);
+  };
 
   return (
     <Card style={cardStyle}>
@@ -68,8 +77,25 @@ const CompanyApplicationCard: React.FC<CompanyApplicationCardProps> = (
               View Details
             </Button>
           </Grid>
+          {applicationStatus === "Meeting Scheduled" ? (
+            <>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => openMeetingDetails()}
+                >
+                  View Meeting Details
+                </Button>
+              </Grid>
+            </>
+          ) : null}
         </Grid>
       </CardContent>
+      <MeetingDetails
+        open={meetingDetails}
+        setOpen={setMeetingDetails}
+        meeting={meeting}
+      />
     </Card>
   );
 };

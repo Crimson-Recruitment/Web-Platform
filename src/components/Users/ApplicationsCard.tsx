@@ -1,4 +1,4 @@
-import { Drawer, Fade, Paper } from "@mui/material";
+import { Drawer, Fade, Grid, Paper } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -6,6 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import MeetingDetails from "../MeetingDetails";
+import { IMeetingInfo } from "../../Models/MeetingInfoModel";
 
 const ApplicationCard = (props: {
   applicant: any;
@@ -13,6 +15,7 @@ const ApplicationCard = (props: {
   timeOfApplication: any;
   applicationStatus: any;
   resumePath: string;
+  meeting: IMeetingInfo;
 }) => {
   const {
     applicant,
@@ -20,6 +23,7 @@ const ApplicationCard = (props: {
     timeOfApplication,
     applicationStatus,
     resumePath,
+    meeting,
   } = props;
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -37,6 +41,12 @@ const ApplicationCard = (props: {
 
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const [meetingDetails, setMeetingDetails] = useState<boolean>(false);
+
+  const openMeetingDetails = () => {
+    setMeetingDetails(true);
   };
 
   return (
@@ -66,11 +76,6 @@ const ApplicationCard = (props: {
             Status: {applicationStatus}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button onClick={handleCardClick} variant="outlined" size="small">
-            Open Options
-          </Button>
-        </CardActions>
       </Card>
       <Fade in={isMenuOpen} timeout={300}>
         <Paper
@@ -86,12 +91,21 @@ const ApplicationCard = (props: {
             borderRadius: "4px",
           }}
         >
+          {applicationStatus === "Meeting Scheduled" ? (
+            <>
+              <MenuItem onClick={() => openMeetingDetails()}>
+                View Meeting Details
+              </MenuItem>
+            </>
+          ) : null}
           <MenuItem onClick={handleViewResume}>View Resume</MenuItem>
-          <MenuItem onClick={handleChatWithRecruiter}>
-            Chat with Recruiter
-          </MenuItem>
         </Paper>
       </Fade>
+      <MeetingDetails
+        open={meetingDetails}
+        setOpen={setMeetingDetails}
+        meeting={meeting}
+      />
     </div>
   );
 };

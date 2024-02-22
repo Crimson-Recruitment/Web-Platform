@@ -1,8 +1,15 @@
 import { CheckCircleRounded } from "@mui/icons-material";
 import {
+  Alert,
+  AlertColor,
   Autocomplete,
   CircularProgress,
+  FormControl,
+  FormControlLabel,
   Grid,
+  Radio,
+  RadioGroup,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -11,10 +18,6 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import MuiPhoneNumber from "material-ui-phone-number";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +41,11 @@ export default function MeetingDialogBox({
   const state = useSelector((state: any) => state.schedule);
   const dispatch = useDispatch();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [openNotification, setOpenNotification] = React.useState(false);
+  const [message, setMessage] = React.useState<{
+    message: string | null;
+    type: string | null;
+  }>({ message: null, type: null });
 
   const handleNext = () => {
     if (activeStep === steps.length - 1) {
@@ -50,21 +58,45 @@ export default function MeetingDialogBox({
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleClick = (val: { message: string; type: string }) => {
+    setMessage(val);
+    setOpenNotification(true);
+  };
+
+  const navClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenNotification(false);
+  };
+
   const onSubmitHandler = async () => {
     dispatch({ type: "SET_SCHEDULE_SEND", payload: true });
-    if (new Date(state.startTime) < new Date()) {
+    if (
+      new Date(state.startTime) < new Date() &&
+      state.meetingType === "online"
+    ) {
       console.log("Start Date has to be later than today!");
       dispatch({ type: "SET_SCHEDULE_SEND", payload: false });
       return;
     }
     let meeting: IMeetingInfo = state;
-    await scheduleMeeting(meeting, applicationId);
-    console.log(state);
+    await scheduleMeeting(
+      { ...meeting, location: location.location },
+      applicationId,
+    );
+    handleClick({
+      message: "You have scheduled a meeting successfully!",
+      type: "success",
+    });
+    await new Promise((res: any) => setTimeout(res, 1000));
+    handleClose();
     dispatch({ type: "SET_SCHEDULE_SEND", payload: false });
   };
 
   return (
-    <React.Fragment>
+    <div>
       <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
         <DialogTitle>Schedule Meeting</DialogTitle>
         <DialogContent>
@@ -445,6 +477,19 @@ export default function MeetingDialogBox({
           </Box>
         </DialogContent>
       </Dialog>
-    </React.Fragment>
+      <Snackbar
+        open={openNotification}
+        autoHideDuration={6000}
+        onClose={navClose}
+      >
+        <Alert
+          onClose={navClose}
+          severity={message.type as AlertColor}
+          sx={{ width: "100%" }}
+        >
+          {message.message}
+        </Alert>
+      </Snackbar>
+    </div>
   );
 }

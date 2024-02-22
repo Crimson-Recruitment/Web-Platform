@@ -8,14 +8,14 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { companyPages } from "../../../Data/CompanyPages";
+import { adminPages } from "../../../Data/AdminPages";
 
 export default function CompanyHome() {
   const [state, setState] = React.useState(false);
-  const company = useSelector((state: any) => state.company);
+  const admin = useSelector((state: any) => state.admin);
   const dispatch = useDispatch();
 
-  React.useEffect(() => {}, [company]);
+  React.useEffect(() => {}, [admin]);
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
@@ -36,7 +36,7 @@ export default function CompanyHome() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {companyPages.map((pages, index) => (
+        {adminPages.map((pages, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton onClick={() => dashboardHandler(pages.section)}>
               <ListItemText primary={pages.pageName} />
@@ -62,14 +62,14 @@ export default function CompanyHome() {
             onClick={toggleDrawer(true)}
             sx={{ mr: 2 }}
           >
-            <MenuIcon color="error" />
+            <MenuIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer anchor={"left"} open={state} onClose={toggleDrawer(false)}>
         {list()}
       </Drawer>
-      {company.currentPage}
+      {admin.currentPage}
     </div>
   );
 }

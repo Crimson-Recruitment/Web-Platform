@@ -20,7 +20,7 @@ import UserView from "./pages/Platform/Users/UserView";
 import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
 import ZoomConnectSuccess from "./pages/ZoomConnectSuccess";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/Platform/Admin/AdminDashboard";
 
 function App() {
   const cookie = new Cookies();

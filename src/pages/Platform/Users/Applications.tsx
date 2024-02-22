@@ -51,6 +51,7 @@ function Applications() {
                 ).toDateString()}
                 applicationStatus={application.status}
                 resumePath={application.user.cv}
+                meeting={application.meetings}
               />
             ))}
           </>
