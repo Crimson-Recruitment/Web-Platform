@@ -236,7 +236,7 @@ function Jobs() {
                 location={currentJob.location}
                 overview={currentJob.companyOverview}
                 company={currentJob.companyName}
-                companyId={currentJob.company.id}
+                companyId={currentJob.company !== null ? currentJob.company.id: 0}
                 type={currentJob.jobType}
                 hideSalary={currentJob.hideSalary}
                 benefits={currentJob.benefits}

@@ -3,6 +3,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import ArticleIcon from "@mui/icons-material/Article";
 import Settings from "@mui/icons-material/Settings";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
+import { GroupAdd } from "@mui/icons-material";
 
 export const companyPages = [
   {
@@ -19,6 +20,11 @@ export const companyPages = [
     pageName: "Applications",
     section: "company-applications",
     icon: <ArticleIcon sx={{ fontSize: "35px", marginRight: "5px" }} />,
+  },
+  {
+    pageName: "Your Hires",
+    section: "hires",
+    icon: <GroupAdd sx={{ fontSize: "35px", marginRight: "5px" }} />,
   },
   {
     pageName: "Settings",

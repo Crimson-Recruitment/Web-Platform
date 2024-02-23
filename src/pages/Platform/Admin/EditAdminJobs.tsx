@@ -3,49 +3,97 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Alert,
-  Autocomplete,
-  Button,
-  Card,
-  CardContent,
-  Checkbox,
-  Container,
-  CssBaseline,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Snackbar,
-  Switch,
-  TextField,
-  Typography,
+    Alert,
+    Autocomplete,
+    Button,
+    Checkbox,
+    Container,
+    CssBaseline,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Snackbar,
+    Switch,
+    TextField,
 } from "@mui/material";
 import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
 import React, { useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { array, object, string, z } from "zod";
+import { useNavigate } from "react-router-dom";
+import { number, object, string, z } from "zod";
 import { industries, jobType } from "../../../Data/CompanyIndustries";
 import { skills } from "../../../Data/UserProfessions";
 import { JobsModel } from "../../../Models/JobsModel";
+import JobCard from "../../../components/Companies/JobCard";
+import Loader from "../../../components/Loader";
 import LocationSearchInput from "../../../components/LocationInput";
-import { getCompanyJobs, postJob, updateJob } from "../../../core/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { getAdminJobs, updateAdminJob } from "../../../core/api";
 
-export const EditJob = () => {
-  const { id } = useParams();
+function CustomTabPanel(props: {
+  [x: string]: any;
+  children: any;
+  value: any;
+  index: any;
+}) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3, minHeight: "100vh" }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+function EditAdminJobs() {
   const [req, setReq] = React.useState("");
   const [benefit, setBenefit] = React.useState("");
-  const state = useSelector((state: any) => state.editJob);
-  const jobs = useSelector((state: any) => state.createJobs);
+  const state = useSelector((state: any) => state.createJobs);
   const location = useSelector((state: any) => state.location);
-  const navigate = useNavigate();
+  const [current, setCurrent] = React.useState<JobsModel>();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleChange = (event: any, newValue: number) => {
+    setCurrent(undefined)
+    if(newValue === 1) {
+        return
+    }
+    dispatch({ type: "SET_VALUE", payload: newValue });
+  };
 
   const removeRequirementsHandler = (res: any) => {
     const newList = state.requirements.filter((item: any) => item !== res);
@@ -55,7 +103,6 @@ export const EditJob = () => {
     const newList = state.benefits.filter((item: any) => item !== res);
     dispatch({ type: "SET_BENEFITS", payload: newList });
   };
-
   const handleClick = (message: { type: string; message: string }) => {
     dispatch({
       type: "SET_MESSAGE",
@@ -73,16 +120,18 @@ export const EditJob = () => {
 
     dispatch({ type: "SET_OPEN", payload: false });
   };
-
   const isInteger = (val: string) => /^\d+$/.test(val);
   const validationSchema = object({
     jobTitle: string().min(1, "Field is required!"),
     jobType: string().min(1, "Field is required!"),
     jobDescription: string()
-      .min(500, "Enter atleast 500 characters!")
+      .min(300, "Enter atleast 300 characters!")
       .max(2000, "Max limit 2000 characters!"),
     field: string().min(1, "Field is required!"),
     locationType: string().min(1, "Field is required!"),
+    companyName: string().min(1, "Field is required!"),
+    companyOverview: string().min(1, "Field is required!"),
+    otherSite: string(),
     expiryDate: string()
       .min(1, "Field is required!")
       .refine((val) => {
@@ -109,7 +158,6 @@ export const EditJob = () => {
   });
 
   type SignUpSchemaType = z.infer<typeof validationSchema>;
-
   const {
     register,
     handleSubmit,
@@ -118,12 +166,26 @@ export const EditJob = () => {
     formState: { errors, isSubmitSuccessful },
   } = useForm<SignUpSchemaType>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      ...jobs.jobsList.filter((val: any) => val.id == id)[0],
-      expiryDate: "",
-    },
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "SET_LOADING", payload: true });
+
+        const jobArray = await getAdminJobs();
+
+        dispatch({ type: "SET_JOBLIST", payload: jobArray });
+      } catch (error) {
+        // Handle errors as needed
+        console.error("Error fetching data:", error);
+      } finally {
+        dispatch({ type: "SET_LOADING", payload: false });
+      }
+    };
+
+    fetchData();
+  }, [current]);
   const onSubmitHandler: SubmitHandler<SignUpSchemaType> = async (values) => {
     dispatch({ type: "SET_LOADING", payload: true });
     if (state.requirements.length <= 0) {
@@ -145,15 +207,17 @@ export const EditJob = () => {
       location: location.location,
       timestamp: new Date().toISOString(),
       benefits: state.benefits,
-      companyName: JSON.parse(sessionStorage.getItem("company")!).companyName,
-      companyOverview: JSON.parse(sessionStorage.getItem("company")!).overview,
       requirements: state.requirements,
       requestCoverLetter: state.requestCoverLetterEdit,
       hideSalary: state.hideSalaryEdit,
     };
-    let res = await updateJob(job, id);
-    if (res?.status == 200) {
-      window.location.href = "/company-home";
+    let res = await updateAdminJob(job, current?.id);
+    if (res?.status === 200) {
+      handleClick({
+        type:"success",
+        message:"You have successfully updated the Job!"
+      })
+      await new Promise((res:any) => setTimeout(res,2000));
     } else {
       let mes: string = res?.data?.message;
       handleClick({
@@ -164,58 +228,54 @@ export const EditJob = () => {
     dispatch({ type: "SET_LOADING", payload: false });
   };
 
-  useEffect(() => {
-    dispatch({
-      type: "SET_REQUIREMENTS",
-      payload: jobs.jobsList.filter((val: any) => val.id == id)[0].requirements,
-    });
-    dispatch({
-      type: "SET_BENEFITS",
-      payload: jobs.jobsList.filter((val: any) => val.id == id)[0].benefits,
-    });
-    dispatch({
-      type: "SET_HIDE_SALARY_EDIT",
-      payload: jobs.jobsList.filter((val: any) => val.id == id)[0].hideSalary,
-    });
-    dispatch({
-      type: "SET_REQUEST_COVER_LETTER_EDIT",
-      payload: jobs.jobsList.filter((val: any) => val.id == id)[0]
-        .requestCoverLetter,
-    });
-    dispatch({
-      type: "SET_SELECTED_SKILLS",
-      payload: skills.filter(
-        (skill) =>
-          jobs.jobsList
-            .filter((val: any) => val.id == id)[0]
-            .skills?.includes(skill.label),
-      ),
-    });
-  }, [benefit]);
+
+  const editJob = (job: JobsModel) => {
+    setCurrent(job)
+    dispatch({ type: "SET_REQUIREMENTS", payload: job.requirements });
+    dispatch({ type: "SET_BENEFITS", payload: job.benefits });
+    dispatch({ type: "SET_VALUE", payload: 1 });
+  };
+
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <Card
-        sx={{
-          maxWidth: "80%",
-          marginTop: "10px",
-          padding: "20px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <Grid container sx={{ marginTop: 5, marginLeft: 5 }}>
-          <Grid item marginBottom={5} xs={12}>
-            <Button variant="contained" onClick={() => navigate(-1)}>
-              Go Back
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h4">Edit Job</Typography>
-          </Grid>
-        </Grid>
-        <CardContent>
-          <Container component="main" maxWidth="sm">
+    <Box>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={state.value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Your Jobs" {...a11yProps(0)} />
+          <Tab label="Edit Job" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={state.value} index={0}>
+        {state.loading ? (
+          <Loader />
+        ) : state.jobsList ? (
+          state.jobsList
+            .sort(
+              (a: { timestamp: number }, b: { timestamp: number }) =>
+                a.timestamp < b.timestamp,
+            )
+            .map((job: JobsModel) => {
+              return (
+                <JobCard
+                  key={job.id!}
+                  title={job.jobTitle}
+                  description={job.jobDescription}
+                  timestamp={new Date(job.timestamp)}
+                  benefits={job.benefits}
+                  minSalary={job.minSalary.toString()}
+                  maxSalary={job.maxSalary.toString()}
+                  location={job.location}
+                  edit={() => editJob(job)}
+                />
+              );
+            })
+        ) : null}
+      </CustomTabPanel>
+      <CustomTabPanel value={state.value} index={1}>
+      <Container component="main" maxWidth="sm">
             <CssBaseline />
             <Box
               sx={{
@@ -232,6 +292,51 @@ export const EditJob = () => {
                 sx={{ mt: 3 }}
               >
                 <Grid container spacing={2}>
+                <Grid item xs={12}>
+              <label
+                htmlFor="companyName"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Company Name
+              </label>
+              <TextField
+                required
+                fullWidth
+                id="companyName"
+                label="Company Name"
+                autoFocus
+                error={!!errors["companyName"]}
+                defaultValue={current?.companyName}
+                helperText={
+                  errors["companyName"] ? errors["companyName"].message : ""
+                }
+                {...register("companyName")}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <label
+                htmlFor="companyOverview"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Company Overview
+              </label>
+              <TextField
+                required
+                fullWidth
+                id="companyOverview"
+                label="Company Overview"
+                defaultValue={current?.companyOverview}
+                multiline
+                rows={4}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
+                autoFocus
+                error={!!errors["companyOverview"]}
+                helperText={
+                  errors["companyOverview"] ? errors["companyOverview"].message : ""
+                }
+                {...register("companyOverview")}
+              />
+            </Grid>
                   <Grid item xs={12}>
                     <label
                       htmlFor="jobTitle"
@@ -244,6 +349,7 @@ export const EditJob = () => {
                       fullWidth
                       id="jobTitle"
                       label="Job Title"
+                      defaultValue={current?.jobTitle}
                       autoFocus
                       error={!!errors["jobTitle"]}
                       helperText={
@@ -705,8 +811,18 @@ export const EditJob = () => {
               </Alert>
             </Snackbar>
           </Container>
-        </CardContent>
-      </Card>
+      </CustomTabPanel>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={state.message.type}
+          sx={{ width: "100%" }}
+        >
+          {state.message.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
-};
+}
+
+export default EditAdminJobs;

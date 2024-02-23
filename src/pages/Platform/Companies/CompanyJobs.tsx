@@ -260,7 +260,7 @@ function CompanyJobs() {
         ) : null}
       </CustomTabPanel>
       <CustomTabPanel value={state.value} index={1}>
-        <Container component="main" maxWidth="lg">
+        <Container component="main" maxWidth="sm">
           <CssBaseline />
           <Box
             sx={{

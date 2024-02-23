@@ -1,5 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { AppBar, IconButton, Toolbar } from "@mui/material";
+import { AppBar, IconButton, ListItemIcon, Toolbar } from "@mui/material";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -39,6 +39,7 @@ export default function CompanyHome() {
         {companyPages.map((pages, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton onClick={() => dashboardHandler(pages.section)}>
+            <ListItemIcon>{pages.icon}</ListItemIcon>
               <ListItemText primary={pages.pageName} />
             </ListItemButton>
           </ListItem>

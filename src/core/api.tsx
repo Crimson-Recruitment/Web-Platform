@@ -132,6 +132,25 @@ export const postJob = async (job: JobsModel) => {
   }
 };
 
+export const postAdminJob = async (job: JobsModel) => {
+  try {
+    const response = await AxiosCompanyInstance.post(
+      `${baseUrl}/jobs/post-admin-job`,
+      JSON.stringify(job),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
+      return response;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};
+
 export const getCompanyJobs = async () => {
   try {
     const response = await AxiosCompanyInstance.get(
@@ -152,10 +171,49 @@ export const getCompanyJobs = async () => {
   }
 };
 
+export const getAdminJobs = async () => {
+  try {
+    const response = await AxiosCompanyInstance.get(
+      `${baseUrl}/jobs/admin-jobs/${
+        JSON.parse(sessionStorage.getItem("company")!).id
+      }`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};
+
 export const updateJob = async (job: JobsModel, id: any) => {
   try {
     const response = await AxiosCompanyInstance.post(
       `${baseUrl}/jobs/update-job/${id}`,
+      JSON.stringify(job),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response?.status == 200) {
+      return response;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+};
+
+export const updateAdminJob = async (job: JobsModel, id: any) => {
+  try {
+    const response = await AxiosCompanyInstance.post(
+      `${baseUrl}/jobs/update-admin-job/${id}`,
       JSON.stringify(job),
       {
         headers: {

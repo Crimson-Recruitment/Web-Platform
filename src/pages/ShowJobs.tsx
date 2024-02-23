@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import { getAllJobs } from "../core/api";
+import { isNullOrUndefined } from "util";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -119,15 +120,15 @@ export default function ShowJobs() {
                           <Button
                             onClick={() => {
                               if (
-                                sessionStorage.getItem("userToken") !==
-                                undefined
+                                sessionStorage.getItem("account") ===
+                                "user"
                               ) {
                                 navigate("/user-home");
                               } else if (
-                                sessionStorage.getItem("companyToken") !=
-                                undefined
+                                sessionStorage.getItem("account") ===
+                                "company"
                               ) {
-                                navigate("company-home");
+                                navigate("/company-home");
                               } else {
                                 setDialog(true);
                               }

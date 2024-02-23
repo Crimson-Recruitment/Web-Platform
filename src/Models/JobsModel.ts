@@ -5,8 +5,8 @@ export interface JobsModel {
   jobTitle: string;
   jobType: string;
   locationType: string;
-  companyName: String;
-  companyOverview: String;
+  companyName: string;
+  companyOverview: string;
   otherSite?: string;
   field: string;
   jobDescription: string;

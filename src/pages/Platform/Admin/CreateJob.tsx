@@ -3,6 +3,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
+  Alert,
   Autocomplete,
   Button,
   Checkbox,
@@ -16,8 +17,10 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Snackbar,
   Switch,
   TextField,
+  Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
@@ -30,7 +33,7 @@ import { industries, jobType } from "../../../Data/CompanyIndustries";
 import { skills } from "../../../Data/UserProfessions";
 import { JobsModel } from "../../../Models/JobsModel";
 import LocationSearchInput from "../../../components/LocationInput";
-import { postJob } from "../../../core/api";
+import { postAdminJob } from "../../../core/api";
 
 function CreateJob() {
   const [req, setReq] = React.useState("");
@@ -39,10 +42,6 @@ function CreateJob() {
   const location = useSelector((state: any) => state.location);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleChange = (event: any, newValue: number) => {
-    dispatch({ type: "SET_VALUE", payload: newValue });
-  };
 
   const removeRequirementsHandler = (res: any) => {
     const newList = state.requirements.filter((item: any) => item !== res);
@@ -75,9 +74,11 @@ function CreateJob() {
     jobTitle: string().min(1, "Field is required!"),
     jobType: string().min(1, "Field is required!"),
     jobDescription: string()
-      .min(500, "Enter atleast 500 characters!")
+      .min(300, "Enter atleast 300 characters!")
       .max(2000, "Max limit 2000 characters!"),
     field: string().min(1, "Field is required!"),
+    companyName: string().min(1, "Field is required!"),
+    companyOverview: string().min(1, "Field is required!"),
     locationType: string().min(1, "Field is required!"),
     otherSite: string(),
     expiryDate: string()
@@ -134,13 +135,11 @@ function CreateJob() {
       location: location.location,
       timestamp: new Date().toISOString(),
       benefits: state.benefits,
-      companyName: JSON.parse(sessionStorage.getItem("company")!).companyName,
-      companyOverview: JSON.parse(sessionStorage.getItem("company")!).overview,
       requirements: state.requirements,
       requestCoverLetter: state.requestCoverLetter,
       hideSalary: state.hideSalary,
     };
-    let res = await postJob(job);
+    let res = await postAdminJob(job);
     if (res?.status == 200) {
       window.location.reload();
     } else {
@@ -158,7 +157,8 @@ function CreateJob() {
   };
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="sm">
+      <Typography variant="h3" sx={{fontSize:"30px", marginTop:"30px"}}>Admin Create Job</Typography>
       <CssBaseline />
       <Box
         sx={{
@@ -175,6 +175,49 @@ function CreateJob() {
           sx={{ mt: 3 }}
         >
           <Grid container spacing={2}>
+          <Grid item xs={12}>
+              <label
+                htmlFor="companyName"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Company Name
+              </label>
+              <TextField
+                required
+                fullWidth
+                id="companyName"
+                label="Company Name"
+                autoFocus
+                error={!!errors["companyName"]}
+                helperText={
+                  errors["companyName"] ? errors["companyName"].message : ""
+                }
+                {...register("companyName")}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <label
+                htmlFor="companyOverview"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Company Overview
+              </label>
+              <TextField
+                required
+                fullWidth
+                id="companyOverview"
+                label="Company Overview"
+                multiline
+                rows={4}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500"
+                autoFocus
+                error={!!errors["companyOverview"]}
+                helperText={
+                  errors["companyOverview"] ? errors["companyOverview"].message : ""
+                }
+                {...register("companyOverview")}
+              />
+            </Grid>
             <Grid item xs={12}>
               <label
                 htmlFor="jobTitle"
@@ -657,6 +700,15 @@ function CreateJob() {
           </Button>
         </Box>
       </Box>
+      <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={state.message.type}
+          sx={{ width: "100%" }}
+        >
+          {state.message.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

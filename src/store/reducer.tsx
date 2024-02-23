@@ -3,6 +3,7 @@ import CompanyJobs from "../pages/Platform/Companies/CompanyJobs";
 import CompanyPricing from "../pages/Platform/Companies/CompanyPricing";
 import CompanyProfile from "../pages/Platform/Companies/CompanyProfile";
 import CompanySettings from "../pages/Platform/Companies/CompanySettings";
+import Employees from "../pages/Platform/Companies/Employees";
 import Applications from "../pages/Platform/Users/Applications";
 import ForYou from "../pages/Platform/Users/ForYou";
 import Jobs from "../pages/Platform/Users/Jobs";
@@ -52,6 +53,8 @@ export const companyDashboardReducer = (
       return { ...state, currentPage: <CompanySettings /> };
     case "company-pricing":
       return { ...state, currentPage: <CompanyPricing /> };
+    case "hires":
+        return { ...state, currentPage: <Employees /> };
     default:
       return state;
   }
