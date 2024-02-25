@@ -130,7 +130,7 @@ function JobDescription(props: {
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           <ul>
-            {requirements.map((req: string, index: number) => (
+            {requirements?.map((req: string, index: number) => (
               <li key={index}>{req}</li>
             ))}
           </ul>

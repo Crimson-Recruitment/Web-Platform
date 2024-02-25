@@ -93,7 +93,7 @@ function Jobs() {
         : true),
   );
 
-  const currentJob = filteredJobs[current];
+  const currentJob = filteredJobs[current] !== undefined ?  filteredJobs[current] : 0;
   return (
     <Box>
       <Grid container>
@@ -224,23 +224,23 @@ function Jobs() {
           }}
           md={5.9}
         >
-          {filteredJobs.length > 0 ? (
+          {filteredJobs[current] !== undefined && filteredJobs.length > 0 ? (
             <>
               <JobDescription
-                jobTitle={currentJob.jobTitle}
-                description={currentJob.jobDescription}
-                requirements={currentJob.requirements}
-                skills={currentJob.skills}
-                minSalary={currentJob.minSalary}
-                maxSalary={currentJob.maxSalary}
-                location={currentJob.location}
-                overview={currentJob.companyOverview}
-                company={currentJob.companyName}
-                companyId={currentJob.company !== null ? currentJob.company.id: 0}
-                type={currentJob.jobType}
-                hideSalary={currentJob.hideSalary}
-                benefits={currentJob.benefits}
-                otherDetails={currentJob.otherDetails}
+                jobTitle={currentJob?.jobTitle}
+                description={currentJob?.jobDescription}
+                requirements={currentJob?.requirements}
+                skills={currentJob?.skills}
+                minSalary={currentJob?.minSalary}
+                maxSalary={currentJob?.maxSalary}
+                location={currentJob?.location}
+                overview={currentJob?.companyOverview}
+                company={currentJob?.companyName}
+                companyId={currentJob?.company !== undefined && currentJob?.company !== null ? currentJob.company.id: 0}
+                type={currentJob?.jobType}
+                hideSalary={currentJob?.hideSalary}
+                benefits={currentJob?.benefits}
+                otherDetails={currentJob?.otherDetails}
               />
             </>
           ) : null}
