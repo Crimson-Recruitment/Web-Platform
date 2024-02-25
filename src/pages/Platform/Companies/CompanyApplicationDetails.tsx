@@ -68,7 +68,7 @@ function CompanyApplicationDetails() {
               return (
                 <div>
                   <CompanyApplicationCard
-                    applicant={application.user.firstName}
+                    applicant={application.user.firstName + " " +  application.user.lastName}
                     id={parseInt(application.id!)}
                     timeOfApplication={new Date(
                       application.timeStamp,

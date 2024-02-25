@@ -327,7 +327,7 @@ export default function MeetingDialogBox({
                               console.log(data);
                             } else {
                               window.open(
-                                "https://zoom.us/oauth/authorize?response_type=code&client_id=MdO1TJWIRyvU8kP2Wwcg&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fzoom-success",
+                                "https://zoom.us/oauth/authorize?response_type=code&client_id=MdO1TJWIRyvU8kP2Wwcg&redirect_uri=https%3A%2F%2Fcrimsonrecruit.com%2Fzoom-success",
                                 "_blank",
                               );
                             }

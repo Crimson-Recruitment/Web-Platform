@@ -1,63 +1,65 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import React, { useState, useEffect } from "react";
+import { Box, Snackbar, Alert, AlertColor } from "@mui/material";
+import EmployeeCard from "../../../components/Companies/EmployeeCard";
+import Loader from "../../../components/Loader";
+import { useNavigate } from "react-router-dom";
+import { getCompanyEmployees } from "../../../core/api";
+import { IEmployee } from "../../../Models/IEmployee";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+function Employees() {
+  const [employees, setEmployees] = useState<Array<IEmployee>>([]);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState({ message: "", severity: "" });
+  const [open, setOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+
+
+  useEffect(() => {
+    ( async() => {
+      let employees = await getCompanyEmployees();
+      console.log(employees)
+      setEmployees(employees)
+      setLoading(false)
+    })()
+  
+  }, []);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const viewDetailsHandler = (employeeId: number) => {
+    navigate(`/employee/${employeeId}`)
+  };
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+    <Box sx={{ p: 2 }}> {/* Adds padding around the entire Box */}
+    <div style={{ minHeight: '100vh', padding: '20px' }}>
+      {loading ? (
+        <Loader />
+      ) : employees.length > 0 ? (
+        employees.map((employee) => (
+          <EmployeeCard
+            key={employee.id}
+            employeeName={employee.user.firstName + " " +  employee.user.lastName}
+            jobTitle={employee.position}
+            onViewDetails={() => viewDetailsHandler(employee.id)}
+          />
+        ))
+      ) : null}
     </div>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={message.severity as AlertColor} sx={{ width: "100%" }}>
+        {message.message}
+      </Alert>
+    </Snackbar>
+  </Box>
   );
 }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-export default function Employees() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Employee Profile" {...a11yProps(0)} />
-          <Tab label="Bio Data" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-        Item One
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Item Two
-      </CustomTabPanel>
-    </Box>
-  );
-}
+export default Employees;

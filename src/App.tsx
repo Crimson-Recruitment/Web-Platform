@@ -21,6 +21,7 @@ import Pricing from "./pages/Pricing";
 import ShowJobs from "./pages/ShowJobs";
 import ZoomConnectSuccess from "./pages/ZoomConnectSuccess";
 import AdminDashboard from "./pages/Platform/Admin/AdminDashboard";
+import EmployeeDetails from "./pages/Platform/Companies/EmployeeDetails";
 
 function App() {
   const cookie = new Cookies();
@@ -59,6 +60,10 @@ function App() {
             <Route
               path="/company-applications/:id"
               element={<CompanyApplicationDetails />}
+            />
+             <Route
+              path="/employee/:id"
+              element={<EmployeeDetails />}
             />
           </>
         ) : null}

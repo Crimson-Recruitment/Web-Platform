@@ -1,6 +1,8 @@
+import "../Styles/print.css"
+
 export default function Footer() {
   return (
-    <footer className="bg-[#8B0000] shadow">
+    <footer className="bg-[#8B0000] shadow hide-on-print">
       <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div className="items-center mb-4 sm:mb-0">

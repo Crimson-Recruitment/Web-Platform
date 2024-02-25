@@ -17,6 +17,7 @@ import { companyPages } from "../Data/CompanyPages";
 import logo from "../assets/images/logo.png";
 import { useDispatch } from "react-redux";
 import { Logout } from "@mui/icons-material";
+import "../Styles/print.css"
 
 const pages = [
   { pageName: "Home", link: "/" },
@@ -53,7 +54,7 @@ function NavigationBar() {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="sticky" sx={{ bgcolor: "#8B0000" }}>
+    <AppBar className="hide-on-print" position="sticky" sx={{ bgcolor: "#8B0000" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

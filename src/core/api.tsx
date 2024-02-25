@@ -288,3 +288,33 @@ export const getCompanyById = async (id: number) => {
     return e.response;
   }
 };
+
+export const getCompanyEmployees = async () => {
+  try {
+    const response = await AxiosCompanyInstance.get(`${baseUrl}/company/employees`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}
+
+export const getEmployee = async (id:number) => {
+  try {
+    const response = await AxiosCompanyInstance.get(`${baseUrl}/employee/get-info/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response?.status == 200) {
+      return response.data;
+    }
+  } catch (e: any) {
+    return e.response;
+  }
+}
