@@ -1,17 +1,19 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Avatar, Button, Chip, Grid, Paper, TextField } from '@mui/material';
-import { ArrowBack, Chat, PictureAsPdf } from '@mui/icons-material';
-import { IEmployee } from '../../../Models/IEmployee';
-import { getEmployee } from '../../../core/api';
-import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import "../../../Styles/print.css";
+import { ArrowBack, Chat, PictureAsPdf } from '@mui/icons-material';
+import { Avatar, Button, Chip, Grid, Paper, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { number, object, string } from 'zod';
+import { IEmployee } from '../../../Models/IEmployee';
+import "../../../Styles/print.css";
+import { getEmployee } from '../../../core/api';
+import { Input, InputAdornment, IconButton } from "@mui/material";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,7 +49,6 @@ function a11yProps(index: number) {
 }
 
 const schema = object({
-    id: number(),
     dateOfBirth: string(),
     gender: string(),
     address: string(),
@@ -66,7 +67,6 @@ const schema = object({
   });
 
   const defaultValues = {
-      id: 0,
       dateOfBirth: '',
       gender: '',
       address: '',
@@ -103,7 +103,7 @@ export default function EmployeeDetails() {
     })()
   }, [])
 
-  const { handleSubmit, control } = useForm<IEmployee>({
+  const { handleSubmit, control, register, formState:{errors} } = useForm<IEmployee>({
     resolver: zodResolver(schema),
     defaultValues: employee,
   });
@@ -197,30 +197,303 @@ export default function EmployeeDetails() {
 </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2} sx={{paddingX:{md:"50px"}}}>
+      <Grid item xs={12}>
       <Button variant="contained" size='small' className="hide-on-print" sx={{marginBottom:"10px"}} onClick={() => navigate(-1)}>
             <ArrowBack sx={{color:'white'}}/> Go Back
         </Button>
-      <Typography variant='h4' sx={{fontSize:"30px"}}>Bio Data</Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2}>
+        </Grid>
+        <Grid item xs={12}>
+        <Typography variant='h4' sx={{fontSize:"30px"}}>Bio Data</Typography>
+        </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">Employee Information</Typography>
         </Grid>
-        {Object.keys(defaultValues).map((key) => (
-          <Grid item xs={12} sm={6} key={key}>
-            <Controller
-              name={key as keyof IEmployee}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label={key}
-                />
-              )}
-            />
-          </Grid>
-        ))}
+        <Grid item xs={12} md={6}>
+        <label
+                    htmlFor="dateOfBirth"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Date Of Birth
+                  </label>
+                  <TextField
+                    required
+                    fullWidth
+                    id="dateOfBirth"
+                    autoFocus
+                    type="date"
+                    error={!!errors["dateOfBirth"]}
+                    helperText={
+                      errors["dateOfBirth"] ? errors["dateOfBirth"].message : ""
+                    }
+                    {...register("dateOfBirth")}
+                  />
+        </Grid>
+        <Grid item xs={12} md={6}>
+        <label
+                    htmlFor="gender"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Gender
+                  </label>
+                  <TextField
+                    required
+                    fullWidth
+                    label="Gender"
+                    id="gender"
+                    autoFocus
+                    error={!!errors["gender"]}
+                    helperText={
+                      errors["gender"] ? errors["gender"].message : ""
+                    }
+                    {...register("gender")}
+                  />
+        </Grid>
+        <Grid item xs={12} md={6}>
+    <label htmlFor="position" className="block mb-2 text-sm font-medium text-gray-900">
+      Position
+    </label>
+    <TextField
+      required
+      fullWidth
+      label="Position"
+      id="position"
+      autoFocus
+      error={!!errors["position"]}
+      helperText={errors["position"] ? errors["position"].message : ""}
+      {...register("position")}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900">
+      Department
+    </label>
+    <TextField
+      required
+      fullWidth
+      label="Department"
+      id="department"
+      autoFocus
+      error={!!errors["department"]}
+      helperText={errors["department"] ? errors["department"].message : ""}
+      {...register("department")}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <label htmlFor="startDate" className="block mb-2 text-sm font-medium text-gray-900">
+      Start Date
+    </label>
+    <TextField
+      required
+      fullWidth
+      id="startDate"
+      autoFocus
+      type="date"
+      error={!!errors["startDate"]}
+      helperText={errors["startDate"] ? errors["startDate"].message : ""}
+      {...register("startDate")}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <label htmlFor="nextOfKinName" className="block mb-2 text-sm font-medium text-gray-900">
+      Next of Kin Name
+    </label>
+    <TextField
+      required
+      fullWidth
+      label="Next of Kin Name"
+      id="nextOfKinName"
+      autoFocus
+      error={!!errors["nextOfKinName"]}
+      helperText={errors["nextOfKinName"] ? errors["nextOfKinName"].message : ""}
+      {...register("nextOfKinName")}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <label htmlFor="nextOfKinRelationship" className="block mb-2 text-sm font-medium text-gray-900">
+      Next of Kin Relationship
+    </label>
+    <TextField
+      required
+      fullWidth
+      label="Next of Kin Relationship"
+      id="nextOfKinRelationship"
+      autoFocus
+      error={!!errors["nextOfKinRelationship"]}
+      helperText={errors["nextOfKinRelationship"] ? errors["nextOfKinRelationship"].message : ""}
+      {...register("nextOfKinRelationship")}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <label htmlFor="nextOfKinPhone" className="block mb-2 text-sm font-medium text-gray-900">
+      Next of Kin Phone
+    </label>
+    <TextField
+      required
+      fullWidth
+      label="Next of Kin Phone"
+      id="nextOfKinPhone"
+      autoFocus
+      error={!!errors["nextOfKinPhone"]}
+      helperText={errors["nextOfKinPhone"] ? errors["nextOfKinPhone"].message : ""}
+      {...register("nextOfKinPhone")}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <label htmlFor="nextOfKinAddress" className="block mb-2 text-sm font-medium text-gray-900">
+      Next of Kin Address
+    </label>
+    <TextField
+      required
+      fullWidth
+      label="Next of Kin Address"
+      id="nextOfKinAddress"
+      autoFocus
+      error={!!errors["nextOfKinAddress"]}
+      helperText={errors["nextOfKinAddress"] ? errors["nextOfKinAddress"].message : ""}
+      {...register("nextOfKinAddress")}
+    />
+  </Grid>
+  <Grid item xs={12} className="hide-on-print">
+    <label htmlFor="criminalRecord" className="block mb-2 text-sm font-medium text-gray-900">
+      Criminal Record
+    </label>
+    <Input
+    fullWidth
+    id="criminalRecord"
+    type="file"
+    inputProps={{
+      accept: ".pdf, .doc, .docx",
+      onChange: (e) => {
+        const file = e;
+        if (file) {
+       
+          
+        }
+      },
+    }}
+    endAdornment={
+      <InputAdornment position="end">
+        <label htmlFor="criminalRecord">
+          <IconButton
+            color="primary"
+            component="span"
+            aria-label="upload file"
+            edge="end"
+          >
+            <AttachFileIcon />
+          </IconButton>
+        </label>
+      </InputAdornment>
+    }
+  />
+  </Grid>
+  <Grid item xs={12} className="hide-on-print">
+    <label htmlFor="medicalReport" className="block mb-2 text-sm font-medium text-gray-900">
+      Medical Report
+    </label>
+    <Input
+    fullWidth
+    id="medicalReport"
+    type="file"
+    inputProps={{
+      accept: ".pdf, .doc, .docx",
+      onChange: (e) => {
+        const file = e;
+        if (file) {
+       
+          
+        }
+      },
+    }}
+    endAdornment={
+      <InputAdornment position="end">
+        <label htmlFor="medicalReport">
+          <IconButton
+            color="primary"
+            component="span"
+            aria-label="upload file"
+            edge="end"
+          >
+            <AttachFileIcon />
+          </IconButton>
+        </label>
+      </InputAdornment>
+    }
+  />
+  </Grid>
+  <Grid item xs={12} className="hide-on-print">
+    <label htmlFor="nationalIdFront" className="block mb-2 text-sm font-medium text-gray-900">
+      National ID Front
+    </label>
+    <Input
+    fullWidth
+    id="nationalIdFront"
+    type="file"
+    inputProps={{
+      accept: ".pdf, .doc, .docx",
+      onChange: (e) => {
+        const file = e;
+        if (file) {
+       
+          
+        }
+      },
+    }}
+    endAdornment={
+      <InputAdornment position="end">
+        <label htmlFor="nationalIdFront">
+          <IconButton
+            color="primary"
+            component="span"
+            aria-label="upload file"
+            edge="end"
+          >
+            <AttachFileIcon />
+          </IconButton>
+        </label>
+      </InputAdornment>
+    }
+  />
+  </Grid>
+  <Grid item xs={12} className="hide-on-print">
+    <label htmlFor="nationalIdBack" className="block mb-2 text-sm font-medium text-gray-900">
+      National ID Back
+    </label>
+    <Input
+    fullWidth
+    id="nationalIdBack"
+    type="file"
+    inputProps={{
+      accept: ".pdf, .doc, .docx",
+      onChange: (e) => {
+        const file = e;
+        if (file) {
+       
+          
+        }
+      },
+    }}
+    endAdornment={
+      <InputAdornment position="end">
+        <label htmlFor="nationalIdBack">
+          <IconButton
+            color="primary"
+            component="span"
+            aria-label="upload file"
+            edge="end"
+          >
+            <AttachFileIcon />
+          </IconButton>
+        </label>
+      </InputAdornment>
+    }
+  />
+  </Grid>
+ 
+
+       
    <Grid item xs={12} className="hide-on-print">
   <Button type="submit" variant="contained" color="primary" style={{ marginRight: '8px' }}>
     Save
